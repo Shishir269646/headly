@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const contentController = require('../../controllers/content.controller');
-const { authenticate, optionalAuth } = require('../../middlewares/auth.middleware');
-const { authorize } = require('../../middlewares/rbac.middleware');
-const { validate } = require('../../middlewares/validate.middleware');
+const contentController = require('../models/Content.model');
+const { authenticate, optionalAuth } = require('../middlewares/auth.middleware');
+const { authorize } = require('../middlewares/rbac.middleware');
+const { validate } = require('../middlewares/validate.middleware');
 const {
     createContentSchema,
     updateContentSchema,
     scheduleContentSchema
-} = require('../../validators/content.validator');
+} = require('../validators/content.validator');
 
 // Public routes (with optional auth for analytics)
 router.get('/', optionalAuth, contentController.getAllContents);

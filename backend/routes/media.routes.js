@@ -1,13 +1,13 @@
 
 const express = require('express');
 const router = express.Router();
-const mediaController = require('../../controllers/media.controller');
-const { authenticate } = require('../../middlewares/auth.middleware');
-const { authorize } = require('../../middlewares/rbac.middleware');
-const { validate } = require('../../middlewares/validate.middleware');
-const { uploadSingle, uploadMultiple } = require('../../middlewares/upload.middleware');
-const { uploadLimiter } = require('../../middlewares/rateLimit.middleware');
-const { updateMediaSchema } = require('../../validators/media.validator');
+const mediaController = require('../controllers/media.controller');
+const { authenticate } = require('../middlewares/auth.middleware');
+const { authorize } = require('../middlewares/rbac.middleware');
+const { validate } = require('../middlewares/validate.middleware');
+const { uploadSingle, uploadMultiple } = require('../middlewares/upload.middleware');
+const { uploadLimiter } = require('../middlewares/rateLimit.middleware');
+const { updateMediaSchema } = require('../validators/media.validator');
 
 // Get media (all authenticated users)
 router.get('/', authenticate, mediaController.getAllMedia);

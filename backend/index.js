@@ -1,19 +1,3 @@
-require("dotenv").config();
-const app = require("./app");
-
-const PORT = process.env.PORT || 5000;
-
-
-
-app.listen(PORT, () => {
-    console.log(`My server is Running Now http://localhost:${PORT}`);
-})
-
-
-
-
-
-
 // ============================================
 // ============================================
 // 📄 src/server.js (Entry Point)
@@ -33,7 +17,7 @@ connectDB();
 // Start server
 const server = app.listen(PORT, () => {
     logger.info(`🚀 Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
-    logger.info(`📡 API URL: http://localhost:${PORT}/api/v1`);
+    logger.info(`📡 API URL: http://localhost:${PORT}/api`);
 
     // Start background jobs
     if (process.env.NODE_ENV === 'production') {

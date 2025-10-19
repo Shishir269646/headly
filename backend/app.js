@@ -20,12 +20,14 @@ app.use(cors({
     optionsSuccessStatus: 200
 }));
 
+
 // Body parsers
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Data sanitization against NoSQL injection
 app.use(mongoSanitize());
+
 
 // HTTP request logger
 if (process.env.NODE_ENV === 'development') {
@@ -35,6 +37,7 @@ if (process.env.NODE_ENV === 'development') {
         stream: { write: message => logger.info(message.trim()) }
     }));
 }
+
 
 // Static files
 app.use('/uploads', express.static('public/uploads'));

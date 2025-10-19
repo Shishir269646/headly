@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../../controllers/auth.controller');
-const { authenticate } = require('../../middlewares/auth.middleware');
-const { validate } = require('../../middlewares/validate.middleware');
-const { authLimiter } = require('../../middlewares/rateLimit.middleware');
+const authController = require('../controllers/auth.controller');
+const { authenticate } = require('../middlewares/auth.middleware');
+const { validate } = require('../middlewares/validate.middleware');
+const { authLimiter } = require('../middlewares/rateLimit.middleware');
 const {
     registerSchema,
     loginSchema,
     changePasswordSchema,
     refreshTokenSchema
-} = require('../../validators/auth.validator');
+} = require('../validators/auth.validator');
 
 // Public routes
 router.post('/register', authLimiter, validate(registerSchema), authController.register);

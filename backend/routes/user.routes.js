@@ -1,15 +1,15 @@
 
 const express = require('express');
 const router = express.Router();
-const userController = require('../../controllers/user.controller');
-const { authenticate } = require('../../middlewares/auth.middleware');
-const { authorize } = require('../../middlewares/rbac.middleware');
-const { validate } = require('../../middlewares/validate.middleware');
+const userController = require('../controllers/user.controller');
+const { authenticate } = require('../middlewares/auth.middleware');
+const { authorize } = require('../middlewares/rbac.middleware');
+const { validate } = require('../middlewares/validate.middleware');
 const {
     createUserSchema,
     updateUserSchema,
     updateProfileSchema
-} = require('../../validators/user.validator');
+} = require('../validators/user.validator');
 
 // Admin only routes
 router.get('/', authenticate, authorize('admin'), userController.getAllUsers);
