@@ -2,6 +2,7 @@
 const contentService = require('../services/content.service');
 const { successResponse } = require('../utils/responses');
 
+
 exports.getAllContents = async (req, res, next) => {
     try {
         const result = await contentService.getAllContents(req.query);

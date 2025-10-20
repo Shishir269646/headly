@@ -2,6 +2,7 @@
 const logger = require('../utils/logger');
 const ApiError = require('../utils/apiError');
 
+
 exports.errorHandler = (err, req, res, next) => {
     let error = { ...err };
     error.message = err.message;

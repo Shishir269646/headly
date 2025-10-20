@@ -47,3 +47,30 @@ process.on('SIGINT', () => {
         logger.info('Process terminated');
     });
 });
+
+
+
+
+
+ /* {
+  "name": "class-01",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "nodemon": "^3.1.9",
+    "uuidv4": "^6.2.13"
+  }
+}
+  */
