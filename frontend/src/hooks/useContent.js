@@ -1,6 +1,9 @@
-// src/hooks/useContent.js
+// ============================================
+// ✅ FIXED: src/hooks/useContent.js
+// ============================================
+
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import {
     fetchContents,
     fetchContentById,
@@ -20,17 +23,11 @@ export const useContent = (filters = null, contentId = null) => {
         (state) => state.content
     );
 
-    // Get user role from auth state
-    const { user } = useSelector((state) => state.auth);
-
-    // Memoize filters to prevent unnecessary re-renders
-    const memoizedFilters = useMemo(() => filters, [JSON.stringify(filters)]);
-
     useEffect(() => {
-        if (memoizedFilters) {
-            dispatch(fetchContents(memoizedFilters));
+        if (filters) {
+            dispatch(fetchContents(filters));
         }
-    }, [dispatch, memoizedFilters]);
+    }, [dispatch, JSON.stringify(filters)]);
 
     useEffect(() => {
         if (contentId) {
@@ -65,14 +62,9 @@ export const useContent = (filters = null, contentId = null) => {
         return dispatch(scheduleContent({ id, publishAt }));
     };
 
-    const clearErrors = () => {
+    const clear = () => {
         dispatch(clearError());
     };
-
-    // Role checks
-    const isAdmin = user?.role === 'admin';
-    const isEditor = user?.role === 'editor' || isAdmin;
-    const isAuthor = user?.role === 'author' || isEditor;
 
     return {
         contents,
@@ -80,15 +72,12 @@ export const useContent = (filters = null, contentId = null) => {
         pagination,
         loading,
         error,
-        isAdmin,
-        isEditor,
-        isAuthor,
         getContentBySlug,
         create,
         update,
         remove,
         publish,
         schedule,
-        clearErrors
+        clearError: clear
     };
 };

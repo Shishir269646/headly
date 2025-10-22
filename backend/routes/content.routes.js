@@ -15,7 +15,7 @@ router.get('/', optionalAuth, contentController.getAllContents);
 router.get('/slug/:slug', optionalAuth, contentController.getContentBySlug);
 router.get('/:id', optionalAuth, contentController.getContentById);
 
-// Protected routes - Authors can create
+// Protected routes - Authors can create        
 router.post('/', authenticate, authorize('admin', 'editor', 'author'), validate(createContentSchema), contentController.createContent);
 
 // Protected routes - Authors can edit their own

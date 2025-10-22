@@ -5,6 +5,7 @@ import TrendingSection from '@/components/ui/TrendingSection';
 import ArticleCard from '@/components/ui/ArticleCard';
 import BlogSidebar from '@/components/ui/BlogSidebar';
 import TechBlogPage from "@/components/ui/TechBlogPage";
+import ContentForm from "@/components/content/ContentForm";
 
 export default function Home() {
   const trendingPosts = [
@@ -127,6 +128,8 @@ export default function Home() {
           {/* Sidebar */}
           <BlogSidebar popularPosts={sidebarPosts} />
         </div>
+
+        <ContentForm />
       </main>
 
       <TechBlogPage />
