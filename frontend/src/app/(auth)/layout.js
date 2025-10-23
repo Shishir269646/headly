@@ -2,10 +2,16 @@
 // 📄 app/(auth)/layout.js - Auth Layout (No Header/Footer)
 // ============================================
 
-export default function AuthLayout({ children }) {
+
+
+import React from 'react'
+
+function layout({ children }) {
     return (
         <>
             {children}
         </>
     );
 }
+
+export default layout

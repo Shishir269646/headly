@@ -1,5 +1,7 @@
+"use client";
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
+import LogoutButton from "../ui/LogoutButton";
 
 export default function Header() {
     return (
@@ -21,6 +23,7 @@ export default function Header() {
                             </ul>
                         </li>
                         <li><a>Item 3</a></li>
+                        <LogoutButton/>
                     </ul>
                 </div>
                 <a className="btn btn-ghost text-xl">daisyUI</a>
@@ -38,6 +41,7 @@ export default function Header() {
                         </details>
                     </li>
                     <li><a>Item 3</a></li>
+                    <LogoutButton/>
                 </ul>
             </div>
             <div className="navbar-end">

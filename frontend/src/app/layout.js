@@ -1,10 +1,10 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+//import Header from "@/components/common/Header";
+//import Footer from "@/components/common/Footer";
 import { ReduxProvider } from "@/store/provider";
-import { AuthProvider } from "@/context/AuthContext";
+//import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,20 +28,23 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
         suppressHydrationWarning
       >
-        <AuthProvider>
-          {/* Header */}
-          <Header />
+       
+          
+          
 
           {/* Main Page Content */}
           <main className="">
+
             <ReduxProvider>
+              
               {children}
+              
             </ReduxProvider>
           </main>
 
-          {/* Footer */}
-          <Footer />
-        </AuthProvider>
+          
+          
+        
       </body>
     </html>
   );
