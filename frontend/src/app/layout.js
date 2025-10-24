@@ -23,28 +23,28 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="bg-base-100">
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable}`}
         suppressHydrationWarning
       >
-       
-          
-          
 
-          {/* Main Page Content */}
-          <main className="">
 
-            <ReduxProvider>
-              
-              {children}
-              
-            </ReduxProvider>
-          </main>
 
-          
-          
-        
+
+        {/* Main Page Content */}
+        <main>
+
+          <ReduxProvider>
+
+            {children}
+
+          </ReduxProvider>
+        </main>
+
+
+
+
       </body>
     </html>
   );
