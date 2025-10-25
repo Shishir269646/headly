@@ -22,4 +22,3 @@ exports.updateProfileSchema = Joi.object({
     bio: Joi.string().max(500).optional(),
     avatar: Joi.string().optional()
 });
-

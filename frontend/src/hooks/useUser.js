@@ -12,17 +12,18 @@ import {
 } from '@/store/slices/userSlice';
 
 export const useUser = (filters = null) => {
+
+
     const dispatch = useDispatch();
     const { users, currentUser, pagination, loading, error } = useSelector(
         (state) => state.user
     );
 
     useEffect(() => {
-        if (filters) {
-            dispatch(fetchUsers(filters));
-        }
+        dispatch(fetchUsers(filters));
     }, [dispatch, JSON.stringify(filters)]);
 
+    
     const getUserById = (id) => {
         return dispatch(fetchUserById(id));
     };

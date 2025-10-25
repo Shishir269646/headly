@@ -1,6 +1,7 @@
 
 const Joi = require('joi');
 
+
 exports.createContentSchema = Joi.object({
     title: Joi.string().min(3).max(200).required(),
     excerpt: Joi.string().max(500).optional(),

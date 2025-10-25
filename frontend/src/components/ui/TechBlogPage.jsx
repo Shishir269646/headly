@@ -1,5 +1,8 @@
 "use client";
-import React from 'react';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContentById } from "@/store/slices/contentSlice";
+import { useParams } from "next/navigation";
 import ArticleBreadcrumb from './ArticleBreadcrumb';
 import ArticleHeader from './ArticleHeader';
 import ArticleBody from './ArticleBody';
@@ -43,6 +46,20 @@ const mockComments = [
 
 // --- Main Page Component ---
 export default function TechBlogPage() {
+
+    const { id } = useParams();
+    const dispatch = useDispatch();
+    const { currentContent, loading, error } = useSelector((state) => state.content);
+
+    useEffect(() => {
+        if (id) dispatch(fetchContentById(id));
+    }, [dispatch, id]);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+    if (!currentContent) return <p>No content found</p>;
+
+
     return (
         // Main container. Dark mode: dark:bg-gray-950, dark:text-gray-200
         <div className="min-h-screen bg-white dark:bg-gray-950 dark:text-gray-200">

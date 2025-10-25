@@ -43,7 +43,7 @@ exports.getUserById = async (userId) => {
 };
 
 exports.createUser = async (userData) => {
-    const { name, email, password, role } = userData;
+    const { name, email, password, role, isActive } = userData;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -54,7 +54,8 @@ exports.createUser = async (userData) => {
         name,
         email,
         password,
-        role
+        role,
+        isActive
     });
 
     await AuditLog.create({

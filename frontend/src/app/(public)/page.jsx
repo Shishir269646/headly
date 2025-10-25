@@ -1,7 +1,11 @@
 "use client";
 
-import FeaturedContentGrid from "@/components/ui/FeaturedContentGrid";
 
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContents } from "@/store/slices/contentSlice";
+
+import FeaturedContentGrid from "@/components/ui/FeaturedContentGrid";
 import TrendingSection from '@/components/ui/TrendingSection';
 import ArticleCard from '@/components/ui/ArticleCard';
 import BlogSidebar from '@/components/ui/BlogSidebar';
@@ -9,7 +13,21 @@ import TechBlogPage from "@/components/ui/TechBlogPage";
 import ContentForm from "@/components/content/ContentForm";
 
 
+
+
 export default function Home() {
+
+    const dispatch = useDispatch();
+
+    const { contents, loading, error } = useSelector((state) => state.content);
+
+    useEffect(() => {
+        // Page load হলে data আনো
+        dispatch(fetchContents());
+    }, [dispatch]);
+
+    console.log("contents :", contents)
+
     const trendingPosts = [
         {
             category: 'Gadgets',

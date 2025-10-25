@@ -1,4 +1,4 @@
-
+// ✅ hooks/useAuth.js
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/store/slices/authSlice';
@@ -22,12 +22,9 @@ export const useAuth = () => {
         isAuthenticated,
         loading,
         error,
-        getContentBySlug,
-        create,
-        update,
-        remove,
-        publish,
-        schedule,
-        clearError: clear
+        logout: handleLogout,
+        isAdmin,
+        isEditor,
+        isAuthor,
     };
 };

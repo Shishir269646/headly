@@ -10,8 +10,8 @@ const { uploadLimiter } = require('../middlewares/rateLimit.middleware');
 const { updateMediaSchema } = require('../validators/media.validator');
 
 // Get media (all authenticated users)
-router.get('/', authenticate, mediaController.getAllMedia);
-router.get('/:id', authenticate, mediaController.getMediaById);
+router.get('/', mediaController.getAllMedia);
+router.get('/:id', mediaController.getMediaById);
 
 // Upload media (authors and above)
 router.post('/upload', authenticate, authorize('admin', 'editor', 'author'), uploadLimiter, uploadSingle, mediaController.uploadMedia);

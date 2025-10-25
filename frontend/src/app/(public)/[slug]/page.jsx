@@ -3,155 +3,41 @@
 // Blog Post Page with ISR (Incremental Static Regeneration)
 // ============================================
 
+"use client";
+import React, { useEffect } from "react";
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContentBySlug } from "@/store/slices/contentSlice";
+import { useParams } from "next/navigation";
 
-// ISR Configuration - Revalidate every 60 seconds
-export const revalidate = 60;
 
-// Generate metadata for SEO
-export async function generateMetadata({ params }) {
-    try {
-        const { slug } = params;
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/contents/slug/${slug}`,
-            { next: { revalidate: 60 } }
-        );
 
-        if (!res.ok) {
-            return {
-                title: 'Post Not Found',
-                description: 'The requested blog post could not be found.'
-            };
-        }
-
-        const data = await res.json();
-        const post = data.data;
-
-        return {
-            title: post.seo?.metaTitle || post.title,
-            description: post.seo?.metaDescription || post.excerpt,
-            keywords: post.seo?.metaKeywords?.join(', ') || post.tags?.join(', '),
-            authors: [{ name: post.author.name }],
-            openGraph: {
-                title: post.seo?.metaTitle || post.title,
-                description: post.seo?.metaDescription || post.excerpt,
-                url: `${process.env.NEXT_PUBLIC_APP_URL}/blog/${post.slug}`,
-                siteName: 'Headly CMS',
-                images: [
-                    {
-                        url: post.featuredImage?.url || '/default-og-image.jpg',
-                        width: 1200,
-                        height: 630,
-                        alt: post.featuredImage?.alt || post.title
-                    }
-                ],
-                type: 'article',
-                publishedTime: post.publishAt || post.createdAt,
-                modifiedTime: post.updatedAt,
-                authors: [post.author.name],
-                tags: post.tags
-            },
-            twitter: {
-                card: 'summary_large_image',
-                title: post.seo?.metaTitle || post.title,
-                description: post.seo?.metaDescription || post.excerpt,
-                images: [post.featuredImage?.url || '/default-og-image.jpg']
-            }
-        };
-    } catch (error) {
-        console.error('Error generating metadata:', error);
-        return {
-            title: 'Blog Post',
-            description: 'Read our latest blog post'
-        };
-    }
-}
-
-// Generate static params for popular posts (optional)
-export async function generateStaticParams() {
-    try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/contents?status=published&limit=50`,
-            { next: { revalidate: 3600 } } // Cache for 1 hour
-        );
-
-        if (!res.ok) return [];
-
-        const data = await res.json();
-        const contents = data.data.contents;
-
-        return contents.map((post) => ({
-            slug: post.slug
-        }));
-    } catch (error) {
-        console.error('Error generating static params:', error);
-        return [];
-    }
-}
 
 // Main Blog Post Page Component
-export default async function BlogPostPage({ params }) {
-    const { slug } = params;
+export default async function BlogPostPage() {
 
-    // Fetch post data
-    let post;
-    try {
-        const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/contents/slug/${slug}`,
-            { next: { revalidate: 60 } }
-        );
 
-        if (!res.ok) {
-            notFound();
-        }
+    const { slug } = useParams();
+    const dispatch = useDispatch();
+    const { currentContent, loading, error } = useSelector((state) => state.content);
 
-        const data = await res.json();
-        post = data.data;
-    } catch (error) {
-        console.error('Error fetching post:', error);
-        notFound();
-    }
+    useEffect(() => {
+        if (slug) dispatch(fetchContentBySlug(slug));
+    }, [dispatch, slug]);
 
-    // Format date
-    const formatDate = (date) => {
-        return new Date(date).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    };
 
-    // Calculate reading time
-    const readingTime = post.readTime || Math.ceil(post.body.split(' ').length / 200);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>{error}</p>;
+    if (!currentContent) return <p>No content found</p>;
+
+
+
 
     return (
         <div className="min-h-screen bg-gray-50">
-            {/* Header/Navbar */}
-            <header className="bg-white shadow-sm sticky top-0 z-50">
-                <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                    <div className="flex items-center justify-between">
-                        <Link href="/" className="text-2xl font-bold text-gray-900">
-                            Headly
-                        </Link>
-                        <div className="flex items-center space-x-6">
-                            <Link href="/blog" className="text-gray-600 hover:text-gray-900">
-                                Blog
-                            </Link>
-                            <Link href="/about" className="text-gray-600 hover:text-gray-900">
-                                About
-                            </Link>
-                            <Link
-                                href="/login"
-                                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                            >
-                                Login
-                            </Link>
-                        </div>
-                    </div>
-                </nav>
-            </header>
+            
 
             {/* Article Content */}
             <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
