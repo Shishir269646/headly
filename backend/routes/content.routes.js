@@ -1,3 +1,8 @@
+// ============================================
+// 📄 src/routes/v1/content.routes.js
+// ✅ CORRECTED & IMPROVED VERSION
+// ============================================
+
 const express = require('express');
 const router = express.Router();
 const contentController = require('../controllers/content.controller');
@@ -7,23 +12,90 @@ const { validate } = require('../middlewares/validate.middleware');
 const {
     createContentSchema,
     updateContentSchema,
-    scheduleContentSchema
+    scheduleContentSchema,
+    updateContentFlagsSchema
 } = require('../validators/content.validator');
 
-// Public routes (with optional auth for analytics)
+// ============================================
+// PUBLIC ROUTES (No authentication required)
+// ============================================
+
+// Homepage sections - These should be FIRST to avoid conflicts with /:id
+router.get('/latest', contentController.getLatestContents);
+router.get('/trending', contentController.getTrendingContents);
+router.get('/popular', contentController.getPopularContents);
+router.get('/featured', contentController.getFeaturedContents);
+
+// Public content routes (with optional auth for analytics)
 router.get('/', optionalAuth, contentController.getAllContents);
 router.get('/slug/:slug', optionalAuth, contentController.getContentBySlug);
+
+// ⚠️ IMPORTANT: This should be LAST among GET routes
+// Because it can match any string including 'latest', 'trending', etc.
 router.get('/:id', optionalAuth, contentController.getContentById);
 
-// Protected routes - Authors can create        
-router.post('/', authenticate, authorize('admin', 'editor', 'author'), validate(createContentSchema), contentController.createContent);
+// ============================================
+// PROTECTED ROUTES (Authentication required)
+// ============================================
 
-// Protected routes - Authors can edit their own
-router.put('/:id', authenticate, authorize('admin', 'editor', 'author'), validate(updateContentSchema), contentController.updateContent);
-router.delete('/:id', authenticate, authorize('admin', 'editor', 'author'), contentController.deleteContent);
+// Create content - Authors and above can create
+router.post(
+    '/',
+    authenticate,
+    authorize('admin', 'editor', 'author'),
+    validate(createContentSchema),
+    contentController.createContent
+);
 
-// Publishing routes - Editors and above
-router.post('/:id/publish', authenticate, authorize('admin', 'editor'), contentController.publishContent);
-router.post('/:id/schedule', authenticate, authorize('admin', 'editor'), validate(scheduleContentSchema), contentController.scheduleContent);
+// Update content - Authors can edit their own, Editors can edit all
+router.put(
+    '/:id',
+    authenticate,
+    authorize('admin', 'editor', 'author'),
+    validate(updateContentSchema),
+    contentController.updateContent
+);
+
+// Delete content - Authors can delete their own, Editors can delete all
+router.delete(
+    '/:id',
+    authenticate,
+    authorize('admin', 'editor', 'author'),
+    contentController.deleteContent
+);
+
+// ============================================
+// PUBLISHING ROUTES (Editors and above)
+// ============================================
+
+// Publish content immediately
+router.post(
+    '/:id/publish',
+    authenticate,
+    authorize('admin', 'editor'),
+    contentController.publishContent
+);
+
+// Schedule content for future publishing
+router.post(
+    '/:id/schedule',
+    authenticate,
+    authorize('admin', 'editor'),
+    validate(scheduleContentSchema),
+    contentController.scheduleContent
+);
+
+// ============================================
+// HOMEPAGE FLAGS (Editors and above)
+// ============================================
+
+// Update content flags (Featured, Popular, etc.)
+router.put(
+    '/:id/flags',
+    authenticate,
+    authorize('admin', 'editor'),
+    validate(updateContentFlagsSchema),
+    contentController.updateContentFlags
+);
 
 module.exports = router;

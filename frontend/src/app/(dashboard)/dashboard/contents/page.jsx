@@ -5,6 +5,7 @@
 
 'use client';
 
+
 import { useContent } from '@/hooks/useContent';
 import { useToast } from '@/hooks/useToast';
 import { useModal } from '@/hooks/useModal';
@@ -19,9 +20,13 @@ export default function ContentsPage() {
         limit: 10
     });
 
-    const { contents, pagination, loading, remove, publish } = useContent(filters);
+    const { contents, pagination, loading, remove, publish, updateFlags } = useContent(filters);
     const toast = useToast();
     const deleteModal = useModal();
+
+    const handleFlagChange = (id, flag, value) => {
+        updateFlags(id, { [flag]: value });
+    };
 
     const handleDelete = async () => {
         try {
@@ -103,6 +108,15 @@ export default function ContentsPage() {
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Date
                                     </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Featured
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Popular
+                                    </th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Featured Order
+                                    </th>
                                     <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Actions
                                     </th>
@@ -135,6 +149,30 @@ export default function ContentsPage() {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {formatDate(content.createdAt)}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <input
+                                                type="checkbox"
+                                                checked={content.isFeatured}
+                                                onChange={(e) => handleFlagChange(content._id, 'isFeatured', e.target.checked)}
+                                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                            />
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <input
+                                                type="checkbox"
+                                                checked={content.isPopular}
+                                                onChange={(e) => handleFlagChange(content._id, 'isPopular', e.target.checked)}
+                                                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                                            />
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <input
+                                                type="number"
+                                                value={content.featuredOrder}
+                                                onChange={(e) => handleFlagChange(content._id, 'featuredOrder', e.target.value)}
+                                                className="w-20 px-2 py-1 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                            />
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div className="flex justify-end space-x-2">

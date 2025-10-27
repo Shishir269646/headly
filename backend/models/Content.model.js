@@ -66,6 +66,23 @@ const contentSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
+    // Manual control flags
+    isFeatured: {
+        type: Boolean,
+        default: false,
+        index: true
+    },
+    isPopular: {
+        type: Boolean,
+        default: false,
+        index: true
+    },
+    featuredOrder: {
+        type: Number,
+        default: 0
+    },
+
+    // Existing views field (for automatic trending)
     views: {
         type: Number,
         default: 0

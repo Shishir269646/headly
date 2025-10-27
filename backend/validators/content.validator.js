@@ -40,3 +40,9 @@ exports.scheduleContentSchema = Joi.object({
     publishAt: Joi.date().greater('now').required()
 });
 
+exports.updateContentFlagsSchema = Joi.object({
+    isFeatured: Joi.boolean().optional(),
+    isPopular: Joi.boolean().optional(),
+    featuredOrder: Joi.number().optional()
+});
+

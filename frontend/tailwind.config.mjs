@@ -13,7 +13,11 @@ const config = {
     },
     plugins: [daisyui],
     daisyui: {
-        themes: ["light", "dark", "synthwave", "cupcake"], // 🔥 এখানে থিমগুলো লিস্ট করুন
+        themes: ["light", "dark", "synthwave", "cupcake"],
+        darkTheme: "dark",
+        base: true,
+        styled: true,
+        utils: true,
     },
 };
 

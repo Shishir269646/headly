@@ -42,6 +42,8 @@ exports.register = async (userData) => {
 };
 
 exports.login = async (credentials, ipAddress, userAgent) => {
+    console.log('JWT_SECRET', process.env.JWT_SECRET);
+    console.log('REFRESH_TOKEN_SECRET', process.env.REFRESH_TOKEN_SECRET);
     const { email, password } = credentials;
 
     // Find user with password

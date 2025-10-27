@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "node index.js",
-    "test": "jest --runInBand --detectOpenHandles",
+    "test": "cross-env JWT_SECRET=test-secret REFRESH_TOKEN_SECRET=test-refresh-secret jest --runInBand --detectOpenHandles",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "eslint **/*.js",
@@ -50,6 +50,7 @@
     "winston": "^3.13.0"
   },
   "devDependencies": {
+    "cross-env": "^10.1.0",
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
     "mongodb-memory-server": "^9.2.0",
@@ -62,4 +63,3 @@
     "npm": ">=9.0.0"
   }
 }
-

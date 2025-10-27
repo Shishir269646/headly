@@ -75,3 +75,55 @@ exports.scheduleContent = async (req, res, next) => {
     }
 };
 
+
+exports.getLatestContents = async (req, res, next) => {
+    try {
+        const { limit = 6 } = req.query;
+        const contents = await contentService.getLatestContents(parseInt(limit));
+        successResponse(res, contents, 'Latest contents retrieved');
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getTrendingContents = async (req, res, next) => {
+    try {
+        const { limit = 6 } = req.query;
+        const contents = await contentService.getTrendingContents(parseInt(limit));
+        successResponse(res, contents, 'Trending contents retrieved');
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getPopularContents = async (req, res, next) => {
+    try {
+        const { limit = 6 } = req.query;
+        const contents = await contentService.getPopularContents(parseInt(limit));
+        successResponse(res, contents, 'Popular contents retrieved');
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.getFeaturedContents = async (req, res, next) => {
+    try {
+        const { limit = 4 } = req.query;
+        const contents = await contentService.getFeaturedContents(parseInt(limit));
+        successResponse(res, contents, 'Featured contents retrieved');
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.updateContentFlags = async (req, res, next) => {
+    try {
+        const content = await contentService.updateContentFlags(
+            req.params.id,
+            req.body
+        );
+        successResponse(res, content, 'Content flags updated');
+    } catch (error) {
+        next(error);
+    }
+};

@@ -179,3 +179,73 @@ exports.scheduleContent = async (contentId, publishAt, user) => {
     return content.populate('author', 'name email avatar');
 };
 
+// 1. Latest (Automatic)
+exports.getLatestContents = async (limit = 6) => {
+    return await Content.find({
+        status: 'published',
+        isDeleted: false
+    })
+        .populate('author', 'name email avatar')
+        .populate('featuredImage')
+        .sort({ publishAt: -1, createdAt: -1 })
+        .limit(limit);
+};
+
+// 2. Trending (Automatic - based on views)
+exports.getTrendingContents = async (limit = 6) => {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    return await Content.find({
+        status: 'published',
+        isDeleted: false,
+        createdAt: { $gte: sevenDaysAgo }
+    })
+        .populate('author', 'name email avatar')
+        .populate('featuredImage')
+        .sort({ views: -1, createdAt: -1 })
+        .limit(limit);
+};
+
+// 3. Popular (Manual - admin selected)
+exports.getPopularContents = async (limit = 6) => {
+    return await Content.find({
+        status: 'published',
+        isDeleted: false,
+        isPopular: true
+    })
+        .populate('author', 'name email avatar')
+        .populate('featuredImage')
+        .sort({ views: -1 })
+        .limit(limit);
+};
+
+// 4. Featured (Manual - admin selected)
+exports.getFeaturedContents = async (limit = 4) => {
+    return await Content.find({
+        status: 'published',
+        isDeleted: false,
+        isFeatured: true
+    })
+        .populate('author', 'name email avatar')
+        .populate('featuredImage')
+        .sort({ featuredOrder: -1, createdAt: -1 })
+        .limit(limit);
+};
+
+// 5. Update content flags (admin only)
+exports.updateContentFlags = async (contentId, flags) => {
+    const content = await Content.findById(contentId);
+
+    if (!content) {
+        throw new ApiError(404, 'Content not found');
+    }
+
+    if (flags.isFeatured !== undefined) content.isFeatured = flags.isFeatured;
+    if (flags.isPopular !== undefined) content.isPopular = flags.isPopular;
+    if (flags.featuredOrder !== undefined) content.featuredOrder = flags.featuredOrder;
+
+    await content.save();
+    return content;
+};
+

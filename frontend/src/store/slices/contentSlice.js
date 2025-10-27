@@ -113,10 +113,74 @@ export const scheduleContent = createAsyncThunk(
     }
 );
 
+export const updateContentFlags = createAsyncThunk(
+    'content/updateContentFlags',
+    async ({ id, flags }, { rejectWithValue }) => {
+        try {
+            const { data } = await api.put(`/contents/${id}/flags`, flags);
+            return data.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to update flags');
+        }
+    }
+);
+
+export const fetchFeaturedContents = createAsyncThunk(
+    'content/fetchFeaturedContents',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await api.get('/contents/featured');
+            return data.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to fetch featured content');
+        }
+    }
+);
+
+export const fetchLatestContents = createAsyncThunk(
+    'content/fetchLatestContents',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await api.get('/contents/latest');
+            return data.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to fetch featured content');
+        }
+    }
+);
+
+
+export const fetchPopularContents = createAsyncThunk(
+    'content/fetchPopularContents',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await api.get('/contents/popular');
+            return data.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to fetch popular content');
+        }
+    }
+);
+
+export const fetchTrendingContents = createAsyncThunk(
+    'content/fetchTrendingContents',
+    async (_, { rejectWithValue }) => {
+        try {
+            const { data } = await api.get('/contents/trending');
+            return data.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Failed to fetch trending content');
+        }
+    }
+);
+
 // Initial state
 const initialState = {
     contents: [],
     currentContent: null,
+    featured: [],
+    popular: [],
+    trending: [],
     pagination: {
         total: 0,
         page: 1,
@@ -211,6 +275,25 @@ const contentSlice = createSlice({
                 if (index !== -1) {
                     state.contents[index] = action.payload;
                 }
+            })
+            .addCase(updateContentFlags.fulfilled, (state, action) => {
+                const index = state.contents.findIndex(c => c._id === action.payload._id);
+                if (index !== -1) {
+                    state.contents[index] = action.payload;
+                }
+            })
+            // Fetch Featured,Latest, Popular, Trending
+            .addCase(fetchFeaturedContents.fulfilled, (state, action) => {
+                state.featured = action.payload;
+            })
+            .addCase(fetchLatestContents.fulfilled, (state, action) => {
+                state.latest = action.payload;
+            })
+            .addCase(fetchPopularContents.fulfilled, (state, action) => {
+                state.popular = action.payload;
+            })
+            .addCase(fetchTrendingContents.fulfilled, (state, action) => {
+                state.trending = action.payload;
             });
     }
 });
