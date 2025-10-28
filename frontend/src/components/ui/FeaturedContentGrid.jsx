@@ -1,30 +1,30 @@
 "use client";
 import React from 'react';
 
-const FeaturedContentGrid = () => {
+const FeaturedContentGrid = ({ posts }) => {
+    // Display a loading state if posts are not yet available
+    if (!posts || posts.length === 0) {
+        return (
+            <div className="animate-pulse">
+                <div className="relative overflow-hidden rounded-lg shadow-xl h-[600px] bg-gray-300 dark:bg-gray-700">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+                    <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
+                        <div className="space-y-4">
+                            <div className="bg-gray-400 dark:bg-gray-600 h-6 w-24 rounded-md"></div>
+                            <div className="bg-gray-400 dark:bg-gray-600 h-8 w-3/4 rounded-md"></div>
+                            <div className="flex items-center gap-4">
+                                <div className="bg-gray-400 dark:bg-gray-600 h-8 w-8 rounded-full"></div>
+                                <div className="bg-gray-400 dark:bg-gray-600 h-4 w-20 rounded-md"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
-
-    // Sample data - replace with your actual content from API
-    const featuredPost = {
-        id: 1,
-        title: "Save $25 on Philips Wired Headphone For A Great Sounding Over-Ear Headphone",
-        slug: "save-25-on-philips-wired-headphone",
-        image: "https://smartmag.theme-sphere.com/tech-blog/wp-content/uploads/sites/35/2022/11/Depositphotos_29247013_xl-2015-2-768x512.jpg",
-        category: {
-            name: "Gadgets",
-            slug: "gadgets",
-            color: "bg-blue-500"
-        },
-        author: {
-            name: "Shane Doe",
-            avatar: "https://cheerup.theme-sphere.com/wp-content/uploads/2016/05/bella-doe.jpg",
-            slug: "shane-doe"
-        },
-        date: "Jan 12, 2020",
-        excerpt: "Get an amazing deal on premium audio quality"
-    };
-
-
+    // Use the first post from the array as the featured post
+    const featuredPost = posts[0];
 
     return (
         <section className="mb-8 px-4">
@@ -35,7 +35,7 @@ const FeaturedContentGrid = () => {
                         {/* Background Image with Overlay */}
                         <div className="absolute inset-0">
                             <img
-                                src={featuredPost.image}
+                                src={featuredPost.featuredImage?.url || 'https://via.placeholder.com/800x600'}
                                 alt={featuredPost.title}
                                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                             />
@@ -47,11 +47,13 @@ const FeaturedContentGrid = () => {
                         <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
                             <div className="space-y-4">
                                 {/* Category Badge */}
-                                <div className="flex items-center gap-2">
-                                    <span className={`${featuredPost.category.color} text-white px-4 py-1.5 rounded-md text-sm font-normal uppercase tracking-wider hover:opacity-90 transition-opacity cursor-pointer`}>
-                                        {featuredPost.category.name}
-                                    </span>
-                                </div>
+                                {featuredPost.categories && featuredPost.categories.length > 0 && (
+                                    <div className="flex items-center gap-2">
+                                        <span className="bg-blue-500 text-white px-4 py-1.5 rounded-md text-sm font-normal uppercase tracking-wider hover:opacity-90 transition-opacity cursor-pointer">
+                                            {featuredPost.categories[0]}
+                                        </span>
+                                    </div>
+                                )}
 
                                 {/* Title */}
                                 <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight hover:text-gray-200 transition-colors cursor-pointer">
@@ -63,33 +65,36 @@ const FeaturedContentGrid = () => {
                                 {/* Meta Information */}
                                 <div className="flex items-center gap-4 text-gray-200">
                                     {/* Author */}
-                                    <div className="flex items-center gap-2">
-                                        <img
-                                            src={featuredPost.author.avatar}
-                                            alt={featuredPost.author.name}
-                                            className="w-8 h-8 rounded-full border-2 border-white/50"
-                                        />
-                                        <a
-                                            href={`/author/${featuredPost.author.slug}`}
-                                            className="text-sm font-medium hover:text-white transition-colors"
-                                        >
-                                            {featuredPost.author.name}
-                                        </a>
-                                    </div>
+                                    {featuredPost.author && (
+                                        <div className="flex items-center gap-2">
+                                            <img
+                                                src={featuredPost.author.avatar || 'https://via.placeholder.com/40'}
+                                                alt={featuredPost.author.name}
+                                                className="w-8 h-8 rounded-full border-2 border-white/50"
+                                            />
+                                            <a
+                                                href={`/author/${featuredPost.author.slug}`}
+                                                className="text-sm font-medium hover:text-white transition-colors"
+                                            >
+                                                {featuredPost.author.name}
+                                            </a>
+                                        </div>
+                                    )}
 
                                     {/* Separator */}
-                                    <span className="text-gray-400">•</span>
+                                    {featuredPost.author && <span className="text-gray-400">•</span>}
 
                                     {/* Date */}
                                     <time className="text-sm">
-                                        {featuredPost.date}
+                                        {new Date(featuredPost.createdAt).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                        })}
                                     </time>
                                 </div>
                             </div>
                         </div>
-
-
-
                     </article>
                 </div>
             </div>

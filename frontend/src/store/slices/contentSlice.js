@@ -144,11 +144,10 @@ export const fetchLatestContents = createAsyncThunk(
             const { data } = await api.get('/contents/latest');
             return data.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Failed to fetch featured content');
+            return rejectWithValue(error.response?.data?.message || 'Failed to fetch latest content');
         }
     }
 );
-
 
 export const fetchPopularContents = createAsyncThunk(
     'content/fetchPopularContents',
@@ -179,6 +178,7 @@ const initialState = {
     contents: [],
     currentContent: null,
     featured: [],
+    latest: [],
     popular: [],
     trending: [],
     pagination: {
@@ -276,13 +276,14 @@ const contentSlice = createSlice({
                     state.contents[index] = action.payload;
                 }
             })
+            // Update Content Flags
             .addCase(updateContentFlags.fulfilled, (state, action) => {
                 const index = state.contents.findIndex(c => c._id === action.payload._id);
                 if (index !== -1) {
                     state.contents[index] = action.payload;
                 }
             })
-            // Fetch Featured,Latest, Popular, Trending
+            // Fetch Featured, Latest, Popular, Trending
             .addCase(fetchFeaturedContents.fulfilled, (state, action) => {
                 state.featured = action.payload;
             })

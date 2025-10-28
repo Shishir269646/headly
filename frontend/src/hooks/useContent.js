@@ -1,9 +1,5 @@
-// ============================================
-// ✅ FIXED: src/hooks/useContent.js
-// ============================================
-
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useMemo } from 'react';
 import {
     fetchContents,
     fetchContentById,
@@ -36,11 +32,14 @@ export const useContent = (filters = null, contentId = null) => {
         error
     } = useSelector((state) => state.content);
 
+    // Memoize filters to prevent unnecessary re-renders
+    const memoizedFilters = useMemo(() => filters, [JSON.stringify(filters)]);
+
     useEffect(() => {
-        if (filters) {
-            dispatch(fetchContents(filters));
+        if (memoizedFilters) {
+            dispatch(fetchContents(memoizedFilters));
         }
-    }, [dispatch, JSON.stringify(filters)]);
+    }, [dispatch, memoizedFilters]);
 
     useEffect(() => {
         if (contentId) {

@@ -9,21 +9,36 @@ import ArticleCard from '@/components/ui/ArticleCard';
 import BlogSidebar from '@/components/ui/BlogSidebar';
 
 export default function Home() {
-    const { contents, featured, popular, trending, latest, getFeatured, getPopular, getTrending, getLatest } = useContent({ limit: 10 });
+    const {
+        featured,
+        popular,
+        trending,
+        latest,
+        loading,
+        error,
+        getFeatured,
+        getPopular,
+        getTrending,
+        getLatest
+    } = useContent();
 
     useEffect(() => {
+        // Fetch all the data on component mount
         getFeatured();
         getLatest();
         getPopular();
         getTrending();
-    }, [getFeatured, getPopular, getTrending, getLatest]);
+    }, []); // Empty dependency array - only run once on mount
 
-    console.log('Contents:', contents);
-    console.log('latest:', latest);
+  
 
-    console.log('Feature Post', featured);
-    console.log('Popular Post', popular);
-    console.log('Trending Post', trending);
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
         <div className="dark:bg-gray-900 min-h-screen mx-auto px-4 py-8 max-w-7xl">
@@ -46,8 +61,8 @@ export default function Home() {
                         Latest Articles
                     </h3>
                     <div className="grid sm:grid-cols-2 gap-6">
-                        {contents.map((post, index) => (
-                            <ArticleCard key={index} {...post} />
+                        {latest.map((post) => (
+                            <ArticleCard key={post._id} post={post} />
                         ))}
                     </div>
                 </div>
