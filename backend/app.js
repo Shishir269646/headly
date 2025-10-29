@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const mongoSanitize = require('express-mongo-sanitize');
 const routes = require('./routes');
 const { errorHandler } = require('./middlewares/errorHandler.middleware');
+const { notFound } = require('./middlewares/notFound.middleware');
 const logger = require('./utils/logger');
 
 const app = express();
@@ -55,12 +56,10 @@ app.get('/health', (req, res) => {
 // API Routes
 app.use('/api', routes);
 
-// 404 Handler
-app.use(errorHandler);
+// Handle 404 errors
+app.use(notFound);
 
 // Global Error Handler
-app.use((err, req, res, next) => {
-    res.status(500).json({ message: "Something Broke" });
-})
+app.use(errorHandler);
 
 module.exports = app;

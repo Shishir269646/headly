@@ -11,6 +11,9 @@ const userRoutes = require('./user.routes');
 const contentRoutes = require('./content.routes');
 const mediaRoutes = require('./media.routes');
 const webhookRoutes = require('./webhook.routes');
+const contactRoutes = require('./contact.routes');
+const newsletterRoutes = require('./newsletter.routes');
+const analyticsRoutes = require('./analytics.routes');
 
 // Mount routes
 router.use('/auth', authRoutes);
@@ -18,6 +21,10 @@ router.use('/users', userRoutes);
 router.use('/contents', contentRoutes);
 router.use('/media', mediaRoutes);
 router.use('/webhooks', webhookRoutes);
+router.use('/contact', contactRoutes);
+router.use('/newsletter', newsletterRoutes);
+router.use('/analytics', analyticsRoutes);
+
 
 module.exports = router;
 

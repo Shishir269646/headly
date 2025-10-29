@@ -38,6 +38,9 @@ export default function DashboardLayout({ children }) {
         { name: 'Contents', href: '/dashboard/contents', icon: '📝' },
         { name: 'Media', href: '/dashboard/media', icon: '🖼️' },
         { name: 'Users', href: '/dashboard/users', icon: '👥', adminOnly: true },
+        { name: 'Contacts', href: '/dashboard/contacts', icon: '📧', adminOnly: true },
+        { name: 'Newsletter', href: '/dashboard/newsletter', icon: '📰', adminOnly: true },
+        { name: 'Analytics', href: '/dashboard/analytics', icon: '📈', adminOnly: true },
         { name: 'Profile', href: '/dashboard/profile', icon: '👤' },
     ];
 

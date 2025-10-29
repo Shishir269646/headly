@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api');
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1');
 
 // Create axios instance
 export const axiosInstance = axios.create({
@@ -39,7 +39,7 @@ axiosInstance.interceptors.response.use(
 
             try {
                 const refreshToken = localStorage.getItem('refreshToken');
-                const { data } = await axios.post(`${API_URL}/auth/refresh-token`, {
+                const { data } = await axios.post(`${API_URL}/v1/auth/refresh-token`, {
                     refreshToken
                 });
 

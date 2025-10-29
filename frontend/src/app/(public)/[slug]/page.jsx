@@ -17,7 +17,7 @@ export default function PostPage() {
         }
     }, [slug]);
 
-    console.log("Post by slug", currentContent);
+   
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;

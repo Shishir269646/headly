@@ -23,7 +23,7 @@ export default function ArticleCard({ post }) {
     return (
         <article className="group cursor-pointer">
             <div className="relative overflow-hidden rounded-lg mb-4">
-                <a href={`/post/${slug}`}>
+                <a href={`/${slug}`}>
                     <img
                         src={featuredImage?.url || 'https://via.placeholder.com/400x300'}
                         alt={title}
@@ -37,7 +37,7 @@ export default function ArticleCard({ post }) {
                 )}
             </div>
             <h4 className="font-bold text-lg sm:text-xl mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition leading-tight dark:text-white">
-                <a href={`/post/${slug}`}>{title}</a>
+                <a href={`/${slug}`}>{title}</a>
             </h4>
             <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 leading-relaxed">
                 {excerpt}

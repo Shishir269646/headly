@@ -57,7 +57,7 @@ const FeaturedContentGrid = ({ posts }) => {
 
                                 {/* Title */}
                                 <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight hover:text-gray-200 transition-colors cursor-pointer">
-                                    <a href={`/post/${featuredPost.slug}`} className="block">
+                                    <a href={`/${featuredPost.slug}`} className="block">
                                         {featuredPost.title}
                                     </a>
                                 </h2>

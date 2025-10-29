@@ -17,7 +17,7 @@ export default function SidebarPost({ post }) {
 
     return (
         <div className="flex gap-3 group cursor-pointer">
-            <a href={`/post/${slug}`} className="flex-shrink-0">
+            <a href={`/${slug}`} className="flex-shrink-0">
                 <img
                     src={featuredImage?.url || 'https://via.placeholder.com/80'}
                     alt={title}
@@ -26,7 +26,7 @@ export default function SidebarPost({ post }) {
             </a>
             <div className="flex-1 min-w-0">
                 <h5 className="font-semibold text-sm mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition leading-tight dark:text-white line-clamp-2">
-                    <a href={`/post/${slug}`}>{title}</a>
+                    <a href={`/${slug}`}>{title}</a>
                 </h5>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
                     {new Date(createdAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}

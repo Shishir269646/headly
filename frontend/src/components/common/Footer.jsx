@@ -1,19 +1,28 @@
+import Link from "next/link";
+
 export default function Footer() {
     return (
         <footer className="footer sm:footer-horizontal bg-base-300 text-base-content p-10">
             <nav>
                 <h6 className="footer-title">Services</h6>
-                <a className="link link-hover">Branding</a>
-                <a className="link link-hover">Design</a>
-                <a className="link link-hover">Marketing</a>
-                <a className="link link-hover">Advertisement</a>
+                <Link href="/" className="link link-hover">Articles</Link>
+                <Link href="/" className="link link-hover">Popular Posts</Link>
+                <Link href="/" className="link link-hover">Trending</Link>
+                <Link href="/" className="link link-hover">Featured</Link>
             </nav>
             <nav>
                 <h6 className="footer-title">Company</h6>
-                <a className="link link-hover">About us</a>
-                <a className="link link-hover">Contact</a>
-                <a className="link link-hover">Jobs</a>
-                <a className="link link-hover">Press kit</a>
+                <Link href="/about" className="link link-hover">About us</Link>
+                <Link href="/contact" className="link link-hover">Contact</Link>
+                <Link href="/terms" className="link link-hover">Terms of Service</Link>
+                <Link href="/privacy" className="link link-hover">Privacy Policy</Link>
+            </nav>
+            <nav>
+                <h6 className="footer-title">Resources</h6>
+                <Link href="/archive" className="link link-hover">Archive</Link>
+                <Link href="/newsletter" className="link link-hover">Newsletter</Link>
+                <Link href="/search" className="link link-hover">Search</Link>
+                <Link href="/sitemap" className="link link-hover">Sitemap</Link>
             </nav>
             <nav>
                 <h6 className="footer-title">Social</h6>
