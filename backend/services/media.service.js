@@ -1,7 +1,7 @@
 
 const Media = require('../models/Media.model');
 const AuditLog = require('../models/AuditLog.model');
-const cloudinary = require('../config/cloudinary');
+const s3 = require('../config/s3');
 const ApiError = require('../utils/apiError');
 
 exports.getAllMedia = async (filters) => {
@@ -49,32 +49,33 @@ exports.getMediaById = async (mediaId) => {
 
 exports.uploadMedia = async (file, userId, metadata = {}) => {
     try {
-        // Upload to Cloudinary
-        const result = await cloudinary.uploader.upload(file.path, {
-            folder: metadata.folder || 'headly/general',
-            resource_type: 'auto',
-            transformation: [
-                { width: 1920, height: 1080, crop: 'limit' },
-                { quality: 'auto' }
-            ]
-        });
+        const folder = metadata.folder || 'general';
+        const key = `${folder}/${Date.now()}-${file.originalname}`;
+
+        const params = {
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: key,
+            Body: require('fs').createReadStream(file.path),
+            ACL: 'public-read',
+            ContentType: file.mimetype
+        };
+
+        const result = await s3.upload(params).promise();
 
         // Create media record
         const media = await Media.create({
-            filename: result.public_id,
+            filename: key,
             originalName: file.originalname,
             mimeType: file.mimetype,
             size: file.size,
-            url: result.secure_url,
-            thumbnailUrl: result.eager?.[0]?.secure_url || result.secure_url,
-            cloudinaryId: result.public_id,
-            width: result.width,
-            height: result.height,
-            format: result.format,
+            url: result.Location,
+            thumbnailUrl: result.Location, // Placeholder, can be a different size
+            bucket: process.env.AWS_S3_BUCKET_NAME,
+            key: key,
             uploadedBy: userId,
             alt: metadata.alt || '',
             caption: metadata.caption || '',
-            folder: metadata.folder || 'general'
+            folder: folder
         });
 
         await AuditLog.create({
@@ -120,12 +121,15 @@ exports.deleteMedia = async (mediaId) => {
         throw new ApiError(404, 'Media not found');
     }
 
-    // Delete from Cloudinary
-    if (media.cloudinaryId) {
+    // Delete from S3
+    if (media.bucket && media.key) {
         try {
-            await cloudinary.uploader.destroy(media.cloudinaryId);
+            await s3.deleteObject({
+                Bucket: media.bucket,
+                Key: media.key
+            }).promise();
         } catch (error) {
-            console.error('Cloudinary deletion failed:', error);
+            console.error('S3 deletion failed:', error);
         }
     }
 

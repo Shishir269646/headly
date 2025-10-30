@@ -25,7 +25,10 @@ const mediaSchema = new mongoose.Schema({
     thumbnailUrl: {
         type: String
     },
-    cloudinaryId: {
+    bucket: {
+        type: String
+    },
+    key: {
         type: String
     },
     width: Number,
