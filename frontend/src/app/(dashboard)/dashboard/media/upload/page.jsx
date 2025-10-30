@@ -34,7 +34,7 @@ export default function UploadMediaPage() {
 
     const handleUpload = async (e) => {
         e.preventDefault();
-        const file = e.target.file.files[0];
+        const file = e.target.elements.file.files[0];
         if (!file) return;
 
         try {

@@ -2,6 +2,12 @@
 const nextConfig = {
     reactStrictMode: true,
     images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'headly-upload-bucket.s3.amazonaws.com',
+            },
+        ],
         domains: ['res.cloudinary.com', 'localhost'],
         formats: ['image/avif', 'image/webp']
     },

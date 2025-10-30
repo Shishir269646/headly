@@ -56,11 +56,12 @@ exports.uploadMedia = async (file, userId, metadata = {}) => {
             Bucket: process.env.AWS_S3_BUCKET_NAME,
             Key: key,
             Body: require('fs').createReadStream(file.path),
-            ACL: 'public-read',
             ContentType: file.mimetype
         };
 
+        console.log('S3 Upload Params:', params);
         const result = await s3.upload(params).promise();
+        console.log('S3 Upload Result:', result);
 
         // Create media record
         const media = await Media.create({

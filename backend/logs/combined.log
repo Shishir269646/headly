@@ -325,3 +325,15 @@
 {"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-10-30 13:23:02"}
 {"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-10-30 13:23:02"}
 {"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-10-30 13:23:02"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-10-30 13:27:19"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-10-30 13:27:19"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-10-30 13:27:19"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-10-30 20:25:21"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-10-30 20:25:21"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-10-30 20:25:21"}
+{"ip":"::1","level":"error","message":"ENOENT: no such file or directory, open 'C:\\MERN Project\\headly\\backend\\uploads\\tmp\\file-1761834531240-872302519.webp'","method":"POST","service":"headly-backend","stack":"Error: ENOENT: no such file or directory, open 'C:\\MERN Project\\headly\\backend\\uploads\\tmp\\file-1761834531240-872302519.webp'","timestamp":"2025-10-30 20:28:51","url":"/api/media/upload"}
+{"ip":"::1","level":"error","message":"ENOENT: no such file or directory, open 'C:\\MERN Project\\headly\\backend\\uploads\\tmp\\file-1761835202341-233600252.webp'","method":"POST","service":"headly-backend","stack":"Error: ENOENT: no such file or directory, open 'C:\\MERN Project\\headly\\backend\\uploads\\tmp\\file-1761835202341-233600252.webp'","timestamp":"2025-10-30 20:40:02","url":"/api/media/upload"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-10-30 20:42:10"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-10-30 20:42:10"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-10-30 20:42:10"}
+{"ip":"::1","level":"error","message":"Media upload failed: The bucket does not allow ACLs","method":"POST","service":"headly-backend","stack":"Error: Media upload failed: The bucket does not allow ACLs\n    at exports.uploadMedia (C:\\MERN Project\\headly\\backend\\services\\media.service.js:92:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async exports.uploadMedia (C:\\MERN Project\\headly\\backend\\controllers\\media.controller.js:28:23)","timestamp":"2025-10-30 20:43:01","url":"/api/media/upload"}
