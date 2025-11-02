@@ -1,4 +1,4 @@
-
+const { PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const Media = require('../models/Media.model');
 const AuditLog = require('../models/AuditLog.model');
 const s3 = require('../config/s3');
@@ -60,8 +60,9 @@ exports.uploadMedia = async (file, userId, metadata = {}) => {
         };
 
         console.log('S3 Upload Params:', params);
-        const result = await s3.upload(params).promise();
-        console.log('S3 Upload Result:', result);
+        await s3.send(new PutObjectCommand(params));
+        const fileUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+        console.log('S3 Upload Result:', fileUrl);
 
         // Create media record
         const media = await Media.create({
@@ -69,8 +70,8 @@ exports.uploadMedia = async (file, userId, metadata = {}) => {
             originalName: file.originalname,
             mimeType: file.mimetype,
             size: file.size,
-            url: result.Location,
-            thumbnailUrl: result.Location, // Placeholder, can be a different size
+            url: fileUrl,
+            thumbnailUrl: fileUrl, // Placeholder, can be a different size
             bucket: process.env.AWS_S3_BUCKET_NAME,
             key: key,
             uploadedBy: userId,
@@ -125,10 +126,10 @@ exports.deleteMedia = async (mediaId) => {
     // Delete from S3
     if (media.bucket && media.key) {
         try {
-            await s3.deleteObject({
+            await s3.send(new DeleteObjectCommand({
                 Bucket: media.bucket,
                 Key: media.key
-            }).promise();
+            }));
         } catch (error) {
             console.error('S3 deletion failed:', error);
         }
@@ -144,4 +145,3 @@ exports.deleteMedia = async (mediaId) => {
         resourceId: media._id
     });
 };
-

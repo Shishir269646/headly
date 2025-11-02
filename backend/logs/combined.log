@@ -337,3 +337,53 @@
 {"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-10-30 20:42:10"}
 {"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-10-30 20:42:10"}
 {"ip":"::1","level":"error","message":"Media upload failed: The bucket does not allow ACLs","method":"POST","service":"headly-backend","stack":"Error: Media upload failed: The bucket does not allow ACLs\n    at exports.uploadMedia (C:\\MERN Project\\headly\\backend\\services\\media.service.js:92:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async exports.uploadMedia (C:\\MERN Project\\headly\\backend\\controllers\\media.controller.js:28:23)","timestamp":"2025-10-30 20:43:01","url":"/api/media/upload"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 12:14:10"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 12:14:10"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 12:14:10"}
+{"ip":"::1","level":"error","message":"Authentication required. Please login.","method":"POST","service":"headly-backend","stack":"Error: Authentication required. Please login.\n    at exports.authenticate (C:\\MERN Project\\headly\\backend\\middlewares\\auth.middleware.js:18:19)\n    at Layer.handle [as handle_request] (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at Function.handle (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:175:3)\n    at router (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:47:12)","timestamp":"2025-11-02 12:16:31","url":"/api/auth/logout"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 12:29:13"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 12:29:13"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 12:29:13"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 12:30:37"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 12:30:37"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 12:30:37"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 12:30:44"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 12:30:44"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 12:30:44"}
+{"ip":"::1","level":"error","message":"Media upload failed: s3.upload is not a function","method":"POST","service":"headly-backend","stack":"Error: Media upload failed: s3.upload is not a function\n    at exports.uploadMedia (C:\\MERN Project\\headly\\backend\\services\\media.service.js:91:15)\n    at exports.uploadMedia (C:\\MERN Project\\headly\\backend\\controllers\\media.controller.js:28:42)\n    at Layer.handle [as handle_request] (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at done (C:\\MERN Project\\headly\\backend\\node_modules\\multer\\lib\\make-middleware.js:47:7)\n    at indicateDone (C:\\MERN Project\\headly\\backend\\node_modules\\multer\\lib\\make-middleware.js:51:68)\n    at C:\\MERN Project\\headly\\backend\\node_modules\\multer\\lib\\make-middleware.js:157:11\n    at WriteStream.<anonymous> (C:\\MERN Project\\headly\\backend\\node_modules\\multer\\storage\\disk.js:43:9)\n    at WriteStream.emit (node:events:530:35)\n    at finish (node:internal/streams/writable:955:10)","timestamp":"2025-11-02 12:31:22","url":"/api/media/upload"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 12:42:18"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 12:42:18"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 12:42:18"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 12:46:23"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 12:46:23"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 12:46:23"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 12:47:09"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 12:47:09"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 12:47:09"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 12:48:32"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 12:48:32"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 12:48:32"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 12:51:35"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 12:51:35"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 12:51:35"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 13:04:42"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 13:04:42"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 13:04:42"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 13:04:55"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 13:04:55"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 13:04:55"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 13:07:10"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 13:07:10"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 13:07:10"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 13:07:48"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 13:07:48"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 13:07:48"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 13:07:59"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 13:07:59"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 13:08:00"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 13:10:53"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 13:10:53"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 13:10:53"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-11-02 13:11:04"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-11-02 13:11:04"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"headly-backend","timestamp":"2025-11-02 13:11:04"}

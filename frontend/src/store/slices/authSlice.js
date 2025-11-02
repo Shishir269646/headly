@@ -8,16 +8,8 @@ const api = axios.create({
     baseURL: API_URL,
     headers: {
         'Content-Type': 'application/json'
-    }
-});
-
-// Add token to requests
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
+    },
+    withCredentials: true // Crucial for sending HTTP-only cookies
 });
 
 // Async thunks
@@ -26,10 +18,8 @@ export const register = createAsyncThunk(
     async (userData, { rejectWithValue }) => {
         try {
             const { data } = await api.post('/auth/register', userData);
-            localStorage.setItem('accessToken', data.data.token);
-            localStorage.setItem('refreshToken', data.data.refreshToken);
             localStorage.setItem('user', JSON.stringify(data.data.user));
-            return data.data;
+            return data.data.user; // Only return user data, token is in cookie
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Registration failed');
         }
@@ -41,10 +31,8 @@ export const login = createAsyncThunk(
     async (credentials, { rejectWithValue }) => {
         try {
             const { data } = await api.post('/auth/login', credentials);
-            localStorage.setItem('accessToken', data.data.token);
-            localStorage.setItem('refreshToken', data.data.refreshToken);
-            localStorage.setItem('user', JSON.stringify(data.data.user));
-            return data.data;
+            localStorage.setItem('user', JSON.stringify(data.data));
+            return data.data; // Only return user data, token is in cookie
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Login failed');
         }
@@ -56,8 +44,6 @@ export const logout = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             await api.post('/auth/logout');
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
             localStorage.removeItem('user');
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Logout failed');
@@ -93,11 +79,10 @@ export const refreshToken = createAsyncThunk(
     'auth/refreshToken',
     async (_, { rejectWithValue }) => {
         try {
-            const refreshToken = localStorage.getItem('refreshToken');
-            const { data } = await api.post('/auth/refresh-token', { refreshToken });
-            localStorage.setItem('accessToken', data.data.token);
-            localStorage.setItem('refreshToken', data.data.refreshToken);
-            return data.data;
+            // With HTTP-only cookies, the browser automatically sends the refresh token cookie.
+            // We don't need to manually retrieve it from localStorage or send it in the body.
+            const { data } = await api.post('/auth/refresh-token');
+            return data.data; // The backend will set a new access token cookie
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Token refresh failed');
         }
@@ -107,8 +92,6 @@ export const refreshToken = createAsyncThunk(
 // Initial state
 const initialState = {
     user: null,
-    token: null,
-    refreshToken: null,
     isAuthenticated: false,
     loading: false,
     error: null
@@ -124,12 +107,17 @@ const authSlice = createSlice({
         },
         loadUserFromStorage: (state) => {
             const userStr = localStorage.getItem('user');
-            const token = localStorage.getItem('accessToken');
-            if (userStr && token) {
+            if (userStr) {
                 state.user = JSON.parse(userStr);
-                state.token = token;
                 state.isAuthenticated = true;
             }
+        },
+        // New action to set isAuthenticated based on backend response (e.g., from a session check)
+        setAuthenticated: (state, action) => {
+            state.isAuthenticated = action.payload;
+        },
+        setUser: (state, action) => {
+            state.user = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -142,9 +130,7 @@ const authSlice = createSlice({
             .addCase(register.fulfilled, (state, action) => {
                 state.loading = false;
                 state.isAuthenticated = true;
-                state.user = action.payload.user;
-                state.token = action.payload.token;
-                state.refreshToken = action.payload.refreshToken;
+                state.user = action.payload; // action.payload is now just user data
             })
             .addCase(register.rejected, (state, action) => {
                 state.loading = false;
@@ -158,9 +144,7 @@ const authSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
                 state.isAuthenticated = true;
-                state.user = action.payload.user;
-                state.token = action.payload.token;
-                state.refreshToken = action.payload.refreshToken;
+                state.user = action.payload; // action.payload is now just user data
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
@@ -169,21 +153,28 @@ const authSlice = createSlice({
             // Logout
             .addCase(logout.fulfilled, (state) => {
                 state.user = null;
-                state.token = null;
-                state.refreshToken = null;
                 state.isAuthenticated = false;
             })
             // Get Current User
             .addCase(getCurrentUser.fulfilled, (state, action) => {
                 state.user = action.payload;
+                state.isAuthenticated = true; // If we successfully get a user, they are authenticated
             })
-            // Refresh Token
-            .addCase(refreshToken.fulfilled, (state, action) => {
-                state.token = action.payload.token;
-                state.refreshToken = action.payload.refreshToken;
+            .addCase(getCurrentUser.rejected, (state) => {
+                state.user = null;
+                state.isAuthenticated = false;
+            })
+            // Refresh Token - no direct state update for token as it's in cookie
+            .addCase(refreshToken.fulfilled, (state) => {
+                // Token is refreshed via cookie, no direct state update needed for token
+                state.isAuthenticated = true; // Assume if refresh is successful, user is authenticated
+            })
+            .addCase(refreshToken.rejected, (state) => {
+                state.isAuthenticated = false;
+                state.user = null;
             });
     }
 });
 
-export const { clearError, loadUserFromStorage } = authSlice.actions;
+export const { clearError, loadUserFromStorage, setAuthenticated, setUser } = authSlice.actions;
 export default authSlice.reducer;

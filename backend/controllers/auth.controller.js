@@ -14,8 +14,15 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
     try {
-        const result = await authService.login(req.body, req.ip, req.headers['user-agent']);
-        successResponse(res, result, 'Login successful');
+        const { token, ...userData } = await authService.login(req.body, req.ip, req.headers['user-agent']);
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+            maxAge: 24 * 60 * 60 * 1000 // 1 day
+        });
+
+        successResponse(res, userData, 'Login successful');
     } catch (error) {
         next(error);
     }
@@ -24,6 +31,7 @@ exports.login = async (req, res, next) => {
 exports.logout = async (req, res, next) => {
     try {
         await authService.logout(req.user.id);
+        res.clearCookie('token');
         successResponse(res, null, 'Logout successful');
     } catch (error) {
         next(error);

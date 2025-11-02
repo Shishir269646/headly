@@ -3,6 +3,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
 const mongoSanitize = require('express-mongo-sanitize');
+const cookieParser = require('cookie-parser');
 const routes = require('./routes');
 const { errorHandler } = require('./middlewares/errorHandler.middleware');
 const { notFound } = require('./middlewares/notFound.middleware');
@@ -25,6 +26,7 @@ app.use(cors({
 // Body parsers
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(cookieParser());
 
 // Data sanitization against NoSQL injection
 app.use(mongoSanitize());
