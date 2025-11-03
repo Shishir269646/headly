@@ -1,5 +1,6 @@
 
 const contentService = require('../services/content.service');
+const mediaService = require('../services/media.service');
 const { successResponse } = require('../utils/responses');
 
 
@@ -32,7 +33,14 @@ exports.getContentBySlug = async (req, res, next) => {
 
 exports.createContent = async (req, res, next) => {
     try {
-        const content = await contentService.createContent(req.user.id, req.body);
+        let featuredImageId = null;
+        if (req.file) {
+            const media = await mediaService.uploadMedia(req.file, req.user.id);
+            featuredImageId = media._id;
+        }
+
+        const contentData = { ...req.body, featuredImage: featuredImageId };
+        const content = await contentService.createContent(req.user.id, contentData);
         successResponse(res, content, 'Content created successfully', 201);
     } catch (error) {
         next(error);
@@ -41,7 +49,14 @@ exports.createContent = async (req, res, next) => {
 
 exports.updateContent = async (req, res, next) => {
     try {
-        const content = await contentService.updateContent(req.params.id, req.body, req.user);
+        let featuredImageId = req.body.featuredImage; // Keep existing if not updated
+        if (req.file) {
+            const media = await mediaService.uploadMedia(req.file, req.user.id);
+            featuredImageId = media._id;
+        }
+
+        const contentData = { ...req.body, featuredImage: featuredImageId };
+        const content = await contentService.updateContent(req.params.id, contentData, req.user);
         successResponse(res, content, 'Content updated successfully');
     } catch (error) {
         next(error);

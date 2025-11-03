@@ -1,23 +1,74 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import SEO from '@/components/seo/SEO';
 import { useParams } from 'next/navigation';
+import { format } from 'date-fns';
+import SEO from '@/components/seo/SEO';
 import { useContent } from '@/hooks/useContent';
 import ContentRenderer from '@/components/content/ContentRenderer';
-import { format } from 'date-fns';
+
+// Optional (only if these are already made in your components folder)
+import ArticleBreadcrumb from '@/components/ui/ArticleBreadcrumb';
+import ArticleHeader from '@/components/ui/ArticleHeader';
+import ArticleBody from '@/components/ui/ArticleBody';
+import ArticleAuthorBio from '@/components/ui/ArticleAuthorBio';
+import ArticleCommentSection from '@/components/ui/ArticleCommentSection';
+import Sidebar from '@/components/ui/Sidebar';
+
+
+
+/* {
+      "title": "Getting Started with Headly CMS",
+      "excerpt": "Learn how to use Headly CMS for your next project",
+      "body": "Headly is a modern headless CMS built with Node.js and MongoDB...",
+      "featuredImage": null,
+      "status": "published",
+      "publishAt": null,
+      "author": {
+        "$oid": "68f5dd0591e429314fc830d7"
+      },
+      "categories": [
+        "Tutorial",
+        "Getting Started"
+      ],
+      "tags": [
+        "headless-cms",
+        "nodejs",
+        "mongodb"
+      ],
+      "seo": {
+        "metaTitle": "Getting Started with Headly CMS",
+        "metaDescription": "Complete guide to getting started with Headly CMS",
+        "metaKeywords": []
+      },
+      "readTime": 1,
+      "views": 2,
+      "isDeleted": false,
+      "createdAt": {
+        "$date": "2025-10-20T06:56:06.567Z"
+      },
+      "updatedAt": {
+        "$date": "2025-11-01T15:01:00.813Z"
+      },
+      "slug": "getting-started-with-headly-cms-1760943366567",
+      "__v": 0,
+      "featuredOrder": 2,
+      "isFeatured": false,
+      "isPopular": true
+    }
+     */
+
+
+
+
 
 export default function PostPage() {
     const { slug } = useParams();
     const { currentContent, loading, error, getContentBySlug } = useContent();
 
     useEffect(() => {
-        if (slug) {
-            getContentBySlug(slug);
-        }
+        if (slug) getContentBySlug(slug);
     }, [slug]);
-
-   
 
     if (loading) {
         return <div className="flex justify-center items-center h-screen">Loading...</div>;
@@ -31,6 +82,7 @@ export default function PostPage() {
         return <div className="text-center mt-10">Post not found.</div>;
     }
 
+    // ✅ Destructure your mongoose model fields
     const {
         title,
         excerpt,
@@ -38,71 +90,80 @@ export default function PostPage() {
         featuredImage,
         author,
         createdAt,
-        categories,
-        tags,
+        categories = [],
+        tags = [],
         seo,
         readTime,
-        views
+        views,
     } = currentContent;
+
+    // ✅ Example breadcrumb items
+    const breadcrumbItems = [
+        { name: 'Home', href: '/' },
+        { name: categories?.[0] || 'Blog', href: '/blog' },
+        { name: title, href: `/post/${slug}` },
+    ];
 
     return (
         <>
             <SEO
                 title={seo?.metaTitle || title}
                 description={seo?.metaDescription || excerpt}
-                keywords={seo?.metaKeywords || tags}
+                keywords={seo?.metaKeywords?.length ? seo.metaKeywords : tags}
                 slug={slug}
                 image={seo?.ogImage || featuredImage?.url}
             />
-            <div className="container mx-auto px-4 py-8">
-                <article className="max-w-4xl mx-auto">
-                    <header className="mb-8">
-                        <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-4">{title}</h1>
-                        {excerpt && <p className="text-lg text-gray-600 mb-4">{excerpt}</p>}
-                        <div className="flex items-center text-sm text-gray-500">
-                            <span>By {author?.name || 'Unknown'}</span>
-                            <span className="mx-2">•</span>
-                            <span>{createdAt ? format(new Date(createdAt), 'MMMM dd, yyyy') : 'N/A'}</span>
-                            <span className="mx-2">•</span>
-                            <span>{readTime} min read</span>
-                            <span className="mx-2">•</span>
-                            <span>{views} views</span>
+
+            <div className="min-h-screen bg-white dark:bg-gray-950 dark:text-gray-200">
+                {/* Breadcrumb */}
+                <ArticleBreadcrumb items={breadcrumbItems} />
+
+                <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {/* ======= Left Column: Article ======= */}
+                        <div className="lg:col-span-2 space-y-6">
+
+                            {/* ✅ Article Header */}
+                            <ArticleHeader
+                                category={categories?.[0] || 'Uncategorized'}
+                                title={title}
+                                authorName={typeof author === 'object' ? author.name : author}
+                                date={createdAt ? format(new Date(createdAt), 'PPP') : '—'}
+                                readTime={readTime}
+                                views={views}
+                                featuredImage={featuredImage?.url}
+                            />
+
+                            {/* ✅ Render actual CMS body */}
+                            <ArticleBody tags={tags}>
+                                <ContentRenderer content={body} />
+                            </ArticleBody>
+
+                            {/* ✅ Author Bio */}
+                            {author && (
+                                <ArticleAuthorBio
+                                    name={author.name || 'Unknown Author'}
+                                    bio={author.bio || 'No bio available.'}
+                                    avatarUrl={author.avatarUrl || '/default-avatar.png'}
+                                    twitterUrl={author.twitter || '#'}
+                                    linkedinUrl={author.linkedin || '#'}
+                                />
+                            )}
+
+                            {/* ✅ Comments Section (Optional placeholder) */}
+                            <ArticleCommentSection
+                                totalComments={0}
+                                comments={[]} // replace with real comments later
+                            />
                         </div>
-                    </header>
 
-                    {featuredImage && (
-                        <img
-                            src={featuredImage.url}
-                            alt={title}
-                            className="w-full h-auto rounded-lg mb-8"
-                        />
-                    )}
-
-                    <div className="prose lg:prose-xl max-w-none">
-                        <ContentRenderer content={body} />
+                        {/* ======= Right Column: Sidebar ======= */}
+                        <div className="lg:col-span-1">
+                            <Sidebar />
+                        </div>
                     </div>
-
-                    <footer className="mt-12">
-                        <div className="flex flex-wrap gap-2 mb-4">
-                            {categories?.length > 0 && <span className="font-bold">Categories:</span>}
-                            {categories?.map(category => (
-                                <span key={category} className="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700">
-                                    {category}
-                                </span>
-                            ))}
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                            {tags?.length > 0 && <span className="font-bold">Tags:</span>}
-                            {tags?.map(tag => (
-                                <span key={tag} className="bg-blue-100 text-blue-800 rounded-full px-3 py-1 text-sm font-semibold">
-                                    #{tag}
-                                </span>
-                            ))}
-                        </div>
-                    </footer>
-                </article>
+                </main>
             </div>
         </>
     );
 }
-''

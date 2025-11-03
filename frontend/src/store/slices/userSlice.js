@@ -4,7 +4,8 @@ import axios from 'axios';
 const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api');
 
 const api = axios.create({
-    baseURL: API_URL
+    baseURL: API_URL,
+    withCredentials: true
 });
 
 api.interceptors.request.use((config) => {
@@ -20,8 +21,10 @@ export const fetchUsers = createAsyncThunk(
     'user/fetchUsers',
     async (filters = {}, { rejectWithValue }) => {
         try {
-            const params = new URLSearchParams(filters).toString();
-            const { data } = await api.get(`/users?${params}`);
+            const safeFilters = filters && typeof filters === 'object' ? filters : {};
+            const paramsStr = new URLSearchParams(safeFilters).toString();
+            const path = paramsStr ? `/users?${paramsStr}` : '/users';
+            const { data } = await api.get(path);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch users');
@@ -89,6 +92,34 @@ export const updateProfile = createAsyncThunk(
     }
 );
 
+export const uploadimage = createAsyncThunk(
+    'user/uploadimage',
+    async (file, { rejectWithValue }) => {
+        try {
+            // Backend expects:
+            // - Field name: 'image' (required) - NOT 'file'
+            // - Endpoint: PUT /api/users/profile/image
+            // - Returns: User object with updated image URL
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const { data } = await api.put('/users/profile/avatar', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            // Backend returns: { success: true, message: '...', data: <user object> }
+            return data.data;
+        } catch (error) {
+            const errorMessage = error.response?.data?.message || 
+                                 error.message || 
+                                 'Failed to upload image';
+            return rejectWithValue(errorMessage);
+        }
+    }
+);
+
 // Initial state
 const initialState = {
     users: [],
@@ -149,6 +180,21 @@ const userSlice = createSlice({
             // Update Profile
             .addCase(updateProfile.fulfilled, (state, action) => {
                 state.currentUser = action.payload;
+            })
+            // Upload image
+            .addCase(uploadimage.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(uploadimage.fulfilled, (state, action) => {
+                state.loading = false;
+                if (state.currentUser) {
+                    state.currentUser.image = action.payload.image;
+                }
+            })
+            .addCase(uploadimage.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
             });
     }
 });

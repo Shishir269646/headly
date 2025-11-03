@@ -3,6 +3,8 @@ const Media = require('../models/Media.model');
 const AuditLog = require('../models/AuditLog.model');
 const s3 = require('../config/s3');
 const ApiError = require('../utils/apiError');
+const fs = require('fs');
+const path = require('path');
 
 exports.getAllMedia = async (filters) => {
     const { folder, mimeType, page = 1, limit = 20, search } = filters;
@@ -49,20 +51,74 @@ exports.getMediaById = async (mediaId) => {
 
 exports.uploadMedia = async (file, userId, metadata = {}) => {
     try {
+        if (!file || !file.path) {
+            throw new ApiError(400, 'Invalid file object');
+        }
+
         const folder = metadata.folder || 'general';
-        const key = `${folder}/${Date.now()}-${file.originalname}`;
+        const sanitizedFileName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+        const key = `${folder}/${Date.now()}-${sanitizedFileName}`;
 
-        const params = {
-            Bucket: process.env.AWS_S3_BUCKET_NAME,
-            Key: key,
-            Body: require('fs').createReadStream(file.path),
-            ContentType: file.mimetype
-        };
+        let fileUrl;
+        let bucket = null;
+        let s3Key = null;
 
-        console.log('S3 Upload Params:', params);
-        await s3.send(new PutObjectCommand(params));
-        const fileUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
-        console.log('S3 Upload Result:', fileUrl);
+        // Check if AWS S3 is configured
+        if (process.env.AWS_S3_BUCKET_NAME && process.env.AWS_REGION && 
+            process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+            try {
+                // Upload to S3 (no ACL to support BucketOwnerEnforced)
+                const params = {
+                    Bucket: process.env.AWS_S3_BUCKET_NAME,
+                    Key: key,
+                    Body: fs.createReadStream(file.path),
+                    ContentType: file.mimetype
+                };
+
+                await s3.send(new PutObjectCommand(params));
+                fileUrl = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
+                bucket = process.env.AWS_S3_BUCKET_NAME;
+                s3Key = key;
+                
+                console.log('S3 Upload Success:', fileUrl);
+            } catch (s3Error) {
+                console.error('S3 Upload Error:', s3Error);
+                // Fallback to local storage if S3 fails
+                throw new ApiError(500, `S3 upload failed: ${s3Error.message}`);
+            }
+        } else {
+            // Fallback to local storage if S3 is not configured
+            console.warn('AWS S3 not configured, using local storage fallback');
+            
+            // Ensure uploads directory exists
+            const uploadsDir = path.join(__dirname, '../uploads');
+            const folderDir = path.join(uploadsDir, folder);
+            
+            if (!fs.existsSync(uploadsDir)) {
+                fs.mkdirSync(uploadsDir, { recursive: true });
+            }
+            if (!fs.existsSync(folderDir)) {
+                fs.mkdirSync(folderDir, { recursive: true });
+            }
+
+            // Move file from tmp to permanent location
+            const targetPath = path.join(folderDir, `${Date.now()}-${sanitizedFileName}`);
+            fs.copyFileSync(file.path, targetPath);
+            
+            // Generate full URL for local storage
+            // Use relative path that will be served by express.static
+            fileUrl = `/uploads/${folder}/${path.basename(targetPath)}`;
+            console.log('Local Upload Success:', fileUrl);
+        }
+
+        // Clean up temporary file
+        try {
+            if (fs.existsSync(file.path)) {
+                fs.unlinkSync(file.path);
+            }
+        } catch (cleanupError) {
+            console.error('Failed to cleanup temp file:', cleanupError);
+        }
 
         // Create media record
         const media = await Media.create({
@@ -72,8 +128,8 @@ exports.uploadMedia = async (file, userId, metadata = {}) => {
             size: file.size,
             url: fileUrl,
             thumbnailUrl: fileUrl, // Placeholder, can be a different size
-            bucket: process.env.AWS_S3_BUCKET_NAME,
-            key: key,
+            bucket: bucket,
+            key: s3Key,
             uploadedBy: userId,
             alt: metadata.alt || '',
             caption: metadata.caption || '',
@@ -89,12 +145,24 @@ exports.uploadMedia = async (file, userId, metadata = {}) => {
 
         return media;
     } catch (error) {
+        // Clean up temporary file on error
+        if (file && file.path && fs.existsSync(file.path)) {
+            try {
+                fs.unlinkSync(file.path);
+            } catch (cleanupError) {
+                console.error('Failed to cleanup temp file on error:', cleanupError);
+            }
+        }
+        
+        if (error instanceof ApiError) {
+            throw error;
+        }
         throw new ApiError(500, `Media upload failed: ${error.message}`);
     }
 };
 
 exports.uploadMultipleMedia = async (files, userId) => {
-    const uploadPromises = files.map(file => this.uploadMedia(file, userId));
+    const uploadPromises = files.map(file => exports.uploadMedia(file, userId));
     return await Promise.all(uploadPromises);
 };
 

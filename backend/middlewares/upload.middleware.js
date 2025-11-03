@@ -1,16 +1,28 @@
 
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const ApiError = require('../utils/apiError');
+
+// Ensure uploads/tmp directory exists
+const uploadsDir = path.join(__dirname, '../uploads/tmp');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+}
 
 // Configure multer storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/tmp');
+        // Ensure directory exists
+        if (!fs.existsSync(uploadsDir)) {
+            fs.mkdirSync(uploadsDir, { recursive: true });
+        }
+        cb(null, uploadsDir);
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+        const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '_');
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(sanitizedName));
     }
 });
 
@@ -36,10 +48,5 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-exports.uploadSingle = upload.single('file');
-exports.uploadMultiple = upload.array('files', 10);
-exports.uploadFields = upload.fields([
-    { name: 'featuredImage', maxCount: 1 },
-    { name: 'gallery', maxCount: 10 }
-]);
+module.exports = upload;
 

@@ -87,7 +87,7 @@ exports.login = async (credentials, ipAddress, userAgent) => {
             name: user.name,
             email: user.email,
             role: user.role,
-            avatar: user.avatar
+            image: user.image || null
         },
         token,
         refreshToken
@@ -137,7 +137,7 @@ exports.refreshToken = async (refreshToken) => {
 };
 
 exports.getUserById = async (userId) => {
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).populate('image');
     if (!user) {
         throw new ApiError(404, 'User not found');
     }

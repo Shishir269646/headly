@@ -8,6 +8,7 @@ import {
     updateUser,
     deleteUser,
     updateProfile,
+    uploadimage,
     clearError
 } from '@/store/slices/userSlice';
 
@@ -44,6 +45,10 @@ export const useUser = (filters = null) => {
         return dispatch(updateProfile(profileData));
     };
 
+    const uploadUserimage = (file) => {
+        return dispatch(uploadimage(file));
+    };
+
     return {
         users,
         currentUser,
@@ -55,6 +60,7 @@ export const useUser = (filters = null) => {
         update,
         remove,
         updateMyProfile,
+        uploadUserimage,
         clearError: () => dispatch(clearError())
     };
 };

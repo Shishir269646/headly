@@ -37,6 +37,7 @@ export default function ContentForm({ contentId = null }) {
     }
   });
 
+  const [selectedFile, setSelectedFile] = useState(null);
   const [categoryInput, setCategoryInput] = useState('');
   const [tagInput, setTagInput] = useState('');
 
@@ -48,7 +49,7 @@ export default function ContentForm({ contentId = null }) {
         slug: currentContent.slug || '',
         excerpt: currentContent.excerpt || '',
         body: currentContent.body || '',
-        featuredImage: currentContent.featuredImage?._id || null,
+        featuredImage: currentContent.featuredImage?.url || null, // Use URL for preview
         status: currentContent.status || 'draft',
         categories: currentContent.categories || [],
         tags: currentContent.tags || [],
@@ -79,20 +80,32 @@ export default function ContentForm({ contentId = null }) {
     setFormData({ ...formData, body: html });
   };
 
-  const handleImageUpload = async (e) => {
+  const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    try {
-      const uploadedMedia = await upload(file, {
-        alt: formData.title || 'Featured Image',
-        folder: 'featured-images'
-      });
-      setFormData({ ...formData, featuredImage: uploadedMedia.payload._id });
-      toast.success('Image uploaded successfully!');
-    } catch (error) {
-      toast.error('Failed to upload image');
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select a valid image file.');
+      e.target.value = ''; // Clear the input
+      return;
     }
+
+    // Validate file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      toast.error('Image size must be less than 10MB.');
+      e.target.value = ''; // Clear the input
+      return;
+    }
+
+    setSelectedFile(file);
+    setFormData(prev => ({ ...prev, featuredImage: URL.createObjectURL(file) })); // Set temporary URL for preview
+  };
+
+  const handleRemoveFeaturedImage = () => {
+    setSelectedFile(null);
+    setFormData(prev => ({ ...prev, featuredImage: null }));
   };
 
   const addCategory = () => {
@@ -132,12 +145,39 @@ export default function ContentForm({ contentId = null }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const dataToSend = new FormData();
+
+    // Append all form data fields
+    for (const key in formData) {
+      if (key === 'featuredImage') {
+        // Skip featuredImage here, handle it separately
+        continue;
+      } else if (key === 'seo') {
+        dataToSend.append(key, JSON.stringify(formData[key]));
+      } else if (Array.isArray(formData[key])) {
+        formData[key].forEach(item => dataToSend.append(`${key}[]`, item));
+      } else {
+        dataToSend.append(key, formData[key]);
+      }
+    }
+
+    // Handle featured image
+    if (selectedFile) {
+      dataToSend.append('featuredImage', selectedFile);
+    } else if (formData.featuredImage && typeof formData.featuredImage === 'string') {
+      // If no new file selected, but an existing image is referenced by URL/ID
+      dataToSend.append('featuredImage', formData.featuredImage);
+    } else if (formData.featuredImage === null) {
+      // Explicitly send null if image was cleared
+      dataToSend.append('featuredImage', ''); // Send empty string for null
+    }
+
     try {
       if (contentId) {
-        await update(contentId, formData);
+        await update(contentId, dataToSend);
         toast.success('Content updated successfully!');
       } else {
-        await create(formData);
+        await create(dataToSend);
         toast.success('Content created successfully!');
       }
       router.push('/dashboard/contents');
@@ -210,11 +250,28 @@ export default function ContentForm({ contentId = null }) {
         <input
           type="file"
           accept="image/*"
-          onChange={handleImageUpload}
+          onChange={handleFileChange}
           disabled={uploading}
           className="block w-full"
         />
         {uploading && <p className="text-sm text-gray-500 mt-1">Uploading...</p>}
+        {formData.featuredImage && (
+          <div className="mt-4 relative w-48 h-32 border rounded overflow-hidden">
+            <img
+              src={typeof formData.featuredImage === 'string' ? formData.featuredImage : `/api/media/${formData.featuredImage}`}
+              alt="Featured Preview"
+              className="w-full h-full object-cover"
+            />
+            <button
+              type="button"
+              onClick={() => setFormData({ ...formData, featuredImage: null })}
+              className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-xs leading-none"
+              aria-label="Remove featured image"
+            >
+              &times;
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Categories */}

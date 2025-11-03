@@ -2,6 +2,7 @@
 const User = require('../models/User.model');
 const AuditLog = require('../models/AuditLog.model');
 const ApiError = require('../utils/apiError');
+const mediaService = require('./media.service');
 
 exports.getAllUsers = async (filters) => {
     const { role, isActive, page = 1, limit = 10, search } = filters;
@@ -18,6 +19,7 @@ exports.getAllUsers = async (filters) => {
 
     const users = await User.find(query)
         .select('-refreshToken')
+        .populate('image')
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .sort({ createdAt: -1 });
@@ -35,7 +37,9 @@ exports.getAllUsers = async (filters) => {
 };
 
 exports.getUserById = async (userId) => {
-    const user = await User.findById(userId).select('-refreshToken');
+    const user = await User.findById(userId)
+        .select('-refreshToken')
+        .populate('image');
     if (!user) {
         throw new ApiError(404, 'User not found');
     }
@@ -109,7 +113,7 @@ exports.deleteUser = async (userId) => {
 };
 
 exports.updateProfile = async (userId, updateData) => {
-    const allowedUpdates = ['name', 'bio', 'avatar'];
+    const allowedUpdates = ['name', 'bio', 'image', 'isActive'];
     const user = await User.findById(userId);
 
     if (!user) {
@@ -123,6 +127,39 @@ exports.updateProfile = async (userId, updateData) => {
     });
 
     await user.save();
+    await user.populate('image');
+    return user;
+};
+
+exports.updateAvatar = async (userId, file) => {
+    if (!file) {
+        throw new ApiError(400, 'No file uploaded');
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new ApiError(404, 'User not found');
+    }
+
+    // Upload media and link to user as image
+    const uploadedMedia = await mediaService.uploadMedia(file, userId, {
+        folder: 'images',
+        alt: `${user.name}'s image`
+    });
+
+    // Update user's image reference
+    user.image = uploadedMedia._id;
+    await user.save();
+    await user.populate('image');
+
+    await AuditLog.create({
+        user: userId,
+        action: 'UPLOAD_MEDIA',
+        resource: 'user',
+        resourceId: userId,
+        details: { image: user.image }
+    });
+
     return user;
 };
 

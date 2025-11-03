@@ -17,6 +17,7 @@ const breadcrumbItems = [
     { label: 'Tablet PC Market', href: '#', isCurrent: true },
 ];
 
+
 const articleDetails = {
     category: 'Technology',
     title: 'Tablet PC Market to Witness Exponential Growth by 2028, Sources Say',

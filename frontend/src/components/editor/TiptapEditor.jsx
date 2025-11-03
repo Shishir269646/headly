@@ -1,6 +1,8 @@
 'use client';
 
 import { useEditor, EditorContent } from '@tiptap/react';
+import { useState } from 'react';
+import MediaLibraryModal from '@/components/media/MediaLibraryModal';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
@@ -10,14 +12,24 @@ import Highlight from '@tiptap/extension-highlight';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { createLowlight } from 'lowlight';
 import javascript from 'highlight.js/lib/languages/javascript';
-import python from 'highlight.js/lib/languages/python';
+import ImageUploadButton from './ImageUploadButton';
 
 // Create lowlight instance and register languages
 const lowlight = createLowlight();
 lowlight.register('javascript', javascript);
-lowlight.register('python', python);
+
+
 
 export default function TiptapEditor({ content, onChange, placeholder = 'Start writing...' }) {
+    const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
+
+    const handleSelectImage = (media) => {
+        if (media && media.url) {
+            editor.chain().focus().setImage({ src: media.url, alt: media.alt }).run();
+        }
+        setIsMediaModalOpen(false);
+    };
+
     const editor = useEditor({
         immediatelyRender: false,
         extensions: [
@@ -66,22 +78,22 @@ export default function TiptapEditor({ content, onChange, placeholder = 'Start w
 
     return (
         <div className="border rounded-lg overflow-hidden">
-            <MenuBar editor={editor} />
+            <MenuBar editor={editor} onBrowseMedia={() => setIsMediaModalOpen(true)} />
             <EditorContent editor={editor} />
+            <MediaLibraryModal
+                isOpen={isMediaModalOpen}
+                onClose={() => setIsMediaModalOpen(false)}
+                onSelect={handleSelectImage}
+            />
         </div>
     );
 }
 
 // Editor Menu Bar Component
-function MenuBar({ editor }) {
+function MenuBar({ editor, onBrowseMedia }) {
     if (!editor) return null;
 
-    const addImage = () => {
-        const url = window.prompt('Enter image URL:');
-        if (url) {
-            editor.chain().focus().setImage({ src: url }).run();
-        }
-    };
+    
 
     const setLink = () => {
         const url = window.prompt('Enter URL:');
@@ -260,12 +272,14 @@ function MenuBar({ editor }) {
                 🔗
             </button>
 
+            <ImageUploadButton editor={editor} />
+
             <button
-                onClick={addImage}
+                onClick={onBrowseMedia}
                 className="px-3 py-1 rounded hover:bg-gray-200"
-                title="Add Image"
+                title="Browse Media Library"
             >
-                🖼️
+                📚
             </button>
 
             <div className="w-px bg-gray-300 mx-1"></div>

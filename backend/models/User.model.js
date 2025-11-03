@@ -29,8 +29,9 @@ const userSchema = new mongoose.Schema({
         enum: ['admin', 'editor', 'author', 'viewer'],
         default: 'author'
     },
-    avatar: {
-        type: String,
+    image: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Media',
         default: null
     },
     bio: {

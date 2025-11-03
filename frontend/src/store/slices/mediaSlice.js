@@ -4,7 +4,8 @@ import axios from 'axios';
 const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api');
 
 const api = axios.create({
-    baseURL: API_URL
+    baseURL: API_URL,
+    withCredentials: true
 });
 
 api.interceptors.request.use((config) => {
@@ -33,12 +34,19 @@ export const uploadMedia = createAsyncThunk(
     'media/uploadMedia',
     async ({ file, metadata }, { rejectWithValue }) => {
         try {
+            // Backend expects:
+            // - Field name: 'file' (required)
+            // - Metadata fields: 'alt', 'caption', 'folder' (optional)
+            // - Endpoint: POST /api/media/upload
             const formData = new FormData();
             formData.append('file', file);
 
+            // Append metadata fields if provided
             if (metadata) {
                 Object.keys(metadata).forEach(key => {
-                    formData.append(key, metadata[key]);
+                    if (metadata[key] !== undefined && metadata[key] !== null) {
+                        formData.append(key, metadata[key]);
+                    }
                 });
             }
 
@@ -47,9 +55,14 @@ export const uploadMedia = createAsyncThunk(
                     'Content-Type': 'multipart/form-data'
                 }
             });
+
+            // Backend returns: { success: true, message: '...', data: <media object> }
             return data.data;
         } catch (error) {
-            return rejectWithValue(error.response?.data?.message || 'Failed to upload media');
+            const errorMessage = error.response?.data?.message || 
+                                 error.message || 
+                                 'Failed to upload media';
+            return rejectWithValue(errorMessage);
         }
     }
 );

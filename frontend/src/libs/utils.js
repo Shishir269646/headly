@@ -183,3 +183,28 @@ export const hasPermission = (user, allowedRoles) => {
     const roles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
     return roles.includes(user.role);
 };
+
+/**
+ * Format image URL - converts relative URLs to absolute URLs if needed
+ * @param {string} url - Image URL (can be relative or absolute)
+ * @returns {string} - Formatted URL
+ */
+export const formatImageUrl = (url) => {
+    if (!url) return '';
+    
+    // If already an absolute URL (http/https), return as is
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+        return url;
+    }
+    
+    // If relative URL starting with /, prepend API base URL
+    if (url.startsWith('/')) {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+        // Remove /api from the end if present since we're adding /uploads
+        const baseUrl = apiUrl.replace(/\/api$/, '');
+        return `${baseUrl}${url}`;
+    }
+    
+    // Return as is if it's a data URL or other format
+    return url;
+};

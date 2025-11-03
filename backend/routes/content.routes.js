@@ -9,6 +9,7 @@ const contentController = require('../controllers/content.controller');
 const { authenticate, optionalAuth } = require('../middlewares/auth.middleware');
 const { authorize } = require('../middlewares/rbac.middleware');
 const { validate } = require('../middlewares/validate.middleware');
+const upload = require('../middlewares/upload.middleware');
 const {
     createContentSchema,
     updateContentSchema,
@@ -43,6 +44,7 @@ router.post(
     '/',
     authenticate,
     authorize('admin', 'editor', 'author'),
+    upload.single('featuredImage'), // Add this line for image upload
     validate(createContentSchema),
     contentController.createContent
 );
@@ -52,6 +54,7 @@ router.put(
     '/:id',
     authenticate,
     authorize('admin', 'editor', 'author'),
+    upload.single('featuredImage'), // Add this line for image upload
     validate(updateContentSchema),
     contentController.updateContent
 );

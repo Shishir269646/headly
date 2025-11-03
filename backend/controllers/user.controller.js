@@ -11,6 +11,7 @@ exports.getAllUsers = async (req, res, next) => {
     }
 };
 
+
 exports.getUserById = async (req, res, next) => {
     try {
         const user = await userService.getUserById(req.params.id);
@@ -51,6 +52,15 @@ exports.updateProfile = async (req, res, next) => {
     try {
         const user = await userService.updateProfile(req.user.id, req.body);
         successResponse(res, user, 'Profile updated successfully');
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.updateAvatar = async (req, res, next) => {
+    try {
+        const user = await userService.updateAvatar(req.user.id, req.file);
+        successResponse(res, user, 'Avatar updated successfully');
     } catch (error) {
         next(error);
     }

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Clock, User, MessageSquare } from 'lucide-react';
 
+
 /**
  * Displays the article title, meta information, and featured image.
  * @param {Object} props - Component props.
@@ -15,6 +16,8 @@ import { Clock, User, MessageSquare } from 'lucide-react';
  * @param {string} props.imageAlt - Alt text for the image.
  * @param {string} props.imageCaption - Caption for the image.
  */
+
+
 export default function ArticleHeader({
     category,
     title,

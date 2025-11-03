@@ -4,22 +4,24 @@ const nextConfig = {
     images: {
         remotePatterns: [
             {
-                protocol: 'https',
-                hostname: 'headly-upload-bucket.s3.amazonaws.com',
+                protocol: "https",
+                hostname: "headly-upload-bucket.s3.us-east-1.amazonaws.com",
+                pathname: "**", // সব path অনুমোদিত
+            },
+            {
+                protocol: "http",
+                hostname: "localhost",
+                pathname: "**",
             },
         ],
-        domains: ['res.cloudinary.com', 'localhost'],
-        formats: ['image/avif', 'image/webp']
+        formats: ["image/avif", "image/webp"],
     },
     env: {
         NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     },
-    // Enable ISR
     experimental: {
         serverActions: true,
-    }
+    },
 };
 
 export default nextConfig;
-
-

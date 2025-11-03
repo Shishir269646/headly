@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useContent } from '@/hooks/useContent';
 import { useMedia } from '@/hooks/useMedia';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { FiFileText, FiCheckCircle, FiFile, FiImage, FiEdit, FiUploadCloud, FiBarChart2 } from 'react-icons/fi';
 
 export default function DashboardPage() {
     const { user } = useAuth();
@@ -33,25 +33,25 @@ export default function DashboardPage() {
                 <StatCard
                     title="Total Contents"
                     value={contents?.length || 0}
-                    icon="📝"
+                    icon={<FiFileText className="text-white text-2xl" />}
                     color="bg-blue-500"
                 />
                 <StatCard
                     title="Published"
                     value={contents?.filter(c => c.status === 'published').length || 0}
-                    icon="✅"
+                    icon={<FiCheckCircle className="text-white text-2xl" />}
                     color="bg-green-500"
                 />
                 <StatCard
                     title="Drafts"
                     value={contents?.filter(c => c.status === 'draft').length || 0}
-                    icon="📄"
+                    icon={<FiFile className="text-white text-2xl" />}
                     color="bg-yellow-500"
                 />
                 <StatCard
                     title="Media Files"
                     value={media?.length || 0}
-                    icon="🖼️"
+                    icon={<FiImage className="text-white text-2xl" />}
                     color="bg-purple-500"
                 />
             </div>
@@ -70,7 +70,10 @@ export default function DashboardPage() {
                     ) : contents && contents.length > 0 ? (
                         <div className="space-y-4">
                             {contents.slice(0, 5).map((content) => (
-                                <div key={content._id} className="flex items-center justify-between py-3 border-b last:border-0">
+                                <div
+                                    key={content._id}
+                                    className="flex items-center justify-between py-3 border-b last:border-0"
+                                >
                                     <div className="flex-1">
                                         <Link
                                             href={`/dashboard/contents/${content._id}/edit`}
@@ -82,10 +85,14 @@ export default function DashboardPage() {
                                             {new Date(content.createdAt).toLocaleDateString()}
                                         </p>
                                     </div>
-                                    <span className={`px-3 py-1 rounded-full text-xs ${content.status === 'published' ? 'bg-green-100 text-green-800' :
-                                            content.status === 'draft' ? 'bg-gray-100 text-gray-800' :
-                                                'bg-yellow-100 text-yellow-800'
-                                        }`}>
+                                    <span
+                                        className={`px-3 py-1 rounded-full text-xs ${content.status === 'published'
+                                                ? 'bg-green-100 text-green-800'
+                                                : content.status === 'draft'
+                                                    ? 'bg-gray-100 text-gray-800'
+                                                    : 'bg-yellow-100 text-yellow-800'
+                                            }`}
+                                    >
                                         {content.status}
                                     </span>
                                 </div>
@@ -94,7 +101,10 @@ export default function DashboardPage() {
                     ) : (
                         <div className="text-center py-8 text-gray-500">
                             <p>No contents yet</p>
-                            <Link href="/dashboard/contents/new" className="text-blue-600 hover:underline mt-2 inline-block">
+                            <Link
+                                href="/dashboard/contents/new"
+                                className="text-blue-600 hover:underline mt-2 inline-block"
+                            >
                                 Create your first content →
                             </Link>
                         </div>
@@ -107,19 +117,19 @@ export default function DashboardPage() {
                 <QuickActionCard
                     title="Create Content"
                     description="Write a new blog post or article"
-                    icon="✍️"
+                    icon={<FiEdit className="text-blue-600 text-3xl" />}
                     href="/dashboard/contents/new"
                 />
                 <QuickActionCard
                     title="Upload Media"
                     description="Add images, videos, or documents"
-                    icon="📤"
+                    icon={<FiUploadCloud className="text-purple-600 text-3xl" />}
                     href="/dashboard/media/upload"
                 />
                 <QuickActionCard
                     title="View Analytics"
                     description="Check your content performance"
-                    icon="📊"
+                    icon={<FiBarChart2 className="text-green-600 text-3xl" />}
                     href="/dashboard/analytics"
                 />
             </div>
@@ -135,7 +145,7 @@ function StatCard({ title, value, icon, color }) {
                     <p className="text-sm text-gray-600 mb-1">{title}</p>
                     <p className="text-3xl font-bold text-gray-900">{value}</p>
                 </div>
-                <div className={`w-12 h-12 ${color} rounded-lg flex items-center justify-center text-2xl`}>
+                <div className={`w-12 h-12 ${color} rounded-lg flex items-center justify-center`}>
                     {icon}
                 </div>
             </div>
@@ -145,11 +155,13 @@ function StatCard({ title, value, icon, color }) {
 
 function QuickActionCard({ title, description, icon, href }) {
     return (
-        <Link href={href} className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition">
-            <div className="text-4xl mb-4">{icon}</div>
+        <Link
+            href={href}
+            className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition"
+        >
+            <div className="mb-4">{icon}</div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
             <p className="text-sm text-gray-600">{description}</p>
         </Link>
     );
 }
-

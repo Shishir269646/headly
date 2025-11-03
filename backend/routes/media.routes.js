@@ -5,7 +5,7 @@ const mediaController = require('../controllers/media.controller');
 const { authenticate } = require('../middlewares/auth.middleware');
 const { authorize } = require('../middlewares/rbac.middleware');
 const { validate } = require('../middlewares/validate.middleware');
-const { uploadSingle, uploadMultiple } = require('../middlewares/upload.middleware');
+const upload = require('../middlewares/upload.middleware');
 const { uploadLimiter } = require('../middlewares/rateLimit.middleware');
 const { updateMediaSchema } = require('../validators/media.validator');
 
@@ -14,8 +14,8 @@ router.get('/', mediaController.getAllMedia);
 router.get('/:id', mediaController.getMediaById);
 
 // Upload media (authors and above)
-router.post('/upload', authenticate, authorize('admin', 'editor', 'author'), uploadLimiter, uploadSingle, mediaController.uploadMedia);
-router.post('/upload-multiple', authenticate, authorize('admin', 'editor', 'author'), uploadLimiter, uploadMultiple, mediaController.uploadMultipleMedia);
+router.post('/upload', authenticate, authorize('admin', 'editor', 'author'), uploadLimiter, upload.single('file'), mediaController.uploadMedia);
+router.post('/upload-multiple', authenticate, authorize('admin', 'editor', 'author'), uploadLimiter, upload.array('files', 10), mediaController.uploadMultipleMedia);
 
 // Update/Delete media
 router.put('/:id', authenticate, authorize('admin', 'editor', 'author'), validate(updateMediaSchema), mediaController.updateMedia);

@@ -1,6 +1,7 @@
 
 const mediaService = require('../services/media.service');
 const { successResponse } = require('../utils/responses');
+const ApiError = require('../utils/apiError');
 
 exports.getAllMedia = async (req, res, next) => {
     try {

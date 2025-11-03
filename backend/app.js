@@ -42,8 +42,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 
-// Static files
-app.use('/uploads', express.static('public/uploads'));
+// Static files - serve uploads from both locations
+app.use('/uploads', express.static('uploads'));
+if (require('fs').existsSync('public/uploads')) {
+    app.use('/uploads', express.static('public/uploads'));
+}
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -55,8 +58,14 @@ app.get('/health', (req, res) => {
     });
 });
 
+
 // API Routes
+app.use((req, res, next) => {
+  console.log(`Request Method: ${req.method}, Request Path: ${req.path}`);
+  next();
+});
 app.use('/api', routes);
+
 
 // Handle 404 errors
 app.use(notFound);
