@@ -48,6 +48,15 @@ exports.deleteUser = async (req, res, next) => {
     }
 };
 
+exports.getProfile = async (req, res, next) => {
+    try {
+        const user = await userService.getProfile(req.user.id);
+        successResponse(res, user, 'Profile retrieved successfully');
+    } catch (error) {
+        next(error);
+    }
+};
+
 exports.updateProfile = async (req, res, next) => {
     try {
         const user = await userService.updateProfile(req.user.id, req.body);

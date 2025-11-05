@@ -1,9 +1,7 @@
 // ============================================
-// 📝 NEW: Content Form with Tiptap
+// 📝 REFACTORED: Content Form with Tiptap (Professional DaisyUI)
 // components/content/ContentForm.jsx
 // ============================================
-
-
 
 'use client';
 
@@ -16,17 +14,26 @@ import TiptapEditor from '@/components/editor/TiptapEditor';
 import { generateSlug } from '@/libs/utils';
 import MediaPickerModal from '@/components/media/MediaPickerModal';
 
+// Note: Placeholder for icon imports (e.g., from 'lucide-react')
+// import { Save, Send, Image, LayoutList, Tag, FileText, Globe } from 'lucide-react'; 
+
+// --- Component Start ---
+
 export default function ContentForm({ contentId = null }) {
   const router = useRouter();
   const toast = useToast();
-  const { create, update, currentContent, loading } = useContent(null, contentId);
+
+  // Renamed 'loading' to 'isSubmitting' for clarity on form-level loading state
+  const { create, update, currentContent, loading: isSubmitting } = useContent(null, contentId);
   const { uploading } = useMedia({ folder: 'content-images' });
 
+  // --- State Initialization ---
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
     excerpt: '',
     body: '',
+    // This holds the Media ObjectId (string)
     featuredImage: null,
     status: 'draft',
     categories: [],
@@ -39,12 +46,15 @@ export default function ContentForm({ contentId = null }) {
   });
 
   const [featuredPreviewUrl, setFeaturedPreviewUrl] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
   const [categoryInput, setCategoryInput] = useState('');
   const [tagInput, setTagInput] = useState('');
   const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
   const [mediaModalTab, setMediaModalTab] = useState('upload');
+  const [isSeoOpen, setIsSeoOpen] = useState(false);
 
+  // --- Effects ---
+
+  // 1. Load existing content data for editing
   useEffect(() => {
     if (currentContent && contentId) {
       setFormData({
@@ -52,6 +62,7 @@ export default function ContentForm({ contentId = null }) {
         slug: currentContent.slug || '',
         excerpt: currentContent.excerpt || '',
         body: currentContent.body || '',
+        // Use the Media object ID for the form field
         featuredImage: currentContent.featuredImage?._id || null,
         status: currentContent.status || 'draft',
         categories: currentContent.categories || [],
@@ -62,11 +73,15 @@ export default function ContentForm({ contentId = null }) {
           metaKeywords: []
         }
       });
+      // Use the Media URL for the image preview
       setFeaturedPreviewUrl(currentContent.featuredImage?.url || null);
     }
   }, [currentContent, contentId]);
 
+  // 2. Auto-generate slug on title change for new content
   useEffect(() => {
+    // Only auto-generate slug if we are creating new content (no contentId)
+    // AND if the user hasn't started editing the slug manually (optional refinement)
     if (!contentId && formData.title) {
       setFormData(prev => ({
         ...prev,
@@ -74,6 +89,8 @@ export default function ContentForm({ contentId = null }) {
       }));
     }
   }, [formData.title, contentId]);
+
+  // --- Handlers ---
 
   const handleTitleChange = (e) => {
     setFormData({ ...formData, title: e.target.value });
@@ -86,12 +103,11 @@ export default function ContentForm({ contentId = null }) {
   const handleRemoveFeaturedImage = () => {
     setFormData(prev => ({ ...prev, featuredImage: null }));
     setFeaturedPreviewUrl(null);
-    setSelectedFile(null);
   };
 
   const addCategory = () => {
     const value = (categoryInput || '').trim();
-    if (!value) return;
+    if (!value || formData.categories.includes(value)) return;
     setFormData(prev => ({ ...prev, categories: [...prev.categories, value] }));
     setCategoryInput('');
   };
@@ -102,7 +118,7 @@ export default function ContentForm({ contentId = null }) {
 
   const addTag = () => {
     const value = (tagInput || '').trim();
-    if (!value) return;
+    if (!value || formData.tags.includes(value)) return;
     setFormData(prev => ({ ...prev, tags: [...prev.tags, value] }));
     setTagInput('');
   };
@@ -111,270 +127,398 @@ export default function ContentForm({ contentId = null }) {
     setFormData(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tag) }));
   };
 
+  const handleSeoChange = (key, value) => {
+    setFormData(prev => ({
+      ...prev,
+      seo: { ...prev.seo, [key]: value }
+    }));
+  };
+
+  /**
+   * Prepares and submits the content data using FormData.
+   * NOTE: When using FormData, complex types (Arrays, Objects) must be JSON.stringify()
+   * and MUST be parsed back into objects/arrays on the server-side!
+   */
   const performSubmit = async (statusOverride = null) => {
+    // Input validation check
+    if (!formData.title || !formData.body) {
+      toast.error('Title and Content body are required!');
+      return;
+    }
+
     const dataToSend = new FormData();
+
+    // 1. Append simple fields
     dataToSend.append('title', formData.title || '');
-    dataToSend.append('slug', formData.slug || '');
+    // Ensure slug is sent, either custom or generated
+    dataToSend.append('slug', formData.slug || generateSlug(formData.title));
     dataToSend.append('excerpt', formData.excerpt || '');
     dataToSend.append('body', formData.body || '');
     dataToSend.append('status', statusOverride || formData.status || 'draft');
 
-    // Send arrays as JSON strings to satisfy backend Joi schemas
+    // 2. Append complex fields as JSON strings (CRITICAL for multipart/form-data)
     dataToSend.append('categories', JSON.stringify(formData.categories || []));
     dataToSend.append('tags', JSON.stringify(formData.tags || []));
 
-    // Send SEO as JSON string per validator
+    // Prepare and append SEO object as a JSON string
     const seoPayload = {
       metaTitle: formData.seo?.metaTitle || '',
       metaDescription: formData.seo?.metaDescription || '',
-      metaKeywords: formData.seo?.metaKeywords || []
+      metaKeywords: formData.seo?.metaKeywords || [] // Ensure it's an array
     };
     dataToSend.append('seo', JSON.stringify(seoPayload));
 
+    // 3. Append featuredImage ID if present
     if (formData.featuredImage) {
       dataToSend.append('featuredImage', formData.featuredImage);
     }
 
+    // Note: If you have fields like isFeatured or featuredOrder in the form, 
+    // you would also append them here, stringified if they are boolean/number 
+    // or sent as simple strings/numbers depending on your backend's parser.
+
+    let result;
     if (contentId) {
-      await update(contentId, dataToSend);
+      result = await update(contentId, dataToSend);
     } else {
-      await create(dataToSend);
+      result = await create(dataToSend);
     }
+    return result;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleAction = async (e, status) => {
+    if (e) e.preventDefault();
     try {
-      await performSubmit();
-      toast.success(contentId ? 'Content updated successfully!' : 'Content created successfully!');
+      await performSubmit(status);
+
+      let successMessage = '';
+      if (status === 'published') {
+        successMessage = 'Content successfully published!';
+      } else if (status === 'draft') {
+        successMessage = 'Draft saved!';
+      } else {
+        successMessage = contentId ? 'Content updated successfully!' : 'Content created successfully!';
+      }
+
+      toast.success(successMessage);
       router.push('/dashboard/contents');
+
     } catch (error) {
-      toast.error(contentId ? 'Failed to update content' : 'Failed to create content');
+      console.error('Submission Error:', error);
+      // Display a more general error if the specific error is not available
+      const errorMessage = error?.response?.data?.message || `Failed to ${status === 'published' ? 'publish' : 'save content'}.`;
+      toast.error(errorMessage);
     }
   };
 
-  const handleSaveDraft = async () => {
-    try {
-      await performSubmit('draft');
-      toast.success('Draft saved!');
-      router.push('/dashboard/contents');
-    } catch {
-      toast.error('Failed to save draft');
-    }
-  };
-
-  const handlePublish = async () => {
-    try {
-      await performSubmit('published');
-      toast.success('Published successfully!');
-      router.push('/dashboard/contents');
-    } catch {
-      toast.error('Failed to publish');
-    }
-  };
 
   const openMediaModal = (tab) => {
     setMediaModalTab(tab);
     setIsMediaModalOpen(true);
   };
 
+  // Called when a media item is selected from the MediaPickerModal
   const handleSelectFeatured = (media) => {
     if (!media) return;
+    // Save the Media ID to the form data
     setFormData(prev => ({ ...prev, featuredImage: media._id }));
+    // Save the Media URL for instant preview
     setFeaturedPreviewUrl(media.url);
+    setIsMediaModalOpen(false);
   };
 
+  // --- Render ---
+
+  // Calculate remaining characters for SEO
+  const metaTitleLength = (formData.seo?.metaTitle || '').length;
+  const metaDescriptionLength = (formData.seo?.metaDescription || '').length;
+
   return (
-    <form onSubmit={handleSubmit} className="max-w-5xl mx-auto p-4 sm:p-6">
-      <div className="card bg-base-100 shadow-xl">
-        <div className="card-body space-y-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="card-title text-2xl sm:text-3xl">{contentId ? 'Edit Content' : 'Create New Content'}</h1>
-              <p className="text-base-content/60">Write and publish your content</p>
-            </div>
-          </div>
+    <div className="p-4 sm:p-6 lg:p-8">
 
-          {/* Title */}
-          <div className="form-control">
-            <label className="label"><span className="label-text">Title *</span></label>
-            <input
-              type="text"
-              value={formData.title || ''}
-              onChange={handleTitleChange}
-              className="input input-bordered w-full"
-              placeholder="Enter content title"
-              required
-            />
-          </div>
-
-          {/* Slug */}
-          <div className="form-control">
-            <label className="label"><span className="label-text">Slug</span></label>
-            <input
-              type="text"
-              value={formData.slug || ''}
-              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-              className="input input-bordered w-full"
-              placeholder="url-friendly-slug"
-            />
-          </div>
-
-          {/* Excerpt */}
-          <div className="form-control">
-            <label className="label"><span className="label-text">Excerpt</span></label>
-            <textarea
-              value={formData.excerpt || ''}
-              onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-              className="textarea textarea-bordered w-full"
-              rows={3}
-              placeholder="Short description"
-            />
-          </div>
-
-          {/* Tiptap Editor */}
-          <div className="form-control">
-            <label className="label"><span className="label-text">Content *</span></label>
-            <div className="rounded-box border">
-              <TiptapEditor
-                content={formData.body || ''}
-                onChange={handleEditorChange}
-                placeholder="Start writing your content..."
-              />
-            </div>
-          </div>
-
-          {/* Featured Image */}
-          <div className="form-control">
-            <label className="label"><span className="label-text">Featured Image</span></label>
-            <div className="flex items-center gap-3">
-              <button type="button" className="btn btn-primary btn-sm" onClick={() => openMediaModal('upload')} disabled={uploading}>
-                Upload New
-              </button>
-              <button type="button" className="btn btn-outline btn-sm" onClick={() => openMediaModal('library')}>
-                Media Library
-              </button>
-            </div>
-            {featuredPreviewUrl && (
-              <div className="mt-4 relative w-48 h-32 border rounded overflow-hidden">
-                <img src={featuredPreviewUrl} alt="Featured Preview" className="w-full h-full object-cover" />
-                <button
-                  type="button"
-                  onClick={handleRemoveFeaturedImage}
-                  className="btn btn-error btn-xs absolute top-1 right-1"
-                  aria-label="Remove featured image"
-                >
-                  Remove
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Categories */}
-          <div className="form-control">
-            <label className="label"><span className="label-text">Categories</span></label>
-            <div className="flex gap-2 mb-2">
-              <input
-                type="text"
-                value={categoryInput || ''}
-                onChange={(e) => setCategoryInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCategory())}
-                className="input input-bordered w-full"
-                placeholder="Add category"
-              />
-              <button type="button" onClick={addCategory} className="btn btn-primary">Add</button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {(formData.categories || []).map(category => (
-                <div key={category} className="badge badge-primary gap-2 p-3">
-                  {category}
-                  <button type="button" onClick={() => removeCategory(category)} className="btn btn-xs btn-ghost">✕</button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Tags */}
-          <div className="form-control">
-            <label className="label"><span className="label-text">Tags</span></label>
-            <div className="flex gap-2 mb-2">
-              <input
-                type="text"
-                value={tagInput || ''}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                className="input input-bordered w-full"
-                placeholder="Add tag"
-              />
-              <button type="button" onClick={addTag} className="btn btn-secondary">Add</button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {(formData.tags || []).map(tag => (
-                <div key={tag} className="badge badge-secondary gap-2 p-3">
-                  {tag}
-                  <button type="button" onClick={() => removeTag(tag)} className="btn btn-xs btn-ghost">✕</button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* SEO Section */}
-          <div className="divider" />
-          <div>
-            <h2 className="text-lg font-semibold mb-2">SEO Settings</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="form-control">
-                <label className="label"><span className="label-text">Meta Title</span></label>
-                <input
-                  type="text"
-                  value={formData.seo?.metaTitle || ''}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    seo: { ...formData.seo, metaTitle: e.target.value }
-                  })}
-                  className="input input-bordered w-full"
-                  maxLength={60}
-                  placeholder="SEO title (max 60 characters)"
-                />
-                <span className="label-text-alt">{(formData.seo?.metaTitle || '').length}/60</span>
-              </div>
-
-              <div className="form-control md:col-span-2">
-                <label className="label"><span className="label-text">Meta Description</span></label>
-                <textarea
-                  value={formData.seo?.metaDescription || ''}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    seo: { ...formData.seo, metaDescription: e.target.value }
-                  })}
-                  className="textarea textarea-bordered w-full"
-                  maxLength={160}
-                  rows={3}
-                  placeholder="SEO description (max 160 characters)"
-                />
-                <span className="label-text-alt">{(formData.seo?.metaDescription || '').length}/160</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="card-actions justify-end pt-2">
-            <button type="button" onClick={handleSaveDraft} disabled={loading} className="btn">
-              Save as Draft
-            </button>
-            <button type="button" onClick={() => router.back()} className="btn btn-ghost">
-              Cancel
-            </button>
-            <button type="button" onClick={handlePublish} disabled={loading} className="btn btn-success">
-              Publish
-            </button>
-            <button type="submit" disabled={loading} className="btn btn-primary">
-              {loading ? 'Saving...' : (contentId ? 'Update' : 'Create')}
-            </button>
-          </div>
+      {/* Header and Actions Panel (Sticky) */}
+      <div className="flex justify-between items-center mb-6 sticky top-0 bg-base-100 z-10 py-4 border-b">
+        <h1 className="text-3xl font-bold text-primary">
+          {contentId ? '✏️ Edit Content' : '✨ Create New Content'}
+        </h1>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={() => handleAction(null, 'draft')}
+            disabled={isSubmitting}
+            className="btn btn-outline"
+          >
+            {/* <Save size={18} /> */}
+            {isSubmitting ? 'Saving...' : 'Save Draft'}
+          </button>
+          <button
+            type="button"
+            onClick={() => handleAction(null, 'published')}
+            disabled={isSubmitting || !formData.title || !formData.body}
+            className="btn btn-success"
+          >
+            {/* <Send size={18} /> */}
+            {isSubmitting ? 'Publishing...' : 'Publish'}
+          </button>
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="btn btn-ghost ml-2"
+          >
+            Cancel
+          </button>
         </div>
       </div>
 
+      <form onSubmit={(e) => handleAction(e, formData.status)} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        {/* Main Content Column (2/3 width) */}
+        <div className="lg:col-span-2 space-y-6">
+
+          {/* Title and Slug Card */}
+          <div className="card bg-base-100 shadow-xl border">
+            <div className="card-body p-6">
+              <div className="form-control">
+                <label className="label"><span className="label-text font-semibold">Title *</span></label>
+                <input
+                  type="text"
+                  value={formData.title || ''}
+                  onChange={handleTitleChange}
+                  className="input input-bordered input-lg w-full text-xl font-bold"
+                  placeholder="Enter an engaging title"
+                  required
+                />
+              </div>
+              <div className="form-control mt-2">
+                <label className="label pt-0"><span className="label-text text-sm">Slug:</span></label>
+                <input
+                  type="text"
+                  value={formData.slug || ''}
+                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                  className="input input-bordered w-full text-sm"
+                  placeholder="url-friendly-slug"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Excerpt Card */}
+          <div className="card bg-base-100 shadow-xl border">
+            <div className="card-body p-6">
+              <div className="form-control">
+                <label className="label"><span className="label-text font-semibold">Excerpt / Summary</span></label>
+                <textarea
+                  value={formData.excerpt || ''}
+                  onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+                  className="textarea textarea-bordered w-full"
+                  rows={3}
+                  placeholder="A short description for listings and previews"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Tiptap Editor Card */}
+          <div className="card bg-base-100 shadow-xl border">
+            <div className="card-body p-6">
+              <label className="label p-0 mb-3"><span className="label-text font-semibold">Content Body *</span></label>
+              <div className="border rounded-lg overflow-hidden">
+                <TiptapEditor
+                  content={formData.body || ''}
+                  onChange={handleEditorChange}
+                  placeholder="Start writing your content..."
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sidebar Column (1/3 width) */}
+        <div className="lg:col-span-1 space-y-6">
+
+          {/* Status Card */}
+          <div className="card bg-base-100 shadow-xl border">
+            <div className="card-body p-6">
+              <h2 className="card-title text-lg">Status & Visibility</h2>
+              <div className="form-control">
+                <label className="label cursor-pointer">
+                  <span className="label-text font-medium">Current Status:</span>
+                  <span className={`badge badge-lg ${formData.status === 'published' ? 'badge-success' : 'badge-warning'}`}>
+                    {formData.status.charAt(0).toUpperCase() + formData.status.slice(1)}
+                  </span>
+                </label>
+
+                <select
+                  className="select select-bordered select-sm w-full mt-2"
+                  value={formData.status}
+                  onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
+                >
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                  <option value="scheduled">Scheduled</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Featured Image Card */}
+          <div className="card bg-base-100 shadow-xl border">
+            <div className="card-body p-6">
+              <h2 className="card-title text-lg">Featured Image</h2>
+              <div className="flex flex-col gap-3">
+                <div className="flex gap-2">
+                  <button type="button" className="btn btn-primary btn-sm" onClick={() => openMediaModal('upload')} disabled={uploading}>
+                    {/* <Image size={16} /> */}
+                    Upload
+                  </button>
+                  <button type="button" className="btn btn-outline btn-sm" onClick={() => openMediaModal('library')}>
+                    {/* <LayoutList size={16} /> */}
+                    Library
+                  </button>
+                </div>
+
+                {featuredPreviewUrl ? (
+                  <div className="relative w-full h-40 border rounded-lg overflow-hidden shadow-md">
+                    <img
+                      src={featuredPreviewUrl}
+                      alt="Featured Preview"
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleRemoveFeaturedImage}
+                      className="btn btn-error btn-xs absolute top-2 right-2 z-10"
+                      aria-label="Remove featured image"
+                    >
+                      ✕ Remove
+                    </button>
+                  </div>
+                ) : (
+                  <div className="h-40 flex items-center justify-center border-2 border-dashed rounded-lg text-base-content/50">
+                    No image selected
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Categories & Tags Card */}
+          <div className="card bg-base-100 shadow-xl border">
+            <div className="card-body p-6 space-y-4">
+              <h2 className="card-title text-lg">Categories & Tags</h2>
+
+              {/* Categories Section */}
+              <div className="form-control">
+                <label className="label p-0"><span className="label-text font-medium flex items-center">
+                  {/* <LayoutList size={16} className="mr-1" /> */}
+                  Categories
+                </span></label>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    value={categoryInput || ''}
+                    onChange={(e) => setCategoryInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCategory())}
+                    className="input input-bordered input-sm w-full"
+                    placeholder="e.g. Technology"
+                  />
+                  <button type="button" onClick={addCategory} className="btn btn-primary btn-sm">Add</button>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {(formData.categories || []).map(category => (
+                    <div key={category} className="badge badge-primary gap-1 p-3 font-medium">
+                      {category}
+                      <button type="button" onClick={() => removeCategory(category)} className="btn btn-xs btn-ghost text-white ml-1">✕</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tags Section */}
+              <div className="form-control pt-2 border-t mt-4">
+                <label className="label p-0"><span className="label-text font-medium flex items-center">
+                  {/* <Tag size={16} className="mr-1" /> */}
+                  Tags
+                </span></label>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    value={tagInput || ''}
+                    onChange={(e) => setTagInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
+                    className="input input-bordered input-sm w-full"
+                    placeholder="e.g. javascript, nextjs"
+                  />
+                  <button type="button" onClick={addTag} className="btn btn-secondary btn-sm">Add</button>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {(formData.tags || []).map(tag => (
+                    <div key={tag} className="badge badge-secondary gap-1 p-3 font-medium">
+                      {tag}
+                      <button type="button" onClick={() => removeTag(tag)} className="btn btn-xs btn-ghost text-white ml-1">✕</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* SEO Settings Card (DaisyUI Collapse) */}
+          <div className={`collapse collapse-arrow bg-base-100 shadow-xl border ${isSeoOpen ? 'collapse-open' : 'collapse-close'}`}>
+            <input type="checkbox" checked={isSeoOpen} onChange={() => setIsSeoOpen(!isSeoOpen)} />
+            <div className="collapse-title text-xl font-medium flex items-center">
+              {/* <Globe size={20} className="mr-2" /> */}
+              SEO Settings
+            </div>
+            <div className="collapse-content">
+              <div className="space-y-4 pt-2">
+                {/* Meta Title */}
+                <div className="form-control">
+                  <label className="label"><span className="label-text">Meta Title</span></label>
+                  <input
+                    type="text"
+                    value={formData.seo?.metaTitle || ''}
+                    onChange={(e) => handleSeoChange('metaTitle', e.target.value)}
+                    className="input input-bordered w-full"
+                    maxLength={60}
+                    placeholder="SEO title (max 60 characters)"
+                  />
+                  <div className="label">
+                    <span className="label-text-alt">{metaTitleLength}/60 characters</span>
+                    <span className={`label-text-alt ${metaTitleLength > 50 && metaTitleLength <= 60 ? 'text-warning' : metaTitleLength > 60 ? 'text-error' : 'text-success'}`}>
+                      {metaTitleLength > 60 ? 'Too Long' : 'Good length'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Meta Description */}
+                <div className="form-control">
+                  <label className="label"><span className="label-text">Meta Description</span></label>
+                  <textarea
+                    value={formData.seo?.metaDescription || ''}
+                    onChange={(e) => handleSeoChange('metaDescription', e.target.value)}
+                    className="textarea textarea-bordered w-full"
+                    maxLength={160}
+                    rows={3}
+                    placeholder="SEO description (max 160 characters)"
+                  />
+                  <div className="label">
+                    <span className="label-text-alt">{metaDescriptionLength}/160 characters</span>
+                    <span className={`label-text-alt ${metaDescriptionLength > 150 && metaDescriptionLength <= 160 ? 'text-warning' : metaDescriptionLength > 160 ? 'text-error' : 'text-success'}`}>
+                      {metaDescriptionLength > 160 ? 'Too Long' : 'Good length'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </form>
+
+      {/* Media Picker Modal */}
       <MediaPickerModal
         isOpen={isMediaModalOpen}
         onClose={() => setIsMediaModalOpen(false)}
@@ -382,6 +526,6 @@ export default function ContentForm({ contentId = null }) {
         defaultTab={mediaModalTab}
         uploadFolder="featured-images"
       />
-    </form>
+    </div>
   );
 }

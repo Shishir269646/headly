@@ -131,7 +131,7 @@ export default function PostPage() {
                                 date={createdAt ? format(new Date(createdAt), 'PPP') : '—'}
                                 readTime={readTime}
                                 views={views}
-                                featuredImage={featuredImage?.url}
+                                featuredImage={featuredImage}
                             />
 
                             {/* ✅ Render actual CMS body */}

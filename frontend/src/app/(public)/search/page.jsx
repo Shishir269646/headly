@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Search, Clock, User, Calendar } from 'lucide-react';
 import ArticleCard from '@/components/ui/ArticleCard';
 
-export default function SearchPage() {
+function SearchPageContent() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '');
@@ -164,3 +164,10 @@ export default function SearchPage() {
     );
 }
 
+export default function SearchPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <SearchPageContent />
+        </Suspense>
+    );
+}

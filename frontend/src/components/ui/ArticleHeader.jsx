@@ -3,19 +3,7 @@ import React from 'react';
 import { Clock, User, MessageSquare } from 'lucide-react';
 
 
-/**
- * Displays the article title, meta information, and featured image.
- * @param {Object} props - Component props.
- * @param {string} props.category - The article category.
- * @param {string} props.title - The main article title.
- * @param {string} props.authorName - Name of the author.
- * @param {string} props.authorHref - Author's profile link.
- * @param {string} props.date - Publication date.
- * @param {number} props.commentCount - Number of comments.
- * @param {string} props.imageUrl - URL for the featured image.
- * @param {string} props.imageAlt - Alt text for the image.
- * @param {string} props.imageCaption - Caption for the image.
- */
+
 
 
 export default function ArticleHeader({
@@ -25,9 +13,7 @@ export default function ArticleHeader({
     authorHref,
     date,
     commentCount,
-    imageUrl,
-    imageAlt,
-    imageCaption,
+    featuredImage,
 }) {
     return (
         <>
@@ -65,13 +51,13 @@ export default function ArticleHeader({
             {/* Featured Image */}
             <div className="mb-8">
                 <img
-                    src={imageUrl}
-                    alt={imageAlt}
+                    src={featuredImage?.url}
+                    alt={featuredImage?.alt || 'Featured Image'}
                     // Responsive width and height.
                     className="w-full h-auto rounded-lg shadow-xl"
                 />
                 {/* Dark mode: dark:text-gray-400 */}
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 italic">{imageCaption}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 italic">{featuredImage?.caption || " "}</p>
             </div>
         </>
     );

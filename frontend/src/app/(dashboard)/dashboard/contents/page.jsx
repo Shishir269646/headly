@@ -177,7 +177,7 @@ export default function ContentsPage() {
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div className="flex justify-end space-x-2">
                                                 <Link
-                                                    href={`/blog/${content.slug}`}
+                                                    href={`/${content.slug}`}
                                                     target="_blank"
                                                     className="text-gray-600 hover:text-gray-900"
                                                     title="View"

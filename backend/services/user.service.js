@@ -112,6 +112,16 @@ exports.deleteUser = async (userId) => {
     });
 };
 
+exports.getProfile = async (userId) => {
+    const user = await User.findById(userId)
+        .select('-refreshToken')
+        .populate('image');
+    if (!user) {
+        throw new ApiError(404, 'User not found');
+    }
+    return user;
+};
+
 exports.updateProfile = async (userId, updateData) => {
     const allowedUpdates = ['name', 'bio', 'image', 'isActive'];
     const user = await User.findById(userId);

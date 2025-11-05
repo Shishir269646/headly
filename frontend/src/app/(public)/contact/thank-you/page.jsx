@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { CheckCircle, Home, Mail, ArrowLeft } from 'lucide-react';
 
-export default function ThankYouPage() {
+function ThankYouPageContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [countdown, setCountdown] = useState(5);
@@ -115,3 +115,10 @@ export default function ThankYouPage() {
     );
 }
 
+export default function ThankYouPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ThankYouPageContent />
+        </Suspense>
+    );
+}

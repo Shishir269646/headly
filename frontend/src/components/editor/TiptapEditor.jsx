@@ -5,7 +5,6 @@ import { useState } from 'react';
 import MediaPickerModal from '@/components/media/MediaPickerModal';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
-import Link from '@tiptap/extension-link';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
@@ -31,10 +30,10 @@ export default function TiptapEditor({ content, onChange, placeholder = 'Start w
         immediatelyRender: false,
         extensions: [
             StarterKit.configure({
-                heading: { levels: [1, 2, 3, 4] }
+                heading: { levels: [1, 2, 3, 4] },
+                codeBlock: false,
             }),
             Image.configure({ HTMLAttributes: { class: 'rounded-lg max-w-full h-auto' } }),
-            Link.configure({ openOnClick: false, HTMLAttributes: { class: 'text-primary underline' } }),
             Underline,
             TextAlign.configure({ types: ['heading', 'paragraph'] }),
             Highlight.configure({ multicolor: true }),

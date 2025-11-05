@@ -3,45 +3,42 @@ const ApiError = require('../utils/apiError');
 
 exports.validate = (schema) => {
     return (req, res, next) => {
-        // Handle both direct Joi schemas and schema objects with body/query/params keys
-        let joiSchema = schema;
-        let dataToValidate = req.body;
-        
+        const validations = [];
+
         if (schema.body) {
-            joiSchema = schema.body;
-            dataToValidate = req.body;
-        } else if (schema.query) {
-            joiSchema = schema.query;
-            dataToValidate = req.query;
-        } else if (schema.params) {
-            joiSchema = schema.params;
-            dataToValidate = req.params;
+            validations.push(schema.body.validate(req.body, { abortEarly: false, stripUnknown: true }));
+        }
+        if (schema.query) {
+            validations.push(schema.query.validate(req.query, { abortEarly: false, stripUnknown: true }));
+        }
+        if (schema.params) {
+            validations.push(schema.params.validate(req.params, { abortEarly: false, stripUnknown: true }));
         }
 
-        const { error, value } = joiSchema.validate(dataToValidate, {
-            abortEarly: false,
-            stripUnknown: true
-        });
+        const errors = [];
+        let validatedValues = {};
 
-        if (error) {
-            const errors = error.details.map(detail => ({
-                field: detail.path.join('.'),
-                message: detail.message
-            }));
+        for (const validation of validations) {
+            if (validation.error) {
+                errors.push(...validation.error.details.map(detail => ({
+                    field: detail.path.join('.'),
+                    message: detail.message
+                })));
+            }
+            if (validation.value) {
+                validatedValues = { ...validatedValues, ...validation.value };
+            }
+        }
 
+        if (errors.length > 0) {
             return next(new ApiError(400, 'Validation error', errors));
         }
 
-        if (schema.body) {
-            req.body = value;
-        } else if (schema.query) {
-            req.query = value;
-        } else if (schema.params) {
-            req.params = value;
-        } else {
-            req.body = value;
-        }
-        
+        // Re-assign validated values
+        if (schema.body) req.body = validatedValues;
+        if (schema.query) req.query = validatedValues;
+        if (schema.params) req.params = validatedValues;
+
         next();
     };
 };
