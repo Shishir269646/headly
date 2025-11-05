@@ -33,13 +33,16 @@ exports.getContentBySlug = async (req, res, next) => {
 
 exports.createContent = async (req, res, next) => {
     try {
-        let featuredImageId = null;
+        let featuredImageId = req.body.featuredImage || null;
         if (req.file) {
             const media = await mediaService.uploadMedia(req.file, req.user.id);
             featuredImageId = media._id;
         }
-
-        const contentData = { ...req.body, featuredImage: featuredImageId };
+        let seo = req.body.seo;
+        if (typeof seo === 'string') {
+            try { seo = JSON.parse(seo); } catch (_) { seo = undefined; }
+        }
+        const contentData = { ...req.body, seo, featuredImage: featuredImageId };
         const content = await contentService.createContent(req.user.id, contentData);
         successResponse(res, content, 'Content created successfully', 201);
     } catch (error) {
@@ -54,8 +57,15 @@ exports.updateContent = async (req, res, next) => {
             const media = await mediaService.uploadMedia(req.file, req.user.id);
             featuredImageId = media._id;
         }
-
-        const contentData = { ...req.body, featuredImage: featuredImageId };
+        let seo = req.body.seo;
+        if (typeof seo === 'string') {
+            try { seo = JSON.parse(seo); } catch (_) { seo = undefined; }
+        }
+        // Normalize categories/tags if they came as comma strings
+        const normalizeArr = (v) => Array.isArray(v) ? v : (typeof v === 'string' ? v.split(',').map(s => s.trim()).filter(Boolean) : undefined);
+        const categories = normalizeArr(req.body.categories);
+        const tags = normalizeArr(req.body.tags);
+        const contentData = { ...req.body, seo, categories, tags, featuredImage: featuredImageId };
         const content = await contentService.updateContent(req.params.id, contentData, req.user);
         successResponse(res, content, 'Content updated successfully');
     } catch (error) {

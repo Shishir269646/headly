@@ -9,6 +9,11 @@ const nextConfig = {
                 pathname: "**", // সব path অনুমোদিত
             },
             {
+                protocol: "https",
+                hostname: "headly-upload-bucket.s3.amazonaws.com",
+                pathname: "**",
+            },
+            {
                 protocol: "http",
                 hostname: "localhost",
                 pathname: "**",
