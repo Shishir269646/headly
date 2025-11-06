@@ -8,7 +8,7 @@ import UserForm from '@/components/dashboard/UserForm';
 
 export default function NewUserPage() {
     const router = useRouter();
-    const { addUser } = useUser();
+    const { create: addUser } = useUser();
     const toast = useToast();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -19,7 +19,8 @@ export default function NewUserPage() {
             toast.success('User created successfully!');
             router.push('/dashboard/users');
         } catch (error) {
-            toast.error(error.message || 'An error occurred');
+            const errorMessage = error?.message || error?.payload || 'An error occurred';
+            toast.error(errorMessage);
         } finally {
             setIsSubmitting(false);
         }

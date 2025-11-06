@@ -189,6 +189,8 @@ export const hasPermission = (user, allowedRoles) => {
  * @param {string} url - Image URL (can be relative or absolute)
  * @returns {string} - Formatted URL
  */
+
+
 export const formatImageUrl = (url) => {
     if (!url) return '';
     

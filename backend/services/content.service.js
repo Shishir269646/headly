@@ -192,14 +192,29 @@ exports.getLatestContents = async (limit = 6) => {
 };
 
 // 2. Trending (Automatic - based on views)
-exports.getTrendingContents = async (limit = 6) => {
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+// Supports optional windowDays; falls back to all-time if window has no results
+exports.getTrendingContents = async (limit = 6, windowDays = 7) => {
+    const days = typeof windowDays === 'number' && windowDays > 0 ? windowDays : 7;
+    const windowStart = new Date();
+    windowStart.setDate(windowStart.getDate() - days);
 
-    return await Content.find({
+    // First try within time window
+    const windowResults = await Content.find({
         status: 'published',
         isDeleted: false,
-        createdAt: { $gte: sevenDaysAgo }
+        createdAt: { $gte: windowStart }
+    })
+        .populate('author', 'name email avatar')
+        .populate('featuredImage')
+        .sort({ views: -1, createdAt: -1 })
+        .limit(limit);
+
+    if (windowResults.length > 0) return windowResults;
+
+    // Fallback: all-time trending
+    return await Content.find({
+        status: 'published',
+        isDeleted: false
     })
         .populate('author', 'name email avatar')
         .populate('featuredImage')

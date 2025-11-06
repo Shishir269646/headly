@@ -18,5 +18,6 @@ exports.changePasswordSchema = Joi.object({
 });
 
 exports.refreshTokenSchema = Joi.object({
-    refreshToken: Joi.string().required()
+    // Allow missing in body when using httpOnly cookies
+    refreshToken: Joi.string().optional()
 });

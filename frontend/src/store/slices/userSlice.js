@@ -1,20 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { axiosInstance } from "../../libs/axios";
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api');
-
-const api = axios.create({
-    baseURL: API_URL,
-    withCredentials: true
-});
-
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-});
 
 // Async thunks
 export const fetchUsers = createAsyncThunk(
@@ -24,7 +10,7 @@ export const fetchUsers = createAsyncThunk(
             const safeFilters = filters && typeof filters === 'object' ? filters : {};
             const paramsStr = new URLSearchParams(safeFilters).toString();
             const path = paramsStr ? `/users?${paramsStr}` : '/users';
-            const { data } = await api.get(path);
+            const { data } = await axiosInstance.get(path);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch users');
@@ -36,7 +22,7 @@ export const fetchUserById = createAsyncThunk(
     'user/fetchUserById',
     async (id, { rejectWithValue }) => {
         try {
-            const { data } = await api.get(`/users/${id}`);
+            const { data } = await axiosInstance.get(`/users/${id}`);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch user');
@@ -48,7 +34,7 @@ export const createUser = createAsyncThunk(
     'user/createUser',
     async (userData, { rejectWithValue }) => {
         try {
-            const { data } = await api.post('/users', userData);
+            const { data } = await axiosInstance.post('/users', userData);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to create user');
@@ -60,7 +46,7 @@ export const updateUser = createAsyncThunk(
     'user/updateUser',
     async ({ id, userData }, { rejectWithValue }) => {
         try {
-            const { data } = await api.put(`/users/${id}`, userData);
+            const { data } = await axiosInstance.put(`/users/${id}`, userData);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to update user');
@@ -72,7 +58,7 @@ export const deleteUser = createAsyncThunk(
     'user/deleteUser',
     async (id, { rejectWithValue }) => {
         try {
-            await api.delete(`/users/${id}`);
+            await axiosInstance.delete(`/users/${id}`);
             return id;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to delete user');
@@ -84,7 +70,7 @@ export const updateProfile = createAsyncThunk(
     'user/updateProfile',
     async (profileData, { rejectWithValue }) => {
         try {
-            const { data } = await api.put('/users/profile/me', profileData);
+            const { data } = await axiosInstance.put('/users/profile/me', profileData);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to update profile');
@@ -96,25 +82,22 @@ export const uploadimage = createAsyncThunk(
     'user/uploadimage',
     async (file, { rejectWithValue }) => {
         try {
-            // Backend expects:
-            // - Field name: 'image' (required) - NOT 'file'
-            // - Endpoint: PUT /api/users/profile/image
-            // - Returns: User object with updated image URL
+
             const formData = new FormData();
             formData.append('image', file);
 
-            const { data } = await api.put('/users/profile/avatar', formData, {
+            const { data } = await axiosInstance.put('/users/profile/avatar', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
-            // Backend returns: { success: true, message: '...', data: <user object> }
+
             return data.data;
         } catch (error) {
-            const errorMessage = error.response?.data?.message || 
-                                 error.message || 
-                                 'Failed to upload image';
+            const errorMessage = error.response?.data?.message ||
+                error.message ||
+                'Failed to upload image';
             return rejectWithValue(errorMessage);
         }
     }

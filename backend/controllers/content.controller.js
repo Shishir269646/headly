@@ -113,8 +113,11 @@ exports.getLatestContents = async (req, res, next) => {
 
 exports.getTrendingContents = async (req, res, next) => {
     try {
-        const { limit = 6 } = req.query;
-        const contents = await contentService.getTrendingContents(parseInt(limit));
+        const { limit = 6, days } = req.query;
+        const contents = await contentService.getTrendingContents(
+            parseInt(limit),
+            days !== undefined ? parseInt(days) : undefined
+        );
         successResponse(res, contents, 'Trending contents retrieved');
     } catch (error) {
         next(error);

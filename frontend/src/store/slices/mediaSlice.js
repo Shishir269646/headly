@@ -1,20 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { axiosInstance } from "../../libs/axios";
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api');
-
-const api = axios.create({
-    baseURL: API_URL,
-    withCredentials: true
-});
-
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-});
 
 // Async thunks
 export const fetchMedia = createAsyncThunk(
@@ -22,7 +8,7 @@ export const fetchMedia = createAsyncThunk(
     async (filters = {}, { rejectWithValue }) => {
         try {
             const params = new URLSearchParams(filters).toString();
-            const { data } = await api.get(`/media?${params}`);
+            const { data } = await axiosInstance.get(`/media?${params}`);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch media');
@@ -34,14 +20,11 @@ export const uploadMedia = createAsyncThunk(
     'media/uploadMedia',
     async ({ file, metadata }, { rejectWithValue }) => {
         try {
-            // Backend expects:
-            // - Field name: 'file' (required)
-            // - Metadata fields: 'alt', 'caption', 'folder' (optional)
-            // - Endpoint: POST /api/media/upload
+
             const formData = new FormData();
             formData.append('file', file);
 
-            // Append metadata fields if provided
+
             if (metadata) {
                 Object.keys(metadata).forEach(key => {
                     if (metadata[key] !== undefined && metadata[key] !== null) {
@@ -50,18 +33,18 @@ export const uploadMedia = createAsyncThunk(
                 });
             }
 
-            const { data } = await api.post('/media/upload', formData, {
+            const { data } = await axiosInstance.post('/media/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
-            // Backend returns: { success: true, message: '...', data: <media object> }
+
             return data.data;
         } catch (error) {
-            const errorMessage = error.response?.data?.message || 
-                                 error.message || 
-                                 'Failed to upload media';
+            const errorMessage = error.response?.data?.message ||
+                error.message ||
+                'Failed to upload media';
             return rejectWithValue(errorMessage);
         }
     }
@@ -76,7 +59,7 @@ export const uploadMultipleMedia = createAsyncThunk(
                 formData.append('files', file);
             });
 
-            const { data } = await api.post('/media/upload-multiple', formData, {
+            const { data } = await axiosInstance.post('/media/upload-multiple', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -92,7 +75,7 @@ export const updateMedia = createAsyncThunk(
     'media/updateMedia',
     async ({ id, metadata }, { rejectWithValue }) => {
         try {
-            const { data } = await api.put(`/media/${id}`, metadata);
+            const { data } = await axiosInstance.put(`/media/${id}`, metadata);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to update media');
@@ -104,7 +87,7 @@ export const deleteMedia = createAsyncThunk(
     'media/deleteMedia',
     async (id, { rejectWithValue }) => {
         try {
-            await api.delete(`/media/${id}`);
+            await axiosInstance.delete(`/media/${id}`);
             return id;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to delete media');

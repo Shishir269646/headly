@@ -3,21 +3,20 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useToast } from '@/hooks/useToast';
-// Assuming 'update' is available via the useUser hook
 import { useUser } from '@/hooks/useUser';
 import UserForm from '@/components/dashboard/UserForm';
 
 export default function EditUserPage() {
     const router = useRouter();
     const { id } = useParams();
-    const { currentUser, getUserById, loading, error, update } = useUser(); // 💡 Assuming 'update' is here
+    const { currentUser, getUserById, loading, error, update } = useUser();
     const { toast } = useToast();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // 1. Fetch user data on mount or ID change
+
     useEffect(() => {
         if (id) {
-            // Ensure id is treated as a string for API call if it comes from URL
+
             getUserById(Array.isArray(id) ? id[0] : id);
         }
     }, [id, getUserById]);
@@ -28,7 +27,7 @@ export default function EditUserPage() {
         const userId = Array.isArray(id) ? id[0] : id;
 
         try {
-            // Make sure the update function is imported/available (e.g., from useUser)
+
             const resultAction = await update(userId, data);
 
             if (resultAction.meta?.requestStatus === 'fulfilled') {
@@ -46,7 +45,7 @@ export default function EditUserPage() {
         }
     };
 
-    // 2. Handle Loading State
+    // Handle Loading State
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -58,7 +57,7 @@ export default function EditUserPage() {
         );
     }
 
-    // 3. Handle Error State (e.g., API failure)
+    //  Handle Error State
     if (error) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -71,7 +70,7 @@ export default function EditUserPage() {
         );
     }
 
-    // 4. Handle "User Not Found" State (after loading and no error)
+    //Handle "User Not Found" State
     if (!currentUser) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -83,7 +82,7 @@ export default function EditUserPage() {
         );
     }
 
-    // 5. Render Form
+    // Render Form
     return (
         <UserForm
             isEditMode={true}

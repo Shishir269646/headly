@@ -1,20 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api');
-
-const api = axios.create({
-    baseURL: API_URL,
-    withCredentials: true
-});
-
-api.interceptors.request.use((config) => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-});
+import { axiosInstance } from "../../libs/axios";
 
 // Async thunks
 export const fetchContents = createAsyncThunk(
@@ -22,7 +8,7 @@ export const fetchContents = createAsyncThunk(
     async (filters = {}, { rejectWithValue }) => {
         try {
             const params = new URLSearchParams(filters).toString();
-            const { data } = await api.get(`/contents?${params}`);
+            const { data } = await axiosInstance.get(`/contents?${params}`);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch contents');
@@ -34,7 +20,7 @@ export const fetchContentById = createAsyncThunk(
     'content/fetchContentById',
     async (id, { rejectWithValue }) => {
         try {
-            const { data } = await api.get(`/contents/${id}`);
+            const { data } = await axiosInstance.get(`/contents/${id}`);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch content');
@@ -46,7 +32,7 @@ export const fetchContentBySlug = createAsyncThunk(
     'content/fetchContentBySlug',
     async (slug, { rejectWithValue }) => {
         try {
-            const { data } = await api.get(`/contents/slug/${slug}`);
+            const { data } = await axiosInstance.get(`/contents/slug/${slug}`);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch content');
@@ -58,7 +44,7 @@ export const createContent = createAsyncThunk(
     'content/createContent',
     async (contentData, { rejectWithValue }) => {
         try {
-            const { data } = await api.post('/contents', contentData);
+            const { data } = await axiosInstance.post('/contents', contentData);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to create content');
@@ -70,7 +56,7 @@ export const updateContent = createAsyncThunk(
     'content/updateContent',
     async ({ id, contentData }, { rejectWithValue }) => {
         try {
-            const { data } = await api.put(`/contents/${id}`, contentData);
+            const { data } = await axiosInstance.put(`/contents/${id}`, contentData);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to update content');
@@ -82,7 +68,7 @@ export const deleteContent = createAsyncThunk(
     'content/deleteContent',
     async (id, { rejectWithValue }) => {
         try {
-            await api.delete(`/contents/${id}`);
+            await axiosInstance.delete(`/contents/${id}`);
             return id;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to delete content');
@@ -94,7 +80,7 @@ export const publishContent = createAsyncThunk(
     'content/publishContent',
     async (id, { rejectWithValue }) => {
         try {
-            const { data } = await api.post(`/contents/${id}/publish`);
+            const { data } = await axiosInstance.post(`/contents/${id}/publish`);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to publish content');
@@ -106,7 +92,7 @@ export const scheduleContent = createAsyncThunk(
     'content/scheduleContent',
     async ({ id, publishAt }, { rejectWithValue }) => {
         try {
-            const { data } = await api.post(`/contents/${id}/schedule`, { publishAt });
+            const { data } = await axiosInstance.post(`/contents/${id}/schedule`, { publishAt });
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to schedule content');
@@ -118,7 +104,7 @@ export const updateContentFlags = createAsyncThunk(
     'content/updateContentFlags',
     async ({ id, flags }, { rejectWithValue }) => {
         try {
-            const { data } = await api.put(`/contents/${id}/flags`, flags);
+            const { data } = await axiosInstance.put(`/contents/${id}/flags`, flags);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to update flags');
@@ -130,7 +116,7 @@ export const fetchFeaturedContents = createAsyncThunk(
     'content/fetchFeaturedContents',
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await api.get('/contents/featured');
+            const { data } = await axiosInstance.get('/contents/featured');
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch featured content');
@@ -142,7 +128,7 @@ export const fetchLatestContents = createAsyncThunk(
     'content/fetchLatestContents',
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await api.get('/contents/latest');
+            const { data } = await axiosInstance.get('/contents/latest');
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch latest content');
@@ -154,7 +140,7 @@ export const fetchPopularContents = createAsyncThunk(
     'content/fetchPopularContents',
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await api.get('/contents/popular');
+            const { data } = await axiosInstance.get('/contents/popular');
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch popular content');
@@ -166,7 +152,7 @@ export const fetchTrendingContents = createAsyncThunk(
     'content/fetchTrendingContents',
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await api.get('/contents/trending');
+            const { data } = await axiosInstance.get('/contents/trending');
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch trending content');

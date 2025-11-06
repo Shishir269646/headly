@@ -1,23 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api');
-
-// Create axios instance
-const api = axios.create({
-    baseURL: API_URL,
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    withCredentials: true // Crucial for sending HTTP-only cookies
-});
+import { axiosInstance } from "../../libs/axios";
 
 // Async thunks
 export const register = createAsyncThunk(
     'auth/register',
     async (userData, { rejectWithValue }) => {
         try {
-            const { data } = await api.post('/auth/register', userData);
+            const { data } = await axiosInstance.post('/auth/register', userData);
             localStorage.setItem('user', JSON.stringify(data.data.user));
             return data.data.user; // Only return user data, token is in cookie
         } catch (error) {
@@ -30,7 +19,7 @@ export const login = createAsyncThunk(
     'auth/login',
     async (credentials, { rejectWithValue }) => {
         try {
-            const { data } = await api.post('/auth/login', credentials);
+            const { data } = await axiosInstance.post('/auth/login', credentials);
             localStorage.setItem('user', JSON.stringify(data.data));
             return data.data; // Only return user data, token is in cookie
         } catch (error) {
@@ -43,7 +32,7 @@ export const logout = createAsyncThunk(
     'auth/logout',
     async (_, { rejectWithValue }) => {
         try {
-            await api.post('/auth/logout');
+            await axiosInstance.post('/auth/logout');
             localStorage.removeItem('user');
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Logout failed');
@@ -55,7 +44,7 @@ export const getCurrentUser = createAsyncThunk(
     'auth/getCurrentUser',
     async (_, { rejectWithValue }) => {
         try {
-            const { data } = await api.get('/auth/me');
+            const { data } = await axiosInstance.get('/auth/me');
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch user');
@@ -67,7 +56,7 @@ export const changePassword = createAsyncThunk(
     'auth/changePassword',
     async (passwords, { rejectWithValue }) => {
         try {
-            const { data } = await api.put('/auth/change-password', passwords);
+            const { data } = await axiosInstance.put('/auth/change-password', passwords);
             return data.message;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Password change failed');
@@ -81,7 +70,7 @@ export const refreshToken = createAsyncThunk(
         try {
             // With HTTP-only cookies, the browser automatically sends the refresh token cookie.
             // We don't need to manually retrieve it from localStorage or send it in the body.
-            const { data } = await api.post('/auth/refresh-token');
+            const { data } = await axiosInstance.post('/auth/refresh-token');
             return data.data; // The backend will set a new access token cookie
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Token refresh failed');
