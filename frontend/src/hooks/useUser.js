@@ -1,6 +1,6 @@
 
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import {
     fetchUsers,
     fetchUserById,
@@ -24,14 +24,16 @@ export const useUser = (filters = null) => {
         dispatch(fetchUsers(filters));
     }, [dispatch, JSON.stringify(filters)]);
 
-    
-    const getUserById = (id) => {
-        return dispatch(fetchUserById(id));
-    };
 
-    const create = (userData) => {
+
+    const getUserById = useCallback((id) => {
+        return dispatch(fetchUserById(id));
+    }, [dispatch]);
+
+
+    const create = useCallback((userData) => {
         return dispatch(createUser(userData));
-    };
+    }, [dispatch]);
 
     const update = (id, userData) => {
         return dispatch(updateUser({ id, userData }));
@@ -63,4 +65,5 @@ export const useUser = (filters = null) => {
         uploadUserimage,
         clearError: () => dispatch(clearError())
     };
+
 };

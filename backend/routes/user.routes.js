@@ -12,6 +12,7 @@ const { updateProfileSchema } = require('../validators/user.validator');
 router.get('/', authenticate, authorize('admin'), userController.getAllUsers);
 router.post('/', authenticate, authorize('admin'), userController.createUser);
 router.get('/:id', authenticate, authorize('admin'), userController.getUserById);
+router.put('/:id', authenticate, authorize('admin'), userController.updateUser);
 router.delete('/:id', authenticate, authorize('admin'), userController.deleteUser);
 
 // Profile routes (authenticated users)

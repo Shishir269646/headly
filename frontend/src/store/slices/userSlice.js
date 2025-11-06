@@ -159,8 +159,19 @@ const userSlice = createSlice({
                 state.error = action.payload;
             })
             // Fetch User By ID
+            .addCase(fetchUserById.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
             .addCase(fetchUserById.fulfilled, (state, action) => {
+                state.loading = false;
                 state.currentUser = action.payload;
+                state.error = null;
+            })
+            .addCase(fetchUserById.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+                state.currentUser = null;
             })
             // Create User
             .addCase(createUser.fulfilled, (state, action) => {
