@@ -150,10 +150,9 @@ export default function PostPage() {
                                 />
                             )}
 
-                            {/* ✅ Comments Section (Optional placeholder) */}
+                            {/* ✅ Comments Section */}
                             <ArticleCommentSection
-                                totalComments={0}
-                                comments={[]} // replace with real comments later
+                                contentId={currentContent._id}
                             />
                         </div>
 

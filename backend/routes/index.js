@@ -14,6 +14,8 @@ const webhookRoutes = require('./webhook.routes');
 const contactRoutes = require('./contact.routes');
 const newsletterRoutes = require('./newsletter.routes');
 const analyticsRoutes = require('./analytics.routes');
+const commentRoutes = require('./comment.routes');
+const dashboardRoutes = require('./dashboard.routes');
 
 // Mount routes
 router.use('/auth', authRoutes);
@@ -24,6 +26,8 @@ router.use('/webhooks', webhookRoutes);
 router.use('/contact', contactRoutes);
 router.use('/newsletter', newsletterRoutes);
 router.use('/analytics', analyticsRoutes);
+router.use('/comments', commentRoutes);
+router.use('/dashboard', dashboardRoutes);
 
 
 module.exports = router;

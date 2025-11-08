@@ -1,47 +1,81 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCommentsByContent, getCommentCount, clearComments } from '@/store/slices/commentSlice';
+import CommentList from '@/components/comments/CommentList';
+import CommentForm from '@/components/comments/CommentForm';
 
 /**
- * Displays a list of comments for the article.
+ * Displays comments section for an article with nested replies support.
  * @param {Object} props - Component props.
- * @param {number} props.totalComments - The total number of comments.
- * @param {Array<Object>} props.comments - Array of comment objects.
- * @param {string} props.comments[].id - Unique comment ID.
- * @param {string} props.comments[].author - Commenter's name.
- * @param {string} props.comments[].avatarUrl - Commenter's avatar URL.
- * @param {string} props.comments[].timestamp - Relative timestamp (e.g., '2 days ago').
- * @param {string} props.comments[].content - The comment text.
+ * @param {string} props.contentId - The content ID to fetch comments for.
  */
-export default function ArticleCommentSection({ totalComments, comments }) {
+export default function ArticleCommentSection({ contentId }) {
+    const dispatch = useDispatch();
+    const { comments, commentCount, loading, error } = useSelector((state) => state.comment);
+    const [showForm, setShowForm] = useState(false);
+
+    useEffect(() => {
+        if (contentId) {
+            dispatch(getCommentsByContent({ contentId, status: 'approved' }));
+            dispatch(getCommentCount({ contentId, status: 'approved' }));
+        }
+
+        return () => {
+            dispatch(clearComments());
+        };
+    }, [contentId, dispatch]);
+
+    const handleCommentSuccess = () => {
+        setShowForm(false);
+        // Refresh comments
+        dispatch(getCommentsByContent({ contentId, status: 'approved' }));
+        dispatch(getCommentCount({ contentId, status: 'approved' }));
+    };
+
     return (
         <div className="mt-12">
-            {/* Dark mode: dark:text-white */}
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">{totalComments} Comments</h3>
-            <div className="space-y-6">
-                {comments.map((comment) => (
-                    <div key={comment.id} className="flex gap-4 p-4 bg-gray-50 rounded-lg shadow-sm dark:bg-gray-800">
-                        {/* Avatar */}
-                        <div className="avatar shrink-0">
-                            <div className="w-12 rounded-full">
-                                <img src={comment.avatarUrl} alt={comment.author} />
-                            </div>
-                        </div>
-                        <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                                {/* Dark mode: dark:text-white */}
-                                <span className="font-semibold text-gray-900 dark:text-white">{comment.author}</span>
-                                {/* Dark mode: dark:text-gray-400 */}
-                                <span className="text-sm text-gray-500 dark:text-gray-400">{comment.timestamp}</span>
-                            </div>
-                            {/* Dark mode: dark:text-gray-300 */}
-                            <p className="text-gray-700 dark:text-gray-300 text-sm">
-                                {comment.content}
-                            </p>
-                            <button className="btn btn-xs btn-ghost mt-2 text-blue-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-blue-400">Reply</button>
-                        </div>
-                    </div>
-                ))}
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                    {commentCount} {commentCount === 1 ? 'Comment' : 'Comments'}
+                </h3>
+                <button
+                    onClick={() => setShowForm(!showForm)}
+                    className="btn btn-primary btn-sm"
+                >
+                    {showForm ? 'Cancel' : 'Leave a Comment'}
+                </button>
             </div>
+
+            {/* Comment form */}
+            {showForm && (
+                <div className="mb-8 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <CommentForm
+                        contentId={contentId}
+                        onSuccess={handleCommentSuccess}
+                        onCancel={() => setShowForm(false)}
+                    />
+                </div>
+            )}
+
+            {/* Loading state */}
+            {loading && comments.length === 0 && (
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    <span className="loading loading-spinner loading-md"></span>
+                    <p className="mt-2">Loading comments...</p>
+                </div>
+            )}
+
+            {/* Error state */}
+            {error && (
+                <div className="alert alert-error mb-4">
+                    <span>{error}</span>
+                </div>
+            )}
+
+            {/* Comments list */}
+            {!loading && <CommentList comments={comments} />}
         </div>
     );
 }

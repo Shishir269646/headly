@@ -4,6 +4,8 @@ import contentReducer from './slices/contentSlice';
 import mediaReducer from './slices/mediaSlice';
 import userReducer from './slices/userSlice';
 import analyticsReducer from './slices/analyticsSlice';
+import commentReducer from './slices/commentSlice';
+import dashboardReducer from './slices/dashboardSlice';
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +13,9 @@ export const store = configureStore({
         content: contentReducer,
         media: mediaReducer,
         user: userReducer,
-        analytics: analyticsReducer
+        analytics: analyticsReducer,
+        comment: commentReducer,
+        dashboard: dashboardReducer
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

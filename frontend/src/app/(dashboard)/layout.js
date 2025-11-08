@@ -21,6 +21,7 @@ import {
     FaSignOutAlt,
     FaChevronLeft,
     FaChevronRight,
+    FaComments,
 } from 'react-icons/fa';
 import Image from 'next/image';
 
@@ -54,6 +55,7 @@ export default function DashboardLayout({ children }) {
     const navigation = [
         { name: 'Dashboard', href: '/dashboard', icon: <FaTachometerAlt /> },
         { name: 'Contents', href: '/dashboard/contents', icon: <FaRegFileAlt /> },
+        { name: 'Comments', href: '/dashboard/comments', icon: <FaComments />, adminOnly: true },
         { name: 'Media', href: '/dashboard/media', icon: <FaImages /> },
         { name: 'Users', href: '/dashboard/users', icon: <FaUsers />, adminOnly: true },
         { name: 'Contacts', href: '/dashboard/contacts', icon: <FaEnvelope />, adminOnly: true },

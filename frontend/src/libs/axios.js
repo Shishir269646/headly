@@ -62,13 +62,21 @@ export const axiosInstance = axios.create({
     withCredentials: true,
 });
 
-// Request interceptor - Add token from cookie
+// Request interceptor - Add token from localStorage
 axiosInstance.interceptors.request.use(
     (config) => {
         // Only run on the client side (in the browser)
         if (typeof window !== 'undefined') {
-            const token = getCookie('accessToken');
-            if (token) {
+            // Try to get token from localStorage first (preferred method)
+            const token = localStorage.getItem('accessToken');
+            // Fallback to cookie if localStorage doesn't have it
+            if (!token) {
+                const cookieToken = getCookie('accessToken');
+                if (cookieToken) {
+                    localStorage.setItem('accessToken', cookieToken);
+                    config.headers.Authorization = `Bearer ${cookieToken}`;
+                }
+            } else {
                 config.headers.Authorization = `Bearer ${token}`;
             }
         }
@@ -90,21 +98,29 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                // Retrieve refreshToken from cookie
-                const refreshToken = getCookie('refreshToken');
+                // Retrieve refreshToken from localStorage or cookie
+                let refreshToken = localStorage.getItem('refreshToken');
+                if (!refreshToken) {
+                    refreshToken = getCookie('refreshToken');
+                }
                 if (!refreshToken) throw new Error('Refresh token missing');
 
                 // Call the refresh endpoint (using standard axios, NOT axiosInstance to avoid interceptor recursion)
                 const { data } = await axios.post(`${API_URL}/auth/refresh-token`, {
                     refreshToken
+                }, {
+                    withCredentials: true
                 });
 
-                // Store new tokens in cookies
-                // Set accessToken for immediate use (e.g., expires in 1 day)
-                setCookie('accessToken', data.data.token, 1);
-                // Set refreshToken (e.g., expires in 30 days)
-                setCookie('refreshToken', data.data.refreshToken, 30);
-
+                // Store new tokens in localStorage (preferred) and cookies (backup)
+                if (data.data.token) {
+                    localStorage.setItem('accessToken', data.data.token);
+                    setCookie('accessToken', data.data.token, 1);
+                }
+                if (data.data.refreshToken) {
+                    localStorage.setItem('refreshToken', data.data.refreshToken);
+                    setCookie('refreshToken', data.data.refreshToken, 30);
+                }
 
                 // Update the Authorization header in the original request with the new token
                 originalRequest.headers.Authorization = `Bearer ${data.data.token}`;
@@ -114,10 +130,12 @@ axiosInstance.interceptors.response.use(
             } catch (refreshError) {
                 // Failed to refresh token or refresh token was missing
                 if (typeof window !== 'undefined') {
-                    // Clear all token cookies and redirect to login
+                    // Clear all tokens from localStorage and cookies
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('refreshToken');
+                    localStorage.removeItem('user');
                     deleteCookie('accessToken');
                     deleteCookie('refreshToken');
-                    // Optionally clear other related cookies if they exist, e.g., deleteCookie('userSession');
 
                     window.location.href = '/login';
                 }
