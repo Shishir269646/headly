@@ -16,11 +16,13 @@ const newsletterRoutes = require('./newsletter.routes');
 const analyticsRoutes = require('./analytics.routes');
 const commentRoutes = require('./comment.routes');
 const dashboardRoutes = require('./dashboard.routes');
+const categoryRoutes = require('./category.routes');
 
 // Mount routes
 router.use('/auth', authRoutes);
 router.use('/users', userRoutes);
 router.use('/contents', contentRoutes);
+router.use('/categories', categoryRoutes);
 router.use('/media', mediaRoutes);
 router.use('/webhooks', webhookRoutes);
 router.use('/contact', contactRoutes);

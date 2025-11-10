@@ -12,6 +12,7 @@ import { useModal } from '@/hooks/useModal';
 import { useState } from 'react';
 import Link from 'next/link';
 import { formatDate, truncateText } from '@/libs/utils';
+import { Eye, Edit, CheckCircle, Trash2 } from 'lucide-react';
 
 export default function ContentsPage() {
     const [filters, setFilters] = useState({
@@ -182,14 +183,14 @@ export default function ContentsPage() {
                                                     className="text-gray-600 hover:text-gray-900"
                                                     title="View"
                                                 >
-                                                    👁️
+                                                    <Eye size={18} />
                                                 </Link>
                                                 <Link
                                                     href={`/dashboard/contents/${content._id}/edit`}
                                                     className="text-blue-600 hover:text-blue-900"
                                                     title="Edit"
                                                 >
-                                                    ✏️
+                                                    <Edit size={18} />
                                                 </Link>
                                                 {content.status === 'draft' && (
                                                     <button
@@ -197,17 +198,16 @@ export default function ContentsPage() {
                                                         className="text-green-600 hover:text-green-900"
                                                         title="Publish"
                                                     >
-                                                        ✅
+                                                        <CheckCircle size={18} />
                                                     </button>
                                                 )}
                                                 <button
-                                                    onClick={() => deleteModal.open(content._id)}
-                                                    className="text-red-600 hover:text-red-900"
-                                                    title="Delete"
-                                                >
-                                                    🗑️
-                                                </button>
-                                            </div>
+                                                                                                            onClick={() => deleteModal.open(content._id)}
+                                                                                                            className="text-red-600 hover:text-red-900"
+                                                                                                            title="Delete"
+                                                                                                        >
+                                                                                                            <Trash2 size={18} />
+                                                                                                        </button>                                            </div>
                                         </td>
                                     </tr>
                                 ))}

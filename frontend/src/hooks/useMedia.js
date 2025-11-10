@@ -17,10 +17,11 @@ export const useMedia = (filters = null) => {
     );
 
     useEffect(() => {
+       
         if (filters) {
             dispatch(fetchMedia(filters));
         }
-    }, [dispatch, JSON.stringify(filters)]);
+    }, [dispatch, JSON.stringify(filters), media, loading, error]);
 
     const upload = (file, metadata = {}) => {
         return dispatch(uploadMedia({ file, metadata }));

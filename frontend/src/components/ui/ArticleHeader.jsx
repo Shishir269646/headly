@@ -21,7 +21,7 @@ export default function ArticleHeader({
             <div className="mb-4">
                 {/* Dark mode: dark:badge-neutral, dark:text-white */}
                 <span className="badge badge-primary badge-lg bg-blue-600 text-white border-blue-600 dark:bg-blue-700 dark:border-blue-700">
-                    {category.toUpperCase()}
+                    {category?.name.toUpperCase()}
                 </span>
             </div>
 

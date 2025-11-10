@@ -42,10 +42,11 @@ const contentSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
-    categories: [{
-        type: String,
-        trim: true
-    }],
+    category: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        required: [true, 'Category is required']
+    },
     tags: [{
         type: String,
         trim: true

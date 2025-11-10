@@ -61,11 +61,10 @@ exports.updateContent = async (req, res, next) => {
         if (typeof seo === 'string') {
             try { seo = JSON.parse(seo); } catch (_) { seo = undefined; }
         }
-        // Normalize categories/tags if they came as comma strings
+        // Normalize tags if they came as comma strings
         const normalizeArr = (v) => Array.isArray(v) ? v : (typeof v === 'string' ? v.split(',').map(s => s.trim()).filter(Boolean) : undefined);
-        const categories = normalizeArr(req.body.categories);
         const tags = normalizeArr(req.body.tags);
-        const contentData = { ...req.body, seo, categories, tags, featuredImage: featuredImageId };
+        const contentData = { ...req.body, seo, category: req.body.category, tags, featuredImage: featuredImageId };
         const content = await contentService.updateContent(req.params.id, contentData, req.user);
         successResponse(res, content, 'Content updated successfully');
     } catch (error) {

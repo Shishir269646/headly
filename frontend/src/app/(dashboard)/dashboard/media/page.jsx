@@ -1,10 +1,3 @@
-
-
-// ============================================
-// 📄 app/(dashboard)/dashboard/media/page.js
-// Media Library Page
-// ============================================
-
 'use client';
 
 import { useMedia } from '@/hooks/useMedia';
@@ -19,6 +12,7 @@ export default function MediaPage() {
     const toast = useToast();
     const deleteModal = useModal();
 
+
     const handleDelete = async () => {
         try {
             await remove(deleteModal.data);
@@ -28,6 +22,8 @@ export default function MediaPage() {
             toast.error('Failed to delete media');
         }
     };
+
+
 
     const copyUrl = (url) => {
         navigator.clipboard.writeText(url);

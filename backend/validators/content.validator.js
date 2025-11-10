@@ -53,7 +53,7 @@ exports.createContentSchema = {
         featuredImage: Joi.string().allow('').optional(),
         status: Joi.string().valid('draft', 'published', 'scheduled', 'archived').optional().allow(''),
         publishAt: Joi.alternatives().try(Joi.date(), Joi.string().allow('')).optional(),
-        categories: Joi.custom(parseArrayFromUnknown).optional(),
+        category: Joi.string().hex().length(24).required(),
         tags: Joi.custom(parseArrayFromUnknown).optional(),
         seo: seoStringOrObject.optional()
     }).unknown(true)
@@ -68,7 +68,7 @@ exports.updateContentSchema = {
         featuredImage: Joi.string().allow('').optional(),
         status: Joi.string().valid('draft', 'published', 'scheduled', 'archived').optional().allow(''),
         publishAt: Joi.alternatives().try(Joi.date(), Joi.string().allow('')).optional(),
-        categories: Joi.custom(parseArrayFromUnknown).optional(),
+        category: Joi.string().hex().length(24).optional(),
         tags: Joi.custom(parseArrayFromUnknown).optional(),
         seo: seoStringOrObject.optional()
     }).unknown(true),

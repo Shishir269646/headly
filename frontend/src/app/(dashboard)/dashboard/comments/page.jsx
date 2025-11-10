@@ -10,7 +10,7 @@ import {
     getCommentStats,
     deleteComment
 } from '@/store/slices/commentSlice';
-import { axiosInstance } from '@/libs/axios';
+
 
 export default function CommentsPage() {
     const dispatch = useDispatch();

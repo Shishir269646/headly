@@ -18,7 +18,6 @@ import {
 } from "recharts";
 import { FaUsers, FaNewspaper, FaEnvelope, FaChartLine } from "react-icons/fa";
 import { MdOutlineArticle } from "react-icons/md";
-import { RiEyeLine, RiHeartLine, RiChat3Line } from "react-icons/ri";
 import { format } from "date-fns";
 
 const AnalyticsPage = () => {

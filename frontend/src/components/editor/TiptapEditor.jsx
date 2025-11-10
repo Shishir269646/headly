@@ -1,7 +1,7 @@
 'use client';
 
 import { useEditor, EditorContent } from '@tiptap/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MediaPickerModal from '@/components/media/MediaPickerModal';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -50,6 +50,13 @@ export default function TiptapEditor({ content, onChange, placeholder = 'Start w
             onChange(html);
         }
     });
+
+    // Effect to update editor content when the 'content' prop changes
+    useEffect(() => {
+        if (editor && content !== editor.getHTML()) {
+            editor.commands.setContent(content || '', false, { preserveCursor: true });
+        }
+    }, [content, editor]);
 
     if (!editor) {
         return <div>Loading editor...</div>;

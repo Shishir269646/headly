@@ -13,15 +13,16 @@ import { useRouter } from 'next/navigation';
 import TiptapEditor from '@/components/editor/TiptapEditor';
 import { generateSlug } from '@/libs/utils';
 import MediaPickerModal from '@/components/media/MediaPickerModal';
+import { useCategories } from '@/hooks/useCategories';
 
-// Note: Placeholder for icon imports (e.g., from 'lucide-react')
-// import { Save, Send, Image, LayoutList, Tag, FileText, Globe } from 'lucide-react'; 
+import { Save, Send, Image, LayoutList, Tag, ChevronDown } from 'lucide-react';
 
 // --- Component Start ---
 
 export default function ContentForm({ contentId = null }) {
   const router = useRouter();
   const toast = useToast();
+  const { categories: availableCategories, loading: categoriesLoading } = useCategories();
 
   // Renamed 'loading' to 'isSubmitting' for clarity on form-level loading state
   const { create, update, currentContent, loading: isSubmitting } = useContent(null, contentId);
@@ -36,7 +37,7 @@ export default function ContentForm({ contentId = null }) {
     // This holds the Media ObjectId (string)
     featuredImage: null,
     status: 'draft',
-    categories: [],
+    category: '',
     tags: [],
     seo: {
       metaTitle: '',
@@ -46,7 +47,6 @@ export default function ContentForm({ contentId = null }) {
   });
 
   const [featuredPreviewUrl, setFeaturedPreviewUrl] = useState(null);
-  const [categoryInput, setCategoryInput] = useState('');
   const [tagInput, setTagInput] = useState('');
   const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
   const [mediaModalTab, setMediaModalTab] = useState('upload');
@@ -65,7 +65,7 @@ export default function ContentForm({ contentId = null }) {
         // Use the Media object ID for the form field
         featuredImage: currentContent.featuredImage?._id || null,
         status: currentContent.status || 'draft',
-        categories: currentContent.categories || [],
+        category: currentContent.category?._id || '',
         tags: currentContent.tags || [],
         seo: currentContent.seo || {
           metaTitle: '',
@@ -105,17 +105,6 @@ export default function ContentForm({ contentId = null }) {
     setFeaturedPreviewUrl(null);
   };
 
-  const addCategory = () => {
-    const value = (categoryInput || '').trim();
-    if (!value || formData.categories.includes(value)) return;
-    setFormData(prev => ({ ...prev, categories: [...prev.categories, value] }));
-    setCategoryInput('');
-  };
-
-  const removeCategory = (category) => {
-    setFormData(prev => ({ ...prev, categories: prev.categories.filter(c => c !== category) }));
-  };
-
   const addTag = () => {
     const value = (tagInput || '').trim();
     if (!value || formData.tags.includes(value)) return;
@@ -134,11 +123,7 @@ export default function ContentForm({ contentId = null }) {
     }));
   };
 
-  /**
-   * Prepares and submits the content data using FormData.
-   * NOTE: When using FormData, complex types (Arrays, Objects) must be JSON.stringify()
-   * and MUST be parsed back into objects/arrays on the server-side!
-   */
+
   const performSubmit = async (statusOverride = null) => {
     // Input validation check
     if (!formData.title || !formData.body) {
@@ -148,16 +133,16 @@ export default function ContentForm({ contentId = null }) {
 
     const dataToSend = new FormData();
 
-    // 1. Append simple fields
+    // Append simple fields
     dataToSend.append('title', formData.title || '');
     // Ensure slug is sent, either custom or generated
     dataToSend.append('slug', formData.slug || generateSlug(formData.title));
     dataToSend.append('excerpt', formData.excerpt || '');
     dataToSend.append('body', formData.body || '');
     dataToSend.append('status', statusOverride || formData.status || 'draft');
+    dataToSend.append('category', formData.category || '');
 
-    // 2. Append complex fields as JSON strings (CRITICAL for multipart/form-data)
-    dataToSend.append('categories', JSON.stringify(formData.categories || []));
+    // Append complex fields as JSON strings (CRITICAL for multipart/form-data)
     dataToSend.append('tags', JSON.stringify(formData.tags || []));
 
     // Prepare and append SEO object as a JSON string
@@ -168,14 +153,12 @@ export default function ContentForm({ contentId = null }) {
     };
     dataToSend.append('seo', JSON.stringify(seoPayload));
 
-    // 3. Append featuredImage ID if present
+    // Append featuredImage ID if present
     if (formData.featuredImage) {
       dataToSend.append('featuredImage', formData.featuredImage);
     }
 
-    // Note: If you have fields like isFeatured or featuredOrder in the form, 
-    // you would also append them here, stringified if they are boolean/number 
-    // or sent as simple strings/numbers depending on your backend's parser.
+
 
     let result;
     if (contentId) {
@@ -236,10 +219,10 @@ export default function ContentForm({ contentId = null }) {
   return (
     <div className="p-4 sm:p-6 lg:p-8">
 
-      {/* Header and Actions Panel (Sticky) */}
-      <div className="flex justify-between items-center mb-6 sticky top-0 bg-base-100 z-10 py-4 border-b">
+      {/* Header and Actions Panel */}
+      <div className="flex justify-between items-center mb-6 top-0 bg-base-100 z-10 py-4 border-b">
         <h1 className="text-3xl font-bold text-primary">
-          {contentId ? '✏️ Edit Content' : '✨ Create New Content'}
+          {contentId ? "Edit Content" : 'Create New Content'}
         </h1>
         <div className="flex gap-3">
           <button
@@ -248,7 +231,7 @@ export default function ContentForm({ contentId = null }) {
             disabled={isSubmitting}
             className="btn btn-outline"
           >
-            {/* <Save size={18} /> */}
+            <Save size={18} />
             {isSubmitting ? 'Saving...' : 'Save Draft'}
           </button>
           <button
@@ -257,7 +240,7 @@ export default function ContentForm({ contentId = null }) {
             disabled={isSubmitting || !formData.title || !formData.body}
             className="btn btn-success"
           >
-            {/* <Send size={18} /> */}
+            <Send size={18} />
             {isSubmitting ? 'Publishing...' : 'Publish'}
           </button>
           <button
@@ -323,11 +306,17 @@ export default function ContentForm({ contentId = null }) {
             <div className="card-body p-6">
               <label className="label p-0 mb-3"><span className="label-text font-semibold">Content Body *</span></label>
               <div className="border rounded-lg overflow-hidden">
-                <TiptapEditor
-                  content={formData.body || ''}
-                  onChange={handleEditorChange}
-                  placeholder="Start writing your content..."
-                />
+                {contentId && !currentContent ? (
+                  <div className="flex justify-center items-center min-h-[300px]">
+                    <span className="loading loading-spinner loading-lg"></span>
+                  </div>
+                ) : (
+                  <TiptapEditor
+                    content={formData.body || ''}
+                    onChange={handleEditorChange}
+                    placeholder="Start writing your content..."
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -369,11 +358,11 @@ export default function ContentForm({ contentId = null }) {
               <div className="flex flex-col gap-3">
                 <div className="flex gap-2">
                   <button type="button" className="btn btn-primary btn-sm" onClick={() => openMediaModal('upload')} disabled={uploading}>
-                    {/* <Image size={16} /> */}
+                    <Image size={16} />
                     Upload
                   </button>
                   <button type="button" className="btn btn-outline btn-sm" onClick={() => openMediaModal('library')}>
-                    {/* <LayoutList size={16} /> */}
+                    <LayoutList size={16} />
                     Library
                   </button>
                 </div>
@@ -406,42 +395,34 @@ export default function ContentForm({ contentId = null }) {
           {/* Categories & Tags Card */}
           <div className="card bg-base-100 shadow-xl border">
             <div className="card-body p-6 space-y-4">
-              <h2 className="card-title text-lg">Categories & Tags</h2>
+              <h2 className="card-title text-lg">Organization</h2>
 
               {/* Categories Section */}
               <div className="form-control">
-                <label className="label p-0"><span className="label-text font-medium flex items-center">
-                  {/* <LayoutList size={16} className="mr-1" /> */}
-                  Categories
-                </span></label>
-                <div className="input-group">
-                  <input
-                    type="text"
-                    value={categoryInput || ''}
-                    onChange={(e) => setCategoryInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCategory())}
-                    className="input input-bordered input-sm w-full"
-                    placeholder="e.g. Technology"
-                  />
-                  <button type="button" onClick={addCategory} className="btn btn-primary btn-sm">Add</button>
-                </div>
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {(formData.categories || []).map(category => (
-                    <div key={category} className="badge badge-primary gap-1 p-3 font-medium">
-                      {category}
-                      <button type="button" onClick={() => removeCategory(category)} className="btn btn-xs btn-ghost text-white ml-1">✕</button>
-                    </div>
+                <label className="label p-0"><span className="label-text font-medium">Category</span></label>
+                <select
+                  className="select select-bordered w-full"
+                  value={formData.category}
+                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                  disabled={categoriesLoading}
+                  required
+                >
+                  <option value="" disabled>
+                    {categoriesLoading ? 'Loading categories...' : 'Select a category'}
+                  </option>
+                  {availableCategories.map(cat => (
+                    <option key={cat._id} value={cat._id}>{cat.name}</option>
                   ))}
-                </div>
+                </select>
               </div>
 
               {/* Tags Section */}
               <div className="form-control pt-2 border-t mt-4">
                 <label className="label p-0"><span className="label-text font-medium flex items-center">
-                  {/* <Tag size={16} className="mr-1" /> */}
+                  <Tag size={16} className="mr-1" />
                   Tags
                 </span></label>
-                <div className="input-group">
+                <div className="input-.group">
                   <input
                     type="text"
                     value={tagInput || ''}
@@ -465,17 +446,29 @@ export default function ContentForm({ contentId = null }) {
           </div>
 
           {/* SEO Settings Card (DaisyUI Collapse) */}
-          <div className={`collapse collapse-arrow bg-base-100 shadow-xl border ${isSeoOpen ? 'collapse-open' : 'collapse-close'}`}>
-            <input type="checkbox" checked={isSeoOpen} onChange={() => setIsSeoOpen(!isSeoOpen)} />
-            <div className="collapse-title text-xl font-medium flex items-center">
-              {/* <Globe size={20} className="mr-2" /> */}
+          <div
+            className={`collapse bg-base-100 shadow-xl border ${isSeoOpen ? 'collapse-open' : 'collapse-close'
+              }`}
+          >
+            <input
+              type="checkbox"
+              checked={isSeoOpen}
+              onChange={() => setIsSeoOpen(!isSeoOpen)}
+            />
+
+            <div className="collapse-title flex items-center gap-3 text-xl font-medium">
+              <ChevronDown size={20} className="mr-2" />
               SEO Settings
             </div>
+
             <div className="collapse-content">
+              {/* your form controls */}
               <div className="space-y-4 pt-2">
                 {/* Meta Title */}
                 <div className="form-control">
-                  <label className="label"><span className="label-text">Meta Title</span></label>
+                  <label className="label">
+                    <span className="label-text">Meta Title</span>
+                  </label>
                   <input
                     type="text"
                     value={formData.seo?.metaTitle || ''}
@@ -484,17 +477,13 @@ export default function ContentForm({ contentId = null }) {
                     maxLength={60}
                     placeholder="SEO title (max 60 characters)"
                   />
-                  <div className="label">
-                    <span className="label-text-alt">{metaTitleLength}/60 characters</span>
-                    <span className={`label-text-alt ${metaTitleLength > 50 && metaTitleLength <= 60 ? 'text-warning' : metaTitleLength > 60 ? 'text-error' : 'text-success'}`}>
-                      {metaTitleLength > 60 ? 'Too Long' : 'Good length'}
-                    </span>
-                  </div>
                 </div>
 
                 {/* Meta Description */}
                 <div className="form-control">
-                  <label className="label"><span className="label-text">Meta Description</span></label>
+                  <label className="label">
+                    <span className="label-text">Meta Description</span>
+                  </label>
                   <textarea
                     value={formData.seo?.metaDescription || ''}
                     onChange={(e) => handleSeoChange('metaDescription', e.target.value)}
@@ -503,16 +492,14 @@ export default function ContentForm({ contentId = null }) {
                     rows={3}
                     placeholder="SEO description (max 160 characters)"
                   />
-                  <div className="label">
-                    <span className="label-text-alt">{metaDescriptionLength}/160 characters</span>
-                    <span className={`label-text-alt ${metaDescriptionLength > 150 && metaDescriptionLength <= 160 ? 'text-warning' : metaDescriptionLength > 160 ? 'text-error' : 'text-success'}`}>
-                      {metaDescriptionLength > 160 ? 'Too Long' : 'Good length'}
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
+
+
+
+
 
         </div>
 

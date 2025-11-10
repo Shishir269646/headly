@@ -35,11 +35,15 @@ export const useContent = (filters = null, contentId = null) => {
     // Memoize filters to prevent unnecessary re-renders
     const memoizedFilters = useMemo(() => filters, [JSON.stringify(filters)]);
 
+    const getContents = useCallback((filters) => {
+        dispatch(fetchContents(filters));
+    }, [dispatch]);
+
     useEffect(() => {
         if (memoizedFilters) {
-            dispatch(fetchContents(memoizedFilters));
+            getContents(memoizedFilters);
         }
-    }, [dispatch, memoizedFilters]);
+    }, [dispatch, memoizedFilters, getContents]);
 
     useEffect(() => {
         if (contentId) {
@@ -108,6 +112,7 @@ export const useContent = (filters = null, contentId = null) => {
         pagination,
         loading,
         error,
+        getContents,
         getContentBySlug,
         create,
         update,

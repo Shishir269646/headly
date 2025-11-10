@@ -4,20 +4,29 @@ const app = require('../app');
 const mongoose = require('mongoose');
 const Content = require('../models/Content.model');
 const User = require('../models/User.model');
+const Category = require('../models/Category.model');
 
 describe('Content Routes', () => {
     let token;
     let user;
+    let category;
 
     beforeAll(async () => {
         // Connect to a test database
         const url = 'mongodb://127.0.0.1/test_db';
-        await mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+        await mongoose.connect(url);
 
-        // Create a user and get a token
+        // Create a user
         user = new User({ name: 'Test User', email: 'test@example.com', password: 'password', role: 'admin' });
         await user.save();
 
+        // Create a category
+        category = new Category({ name: 'Test Category', slug: 'test-category' });
+        await category.save();
+    });
+
+    beforeEach(async () => {
+        // Get a fresh token before each test
         const res = await request(app)
             .post('/api/auth/login')
             .send({
@@ -40,8 +49,8 @@ describe('Content Routes', () => {
         it('should get the latest content', async () => {
             // Create some content
             await Content.create([
-                { title: 'Latest 1', body: 'body', author: user._id, status: 'published', publishAt: new Date() },
-                { title: 'Latest 2', body: 'body', author: user._id, status: 'published', publishAt: new Date() },
+                { title: 'Latest 1', body: 'body', author: user._id, status: 'published', publishAt: new Date(), category: category._id },
+                { title: 'Latest 2', body: 'body', author: user._id, status: 'published', publishAt: new Date(), category: category._id },
             ]);
 
             const res = await request(app).get('/api/contents/latest');
@@ -55,8 +64,8 @@ describe('Content Routes', () => {
         it('should get trending content', async () => {
             // Create some content
             await Content.create([
-                { title: 'Trending 1', body: 'body', author: user._id, status: 'published', views: 100 },
-                { title: 'Trending 2', body: 'body', author: user._id, status: 'published', views: 200 },
+                { title: 'Trending 1', body: 'body', author: user._id, status: 'published', views: 100, category: category._id },
+                { title: 'Trending 2', body: 'body', author: user._id, status: 'published', views: 200, category: category._id },
             ]);
 
             const res = await request(app).get('/api/contents/trending');
@@ -70,9 +79,9 @@ describe('Content Routes', () => {
         it('should get popular content', async () => {
             // Create some content
             await Content.create([
-                { title: 'Popular 1', body: 'body', author: user._id, status: 'published', isPopular: true },
-                { title: 'Popular 2', body: 'body', author: user._id, status: 'published', isPopular: true },
-                { title: 'Not Popular', body: 'body', author: user._id, status: 'published', isPopular: false },
+                { title: 'Popular 1', body: 'body', author: user._id, status: 'published', isPopular: true, category: category._id },
+                { title: 'Popular 2', body: 'body', author: user._id, status: 'published', isPopular: true, category: category._id },
+                { title: 'Not Popular', body: 'body', author: user._id, status: 'published', isPopular: false, category: category._id },
             ]);
 
             const res = await request(app).get('/api/contents/popular');
@@ -85,9 +94,9 @@ describe('Content Routes', () => {
         it('should get featured content', async () => {
             // Create some content
             await Content.create([
-                { title: 'Featured 1', body: 'body', author: user._id, status: 'published', isFeatured: true, featuredOrder: 1 },
-                { title: 'Featured 2', body: 'body', author: user._id, status: 'published', isFeatured: true, featuredOrder: 2 },
-                { title: 'Not Featured', body: 'body', author: user._id, status: 'published', isFeatured: false },
+                { title: 'Featured 1', body: 'body', author: user._id, status: 'published', isFeatured: true, featuredOrder: 1, category: category._id },
+                { title: 'Featured 2', body: 'body', author: user._id, status: 'published', isFeatured: true, featuredOrder: 2, category: category._id },
+                { title: 'Not Featured', body: 'body', author: user._id, status: 'published', isFeatured: false, category: category._id },
             ]);
 
             const res = await request(app).get('/api/contents/featured');
@@ -100,7 +109,7 @@ describe('Content Routes', () => {
     describe('PUT /api/contents/:id/flags', () => {
         it('should update content flags', async () => {
             // Create some content
-            const content = await Content.create({ title: 'Content', body: 'body', author: user._id, status: 'published' });
+            const content = await Content.create({ title: 'Content', body: 'body', author: user._id, status: 'published', category: category._id });
 
             const res = await request(app)
                 .put(`/api/contents/${content._id}/flags`)

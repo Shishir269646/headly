@@ -1,25 +1,39 @@
 
 const Content = require('../models/Content.model');
+const Category = require('../models/Category.model');
 const AuditLog = require('../models/AuditLog.model');
 const webhookService = require('./webhook.service');
 const ApiError = require('../utils/apiError');
 
 exports.getAllContents = async (filters) => {
-    const { status, author, category, tag, page = 1, limit = 10, search } = filters;
+    const { status, author, category: categorySlug, tag, page = 1, limit = 10, search } = filters;
 
     const query = { isDeleted: false };
 
     if (status) query.status = status;
     if (author) query.author = author;
-    if (category) query.categories = category;
     if (tag) query.tags = tag;
     if (search) {
         query.$text = { $search: search };
     }
 
+    if (categorySlug) {
+        const category = await Category.findOne({ slug: categorySlug });
+        if (category) {
+            query.category = category._id;
+        } else {
+            // If category slug is provided but not found, return no content
+            return {
+                contents: [],
+                pagination: { total: 0, page: 1, pages: 0 }
+            };
+        }
+    }
+
     const contents = await Content.find(query)
         .populate('author', 'name email avatar')
         .populate('featuredImage')
+        .populate('category', 'name slug')
         .limit(limit * 1)
         .skip((page - 1) * limit)
         .sort({ createdAt: -1 });
@@ -39,7 +53,8 @@ exports.getAllContents = async (filters) => {
 exports.getContentById = async (contentId) => {
     const content = await Content.findOne({ _id: contentId, isDeleted: false })
         .populate('author', 'name email avatar')
-        .populate('featuredImage');
+        .populate('featuredImage')
+        .populate('category', 'name slug');
 
     if (!content) {
         throw new ApiError(404, 'Content not found');
@@ -51,7 +66,8 @@ exports.getContentById = async (contentId) => {
 exports.getContentBySlug = async (slug) => {
     const content = await Content.findOne({ slug, isDeleted: false })
         .populate('author', 'name email avatar')
-        .populate('featuredImage');
+        .populate('featuredImage')
+        .populate('category', 'name slug');
 
     if (!content) {
         throw new ApiError(404, 'Content not found');
@@ -235,17 +251,21 @@ exports.getFeaturedContents = async (limit = 4) => {
 
 // 5. Update content flags (admin only)
 exports.updateContentFlags = async (contentId, flags) => {
-    const content = await Content.findById(contentId);
+    const update = {};
+    if (flags.isFeatured !== undefined) update.isFeatured = flags.isFeatured;
+    if (flags.isPopular !== undefined) update.isPopular = flags.isPopular;
+    if (flags.featuredOrder !== undefined) update.featuredOrder = flags.featuredOrder;
+
+    const content = await Content.findByIdAndUpdate(
+        contentId,
+        { $set: update },
+        { new: true, runValidators: true }
+    );
 
     if (!content) {
         throw new ApiError(404, 'Content not found');
     }
 
-    if (flags.isFeatured !== undefined) content.isFeatured = flags.isFeatured;
-    if (flags.isPopular !== undefined) content.isPopular = flags.isPopular;
-    if (flags.featuredOrder !== undefined) content.featuredOrder = flags.featuredOrder;
-
-    await content.save();
     return content;
 };
 

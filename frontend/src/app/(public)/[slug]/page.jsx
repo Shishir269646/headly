@@ -90,7 +90,7 @@ export default function PostPage() {
         featuredImage,
         author,
         createdAt,
-        categories = [],
+        category,
         tags = [],
         seo,
         readTime,
@@ -100,7 +100,7 @@ export default function PostPage() {
     // ✅ Example breadcrumb items
     const breadcrumbItems = [
         { name: 'Home', href: '/' },
-        { name: categories?.[0] || 'Blog', href: '/blog' },
+        { name: category?.[0] || 'Blog', href: '/blog' },
         { name: title, href: `/post/${slug}` },
     ];
 
@@ -125,7 +125,7 @@ export default function PostPage() {
 
                             {/* ✅ Article Header */}
                             <ArticleHeader
-                                category={categories?.[0] || 'Uncategorized'}
+                                category={category || 'Uncategorized'}
                                 title={title}
                                 authorName={typeof author === 'object' ? author.name : author}
                                 date={createdAt ? format(new Date(createdAt), 'PPP') : '—'}
