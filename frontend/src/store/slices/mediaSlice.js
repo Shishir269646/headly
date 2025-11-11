@@ -8,9 +8,13 @@ export const fetchMedia = createAsyncThunk(
     async (filters = {}, { rejectWithValue }) => {
         try {
             const params = new URLSearchParams(filters).toString();
-            const { data } = await axiosInstance.get(`/media?${params}`);
+            const url = `/media${params ? `?${params}` : ''}`;
+            console.log('Fetching media from:', url);
+            const { data } = await axiosInstance.get(url);
+            console.log('Media fetched successfully:', data);
             return data.data;
         } catch (error) {
+            console.error('Failed to fetch media:', error.response?.data || error.message);
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch media');
         }
     }

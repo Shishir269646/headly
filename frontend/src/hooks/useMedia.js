@@ -1,6 +1,6 @@
 
 import { useSelector, useDispatch } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
     fetchMedia,
     uploadMedia,
@@ -10,18 +10,19 @@ import {
     clearError
 } from '@/store/slices/mediaSlice';
 
-export const useMedia = (filters = null) => {
+export const useMedia = (filters = null, autoFetch = false) => {
     const dispatch = useDispatch();
     const { media, pagination, uploading, loading, error } = useSelector(
         (state) => state.media
     );
+    const hasFetchedRef = useRef(false);
 
     useEffect(() => {
-       
-        if (filters) {
-            dispatch(fetchMedia(filters));
+        if (autoFetch && !hasFetchedRef.current) {
+            hasFetchedRef.current = true;
+            dispatch(fetchMedia(filters || {}));
         }
-    }, [dispatch, JSON.stringify(filters), media, loading, error]);
+    }, [dispatch, autoFetch]);
 
     const upload = (file, metadata = {}) => {
         return dispatch(uploadMedia({ file, metadata }));

@@ -6,11 +6,16 @@ import { useModal } from '@/hooks/useModal';
 import Link from 'next/link';
 import Image from 'next/image';
 import { formatFileSize, formatDate } from '@/libs/utils';
+import { useEffect } from 'react';
 
 export default function MediaPage() {
-    const { media, loading, remove } = useMedia();
+    const { media, loading, remove, refetch } = useMedia({}, true);  
     const toast = useToast();
     const deleteModal = useModal();
+
+    useEffect(() => {
+        console.log('Media state:', { media, loading });
+    }, [media, loading]);
 
 
     const handleDelete = async () => {
@@ -87,6 +92,7 @@ export default function MediaPage() {
                             </div>
                         </div>
                     ))}
+
                 </div>
             ) : (
                 <div className="bg-white rounded-lg shadow p-12 text-center">

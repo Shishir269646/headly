@@ -42,11 +42,18 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 
-// Static files - serve uploads from both locations
-app.use('/uploads', express.static('uploads'));
-if (require('fs').existsSync('public/uploads')) {
-    app.use('/uploads', express.static('public/uploads'));
+// Static files - serve uploads directory
+const path = require('path');
+const fs = require('fs');
+
+// Ensure uploads directory exists
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
 }
+
+// Serve static files from uploads directory
+app.use('/uploads', express.static(uploadsDir));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
