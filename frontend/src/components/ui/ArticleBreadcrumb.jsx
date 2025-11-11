@@ -5,7 +5,7 @@ import React from 'react';
 
 
 
-export default function ArticleBreadcrumb({ items }) {
+export default function ArticleBreadcrumb({ items=[] }) {
     return (
         // Responsive BG and border. Dark mode: dark:bg-gray-800, dark:border-gray-700
         <div className="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">

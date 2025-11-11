@@ -6,7 +6,7 @@ import { useContent } from '@/hooks/useContent';
 import FeaturedContentGrid from '@/components/ui/FeaturedContentGrid';
 import TrendingSection from '@/components/ui/TrendingSection';
 import ArticleCard from '@/components/ui/ArticleCard';
-import BlogSidebar from '@/components/ui/BlogSidebar';
+import Sidebar from '@/components/ui/Sidebar';
 
 export default function Home() {
     const {
@@ -30,7 +30,7 @@ export default function Home() {
         getTrending();
     }, []); // Empty dependency array - only run once on mount
 
-  
+
 
     if (loading) {
         return <div>Loading...</div>;
@@ -68,7 +68,7 @@ export default function Home() {
                 </div>
 
                 {/* Sidebar */}
-                <BlogSidebar popularPosts={popular} />
+                <Sidebar />
             </div>
         </div>
     );

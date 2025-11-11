@@ -15,11 +15,12 @@ import {
     fetchLatestContents,
     fetchTrendingContents,
     clearError,
-    clearCurrentContent
-} from '@/store/slices/contentSlice';
+    clearCurrentContent // This action is still used, but manually
+} from '@/store/slices/contentSlice'; // Assuming this is the correct path
 
 export const useContent = (filters = null, contentId = null) => {
     const dispatch = useDispatch();
+
     const {
         contents,
         currentContent,
@@ -35,72 +36,88 @@ export const useContent = (filters = null, contentId = null) => {
     // Memoize filters to prevent unnecessary re-renders
     const memoizedFilters = useMemo(() => filters, [JSON.stringify(filters)]);
 
+    // --- Action Functions (returning .unwrap() for component use) ---
+
     const getContents = useCallback((filters) => {
         dispatch(fetchContents(filters));
     }, [dispatch]);
 
+    const getContentBySlug = useCallback((slug) => {
+        // Return the thunk's promise (unwrapped result)
+        return dispatch(fetchContentBySlug(slug)).unwrap();
+    }, [dispatch]);
+
+    const clearErrorState = useCallback(() => {
+        dispatch(clearError());
+    }, [dispatch]);
+
+    const clearContentState = useCallback(() => {
+        dispatch(clearCurrentContent());
+    }, [dispatch]);
+
+
+    // --- useEffects ---
+
+    // 1. Effect for fetching the main content list
     useEffect(() => {
         if (memoizedFilters) {
             getContents(memoizedFilters);
         }
-    }, [dispatch, memoizedFilters, getContents]);
+    }, [memoizedFilters, getContents]);
 
+    // 2. Effect for fetching a single content item by ID
+    // CRITICAL FIX: The cleanup function that called clearCurrentContent() has been REMOVED here.
+    // This prevents the state from being wiped right after the slug-based fetch completes.
     useEffect(() => {
         if (contentId) {
             dispatch(fetchContentById(contentId));
         }
-        return () => {
-            dispatch(clearCurrentContent());
-        };
+        // NOTE: The automatic cleanup (return () => dispatch(clearCurrentContent());) 
+        // has been intentionally removed to fix the data going null issue.
     }, [dispatch, contentId]);
 
-    const getContentBySlug = useCallback((slug) => {
-        return dispatch(fetchContentBySlug(slug));
-    }, [dispatch]);
+    // --- Remaining CRUD Action Functions (Same as before) ---
 
     const create = useCallback((contentData) => {
-        return dispatch(createContent(contentData));
+        return dispatch(createContent(contentData)).unwrap();
     }, [dispatch]);
 
     const update = useCallback((id, contentData) => {
-        return dispatch(updateContent({ id, contentData }));
+        return dispatch(updateContent({ id, contentData })).unwrap();
     }, [dispatch]);
 
     const remove = useCallback((id) => {
-        return dispatch(deleteContent(id));
+        return dispatch(deleteContent(id)).unwrap();
     }, [dispatch]);
 
     const publish = useCallback((id) => {
-        return dispatch(publishContent(id));
+        return dispatch(publishContent(id)).unwrap();
     }, [dispatch]);
 
     const schedule = useCallback((id, publishAt) => {
-        return dispatch(scheduleContent({ id, publishAt }));
+        return dispatch(scheduleContent({ id, publishAt })).unwrap();
     }, [dispatch]);
 
     const updateFlags = useCallback((id, flags) => {
-        return dispatch(updateContentFlags({ id, flags }));
+        return dispatch(updateContentFlags({ id, flags })).unwrap();
     }, [dispatch]);
 
     const getFeatured = useCallback(() => {
-        return dispatch(fetchFeaturedContents());
+        return dispatch(fetchFeaturedContents()).unwrap();
     }, [dispatch]);
 
     const getLatest = useCallback(() => {
-        return dispatch(fetchLatestContents());
+        return dispatch(fetchLatestContents()).unwrap();
     }, [dispatch]);
 
     const getPopular = useCallback(() => {
-        return dispatch(fetchPopularContents());
+        return dispatch(fetchPopularContents()).unwrap();
     }, [dispatch]);
 
     const getTrending = useCallback(() => {
-        return dispatch(fetchTrendingContents());
+        return dispatch(fetchTrendingContents()).unwrap();
     }, [dispatch]);
 
-    const clear = useCallback(() => {
-        dispatch(clearError());
-    }, [dispatch]);
 
     return {
         contents,
@@ -124,6 +141,7 @@ export const useContent = (filters = null, contentId = null) => {
         getFeatured,
         getPopular,
         getTrending,
-        clearError: clear
+        clearError: clearErrorState,
+        clearCurrentContent: clearContentState // Now you must call this manually if needed
     };
 };

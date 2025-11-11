@@ -1,22 +1,12 @@
 "use client";
 import React from 'react';
-import { Twitter, Linkedin } from 'lucide-react';
 
-/**
- * Displays the article author's biography.
- * @param {Object} props - Component props.
- * @param {string} props.name - Author's name.
- * @param {string} props.bio - Author's biography.
- * @param {string} props.avatarUrl - URL for the author's profile picture.
- * @param {string} [props.twitterUrl] - Optional Twitter link.
- * @param {string} [props.linkedinUrl] - Optional LinkedIn link.
- */
+
+
 export default function ArticleAuthorBio({
     name,
     bio,
     avatarUrl,
-    twitterUrl,
-    linkedinUrl,
 }) {
     return (
         // Dark mode: dark:bg-gray-800, dark:shadow-xl
@@ -34,18 +24,7 @@ export default function ArticleAuthorBio({
                     <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
                         {bio}
                     </p>
-                    <div className="flex gap-2">
-                        {twitterUrl && (
-                            <a href={twitterUrl} className="btn btn-xs btn-ghost text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400" aria-label={`Twitter profile for ${name}`}>
-                                <Twitter size={14} />
-                            </a>
-                        )}
-                        {linkedinUrl && (
-                            <a href={linkedinUrl} className="btn btn-xs btn-ghost text-gray-500 hover:text-blue-700 dark:text-gray-400 dark:hover:text-blue-500" aria-label={`LinkedIn profile for ${name}`}>
-                                <Linkedin size={14} />
-                            </a>
-                        )}
-                    </div>
+
                 </div>
             </div>
         </div>

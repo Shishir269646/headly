@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import { format } from 'date-fns';
 import SEO from '@/components/seo/SEO';
@@ -16,73 +16,77 @@ import ArticleCommentSection from '@/components/ui/ArticleCommentSection';
 import Sidebar from '@/components/ui/Sidebar';
 
 
-
-/* {
-      "title": "Getting Started with Headly CMS",
-      "excerpt": "Learn how to use Headly CMS for your next project",
-      "body": "Headly is a modern headless CMS built with Node.js and MongoDB...",
-      "featuredImage": null,
-      "status": "published",
-      "publishAt": null,
-      "author": {
-        "$oid": "68f5dd0591e429314fc830d7"
-      },
-      "categories": [
-        "Tutorial",
-        "Getting Started"
-      ],
-      "tags": [
-        "headless-cms",
-        "nodejs",
-        "mongodb"
-      ],
-      "seo": {
-        "metaTitle": "Getting Started with Headly CMS",
-        "metaDescription": "Complete guide to getting started with Headly CMS",
-        "metaKeywords": []
-      },
-      "readTime": 1,
-      "views": 2,
-      "isDeleted": false,
-      "createdAt": {
-        "$date": "2025-10-20T06:56:06.567Z"
-      },
-      "updatedAt": {
-        "$date": "2025-11-01T15:01:00.813Z"
-      },
-      "slug": "getting-started-with-headly-cms-1760943366567",
-      "__v": 0,
-      "featuredOrder": 2,
-      "isFeatured": false,
-      "isPopular": true
-    }
-     */
-
-
-
-
-
 export default function PostPage() {
     const { slug } = useParams();
-    const { currentContent, loading, error, getContentBySlug } = useContent();
+    const {
+        currentContent,
+        loading,
+        error,
+        getContentBySlug,
+        clearError
+    } = useContent();
 
+
+
+    // FIX: Use async/await in useEffect to properly handle the thunk promise
     useEffect(() => {
-        if (slug) getContentBySlug(slug);
-    }, [slug]);
+        // 1. Clear any previous error before a new fetch attempt
+        clearError();
+
+        if (slug) {
+            const fetchContent = async () => {
+                try {
+                    // Call the action. We await it to ensure completion before proceeding, 
+                    // though the state update happens via Redux slice
+                    await getContentBySlug(slug);
+                } catch (err) {
+                    // This catches the error returned by the .unwrap() in the hook.
+                    // The error state in Redux should also be updated.
+                    console.error('Error fetching content by slug:', err);
+                }
+            };
+            fetchContent();
+        }
+    }, [slug, getContentBySlug, clearError]);
 
     if (loading) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-screen text-lg">
+                Loading post...
+            </div>
+        );
     }
 
+    // Error state
     if (error) {
-        return <div className="text-red-500 text-center mt-10">Error: {error}</div>;
+        return (
+            <div className="text-center mt-10 text-red-500">
+                <p>Error: {error}</p>
+                <button
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+                    onClick={() => {
+                        clearError();
+                        getContentBySlug(slug);
+                    }}
+                >
+                    Retry
+                </button>
+            </div>
+        );
     }
 
+    // No content found
     if (!currentContent) {
-        return <div className="text-center mt-10">Post not found.</div>;
+        return (
+            <div className="text-center mt-10 text-gray-500">
+                <p>Post not found.</p>
+                <p className="text-sm mt-2">Slug: {slug}</p>
+            </div>
+        );
     }
 
-    // ✅ Destructure your mongoose model fields
+
+    // FIX: Destructure 'categories' (plural) as an array, not 'category'
     const {
         title,
         excerpt,
@@ -90,19 +94,23 @@ export default function PostPage() {
         featuredImage,
         author,
         createdAt,
-        category,
+        category, // Use 'category' to match your JSON structure
         tags = [],
         seo,
         readTime,
         views,
     } = currentContent;
 
-    // ✅ Example breadcrumb items
+    // Example breadcrumb items (using the first category from the array)
     const breadcrumbItems = [
         { name: 'Home', href: '/' },
-        { name: category?.[0] || 'Blog', href: '/blog' },
-        { name: title, href: `/post/${slug}` },
+        { name: category?.name  },
+        { name: title, href: `/${slug}` },
     ];
+
+    // Fallback for author display, since the author field might be a reference (string) or populated object.
+    const authorName = typeof author === 'object' && author !== null ? author.name : (author || 'Unknown Author');
+
 
     return (
         <>
@@ -123,24 +131,24 @@ export default function PostPage() {
                         {/* ======= Left Column: Article ======= */}
                         <div className="lg:col-span-2 space-y-6">
 
-                            {/* ✅ Article Header */}
+                            {/* Article Header */}
                             <ArticleHeader
-                                category={category || 'Uncategorized'}
+                                category={category || 'Uncategorized'} // Use the first category
                                 title={title}
-                                authorName={typeof author === 'object' ? author.name : author}
+                                authorName={authorName}
                                 date={createdAt ? format(new Date(createdAt), 'PPP') : '—'}
                                 readTime={readTime}
                                 views={views}
                                 featuredImage={featuredImage}
                             />
 
-                            {/* ✅ Render actual CMS body */}
+                            {/* Render actual CMS body */}
                             <ArticleBody tags={tags}>
                                 <ContentRenderer content={body} />
                             </ArticleBody>
 
-                            {/* ✅ Author Bio */}
-                            {author && (
+                            {/* Author Bio (only display if author is a populated object) */}
+                            {typeof author === 'object' && author !== null && (
                                 <ArticleAuthorBio
                                     name={author.name || 'Unknown Author'}
                                     bio={author.bio || 'No bio available.'}
@@ -150,8 +158,9 @@ export default function PostPage() {
                                 />
                             )}
 
-                            {/* ✅ Comments Section */}
+                            {/* Comments Section */}
                             <ArticleCommentSection
+                                // Assuming your content object has an '_id' for the comment anchor
                                 contentId={currentContent._id}
                             />
                         </div>

@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
 import { axiosInstance } from "../../libs/axios";
 
 // Async thunks
@@ -28,6 +27,7 @@ export const fetchContentById = createAsyncThunk(
     }
 );
 
+
 export const fetchContentBySlug = createAsyncThunk(
     'content/fetchContentBySlug',
     async (slug, { rejectWithValue }) => {
@@ -39,6 +39,7 @@ export const fetchContentBySlug = createAsyncThunk(
         }
     }
 );
+
 
 export const createContent = createAsyncThunk(
     'content/createContent',
