@@ -1,8 +1,8 @@
-// tailwind.config.mjs
 import daisyui from "daisyui";
+import typography from "@tailwindcss/typography";
 
-/** @type {import('tailwindcss').Config} */
 const config = {
+    darkMode: "class",
     content: [
         "./pages/**/*.{js,ts,jsx,tsx,mdx}",
         "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -11,7 +11,10 @@ const config = {
     theme: {
         extend: {},
     },
-    plugins: [daisyui],
+    plugins: [
+        daisyui,
+        typography, // correct usage
+    ],
     daisyui: {
         themes: ["light", "dark", "synthwave", "cupcake"],
         darkTheme: "dark",

@@ -9,8 +9,19 @@ body {
   padding: 0;
 }
 
+
+.dark body {
+  background-color: #101828;
+}
+
+
 /* Font override চাইলে */
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* @layer base {
+  body {
+    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300;
+  }
+} */

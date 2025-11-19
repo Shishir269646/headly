@@ -41,7 +41,7 @@ export default function Home() {
     }
 
     return (
-        <div className="dark:bg-gray-900 min-h-screen mx-auto px-4 py-8 max-w-7xl">
+        <div className="min-h-screen w-full dark:bg-gray-900 mx-auto px-4 py-8 max-w-7xl">
             {/* Featured Section */}
             <div className="grid lg:grid-cols-3 gap-6 mb-12">
                 {/* Large Featured Post */}

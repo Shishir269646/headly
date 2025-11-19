@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 //import Header from "@/components/common/Header";
 //import Footer from "@/components/common/Footer";
+import { Providers } from "./providers";
 import { ReduxProvider } from "@/store/provider";
 //import { AuthProvider } from "@/context/AuthContext";
 
@@ -25,26 +26,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable}`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-white dark:bg-gray-900`}
         suppressHydrationWarning
       >
-
-
-
-
         {/* Main Page Content */}
         <main>
-
-          <ReduxProvider>
-
-            {children}
-
-          </ReduxProvider>
+          <Providers>
+            <ReduxProvider>
+              {children}
+            </ReduxProvider>
+          </Providers>
         </main>
-
-
-
-
       </body>
     </html>
   );

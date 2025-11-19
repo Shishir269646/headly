@@ -6,7 +6,7 @@ const FeaturedContentGrid = ({ posts }) => {
     if (!posts || posts.length === 0) {
         return (
             <div className="animate-pulse">
-                <div className="relative overflow-hidden rounded-lg shadow-xl h-[600px] bg-gray-300 dark:bg-gray-700">
+                <div className="relative overflow-hidden rounded-lg shadow-xl h-[600px] dark:bg-gray-900">
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
                     <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
                         <div className="space-y-4">
@@ -27,7 +27,7 @@ const FeaturedContentGrid = ({ posts }) => {
     const featuredPost = posts[0];
 
     return (
-        <section className="mb-8 px-4">
+        <section className="mb-8 px-4 bg-white dark:bg-gray-900">
             <div className="max-w-7xl mx-auto">
                 <div className="relative group">
                     {/* Main Featured Article */}
