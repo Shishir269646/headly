@@ -100,9 +100,9 @@ function UsersPage() {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.role === 'admin' ? 'bg-red-100 text-red-800' :
-                                                    user.role === 'editor' ? 'bg-blue-100 text-blue-800' :
-                                                        user.role === 'author' ? 'bg-green-100 text-green-800' :
-                                                            'bg-gray-100 text-gray-800'
+                                                user.role === 'editor' ? 'bg-blue-100 text-blue-800' :
+                                                    user.role === 'author' ? 'bg-green-100 text-green-800' :
+                                                        'bg-gray-100 text-gray-800'
                                                 }`}>
                                                 {user.role}
                                             </span>
@@ -169,6 +169,7 @@ function UsersPage() {
                 )}
             </div>
 
+
             {/* Delete Modal */}
             {deleteModal.isOpen && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full z-50 flex items-center justify-center">
@@ -192,8 +193,9 @@ function UsersPage() {
                             </button>
                         </div>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
+
 
             {/* Toasts */}
             <div className="fixed bottom-4 right-4 space-y-2 z-50">

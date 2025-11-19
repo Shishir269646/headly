@@ -9,19 +9,28 @@ const withAuth = (WrappedComponent, allowedRoles) => {
         const router = useRouter();
 
         useEffect(() => {
-            if (loading) return;
+            if (loading) return; // Still fetching auth status
 
-            if (!isAuthenticated) {
+            if (!isAuthenticated) { // Not authenticated at all
                 router.replace('/login');
                 return;
             }
 
-            if (allowedRoles && !allowedRoles.includes(user?.role)) {
+            // At this point, isAuthenticated is TRUE and loading is FALSE.
+            // Now, we MUST wait for the 'user' object to be present to check roles.
+            if (!user) {
+                // If authenticated but user object isn't here yet, we do nothing and wait for 'user' to update
+                // The main render condition will keep showing the spinner.
+                return;
+            }
+
+            // User is authenticated, not loading, and user object is available. Now check roles.
+            if (allowedRoles && !allowedRoles.includes(user.role)) {
                 router.replace('/dashboard/not-authorized');
             }
-        }, [user, isAuthenticated, loading, router]);
+        }, [user, isAuthenticated, loading, router, allowedRoles]);
 
-        if (loading || !isAuthenticated || (allowedRoles && !allowedRoles.includes(user?.role))) {
+        if (loading || !isAuthenticated || (isAuthenticated && !user) || (allowedRoles && user && !allowedRoles.includes(user.role))) {
             return (
                 <div className="min-h-screen flex items-center justify-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
