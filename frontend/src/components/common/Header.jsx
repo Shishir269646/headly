@@ -18,6 +18,7 @@ export default function Header() {
                         <li><Link href="/">Home</Link></li>
                         <li><Link href="/about">About</Link></li>
                         <li><Link href="/archive">Archive</Link></li>
+                        <li><Link href="/all-content">All Content</Link></li>
                         <li><Link href="/newsletter">Newsletter</Link></li>
                         <li><Link href="/contact">Contact</Link></li>
                         <LogoutButton/>
@@ -30,6 +31,7 @@ export default function Header() {
                     <li><Link href="/">Home</Link></li>
                     <li><Link href="/about">About</Link></li>
                     <li><Link href="/archive">Archive</Link></li>
+                        <li><Link href="/all-content">All Content</Link></li>
                     <li><Link href="/newsletter">Newsletter</Link></li>
                     <li><Link href="/contact">Contact</Link></li>
                     <LogoutButton/>

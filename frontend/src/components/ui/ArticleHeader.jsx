@@ -23,12 +23,12 @@ export default function ArticleHeader({
             </div>
 
             {/* Article Title */}
-            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-extrabold dark:text-white mb-6 leading-tight">
                 {title}
             </h1>
 
             {/* Meta Information */}
-            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-6 pb-6 border-b dark:border-gray-700">
+            <div className="flex flex-wrap items-center gap-4 text-sm dark:text-gray-200 mb-6 pb-6 border-b dark:border-gray-700">
                 <div className="flex items-center gap-2">
                     <User size={16} />
                     <span>By <a href={authorHref} className="text-blue-600 hover:underline dark:text-blue-400">{authorName}</a></span>
