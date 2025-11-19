@@ -1,5 +1,6 @@
 'use client';
 
+import withAuth from '@/hoc/withAuth';
 import { useMedia } from '@/hooks/useMedia';
 import { useToast } from '@/hooks/useToast';
 import { useModal } from '@/hooks/useModal';
@@ -8,7 +9,7 @@ import Image from 'next/image';
 import { formatFileSize, formatDate } from '@/libs/utils';
 import { useEffect } from 'react';
 
-export default function MediaPage() {
+function MediaPage() {
     const { media, loading, remove, refetch } = useMedia({}, true);  
     const toast = useToast();
     const deleteModal = useModal();
@@ -135,3 +136,5 @@ export default function MediaPage() {
         </div>
     );
 }
+
+export default withAuth(MediaPage, ['admin', 'editor', 'author']);

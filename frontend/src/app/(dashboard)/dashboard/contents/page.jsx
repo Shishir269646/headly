@@ -6,6 +6,7 @@
 'use client';
 
 
+import withAuth from '@/hoc/withAuth';
 import { useContent } from '@/hooks/useContent';
 import { useToast } from '@/hooks/useToast';
 import { useModal } from '@/hooks/useModal';
@@ -14,7 +15,7 @@ import Link from 'next/link';
 import { formatDate, truncateText } from '@/libs/utils';
 import { Eye, Edit, CheckCircle, Trash2 } from 'lucide-react';
 
-export default function ContentsPage() {
+function ContentsPage() {
     const [filters, setFilters] = useState({
         status: '',
         page: 1,
@@ -295,3 +296,5 @@ export default function ContentsPage() {
         </div>
     );
 }
+
+export default withAuth(ContentsPage, ['admin', 'editor', 'author']);

@@ -1,10 +1,11 @@
 'use client';
 
+import withAuth from '@/hoc/withAuth';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import axios from '@/libs/axios';
 
-export default function NewsletterPage() {
+function NewsletterPage() {
     const { user } = useAuth();
     const [subscribers, setSubscribers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -12,10 +13,6 @@ export default function NewsletterPage() {
 
     useEffect(() => {
         const fetchSubscribers = async () => {
-            if (user?.role !== 'admin') {
-                setLoading(false);
-                return;
-            }
             try {
                 const response = await axios.get('/newsletter/subscribers');
                 setSubscribers(response.data.data.subscribers);
@@ -41,9 +38,6 @@ export default function NewsletterPage() {
         return <div className="text-red-500">{error}</div>;
     }
 
-    if (user?.role !== 'admin') {
-        return <div className="text-red-500">You do not have permission to view this page.</div>;
-    }
 
     return (
         <div>
@@ -69,3 +63,5 @@ export default function NewsletterPage() {
         </div>
     );
 }
+
+export default withAuth(NewsletterPage, ['admin']);

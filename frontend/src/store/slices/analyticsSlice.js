@@ -5,9 +5,9 @@ import { axiosInstance } from "../../libs/axios";
 // Async thunks
 export const getAnalytics = createAsyncThunk(
     'analytics/getAnalytics',
-    async (_, { rejectWithValue }) => {
+    async (period = 30, { rejectWithValue }) => {
         try {
-            const { data } = await axiosInstance.get('/analytics');
+            const { data } = await axiosInstance.get(`/analytics?period=${period}`);
             return data.data;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Failed to fetch analytics');

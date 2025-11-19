@@ -5,6 +5,7 @@
 
 'use client';
 
+import withAuth from '@/hoc/withAuth';
 import { useUser } from '@/hooks/useUser';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/useToast';
@@ -14,21 +15,14 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { formatDate } from '@/libs/utils';
 
-export default function UsersPage() {
-    const { user: currentUser, isAdmin } = useAuth();
+function UsersPage() {
+    const { user: currentUser } = useAuth();
     const { users, loading, remove } = useUser();
     const toast = useToast();
     const deleteModal = useModal();
     const router = useRouter();
 
-    useEffect(() => {
-        if (!isAdmin) {
-            router.push('/dashboard');
-            toast.error('Admin access required');
-        }
-    }, [isAdmin]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    if (!isAdmin) return null;
 
     const handleDelete = async () => {
         try {
@@ -198,8 +192,8 @@ export default function UsersPage() {
                             </button>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
 
             {/* Toasts */}
             <div className="fixed bottom-4 right-4 space-y-2 z-50">
@@ -234,3 +228,5 @@ export default function UsersPage() {
         </div>
     );
 }
+
+export default withAuth(UsersPage, ['admin']);

@@ -5,13 +5,14 @@
 
 'use client';
 
+import withAuth from '@/hoc/withAuth';
 import { useAuth } from '@/hooks/useAuth';
 import { useUser } from '@/hooks/useUser';
 import { formatImageUrl } from '@/libs/utils';
 import { useToast } from '@/hooks/useToast';
 import { useState, useRef } from 'react';
 
-export default function ProfilePage() {
+function ProfilePage() {
     const { user } = useAuth();
     const { updateMyProfile, uploadUserimage } = useUser();
     const toast = useToast();
@@ -243,3 +244,4 @@ export default function ProfilePage() {
     );
 }
 
+export default withAuth(ProfilePage, ['admin', 'editor', 'author', 'viewer']);

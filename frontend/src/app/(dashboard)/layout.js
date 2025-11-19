@@ -32,10 +32,6 @@ export default function DashboardLayout({ children }) {
     const pathname = usePathname();
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
-
-
-
-
     // Redirect if not authenticated
     useEffect(() => {
         if (!loading && !isAuthenticated) {
@@ -54,20 +50,20 @@ export default function DashboardLayout({ children }) {
     if (!isAuthenticated) return null;
 
     const navigation = [
-        { name: 'Dashboard', href: '/dashboard', icon: <FaTachometerAlt /> },
-        { name: 'Contents', href: '/dashboard/contents', icon: <FaRegFileAlt /> },
-        { name: 'Categories', href: '/dashboard/categories', icon: <FaTags />, adminOnly: true },
-        { name: 'Comments', href: '/dashboard/comments', icon: <FaComments />, adminOnly: true },
-        { name: 'Media', href: '/dashboard/media', icon: <FaImages /> },
-        { name: 'Users', href: '/dashboard/users', icon: <FaUsers />, adminOnly: true },
-        { name: 'Contacts', href: '/dashboard/contacts', icon: <FaEnvelope />, adminOnly: true },
-        { name: 'Newsletter', href: '/dashboard/newsletter', icon: <FaNewspaper />, adminOnly: true },
-        { name: 'Analytics', href: '/dashboard/analytics', icon: <FaChartLine />, adminOnly: true },
-        { name: 'Profile', href: '/dashboard/profile', icon: <FaUserCircle /> },
+        { name: 'Dashboard', href: '/dashboard', icon: <FaTachometerAlt />, roles: ['admin', 'editor', 'author', 'viewer'] },
+        { name: 'Contents', href: '/dashboard/contents', icon: <FaRegFileAlt />, roles: ['admin', 'editor', 'author'] },
+        { name: 'Categories', href: '/dashboard/categories', icon: <FaTags />, roles: ['admin', 'editor'] },
+        { name: 'Comments', href: '/dashboard/comments', icon: <FaComments />, roles: ['admin', 'editor'] },
+        { name: 'Media', href: '/dashboard/media', icon: <FaImages />, roles: ['admin', 'editor', 'author'] },
+        { name: 'Users', href: '/dashboard/users', icon: <FaUsers />, roles: ['admin'] },
+        { name: 'Contacts', href: '/dashboard/contacts', icon: <FaEnvelope />, roles: ['admin'] },
+        { name: 'Newsletter', href: '/dashboard/newsletter', icon: <FaNewspaper />, roles: ['admin'] },
+        { name: 'Analytics', href: '/dashboard/analytics', icon: <FaChartLine />, roles: ['admin', 'editor'] },
+        { name: 'Profile', href: '/dashboard/profile', icon: <FaUserCircle />, roles: ['admin', 'editor', 'author', 'viewer'] },
     ];
 
     const filteredNavigation = navigation.filter(
-        (item) => !item.adminOnly || user?.role === 'admin'
+        (item) => item.roles.includes(user?.role)
     );
 
     // Create readable title

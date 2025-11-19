@@ -1,5 +1,6 @@
 'use client';
 
+import withAuth from '@/hoc/withAuth';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuth } from '@/hooks/useAuth';
@@ -8,9 +9,9 @@ import Link from 'next/link';
 import { FiFileText, FiCheckCircle, FiFile, FiImage, FiEdit, FiUploadCloud, FiBarChart2, FiMessageSquare, FiClock, FiActivity, FiXCircle } from 'react-icons/fi';
 import { format } from 'date-fns';
 
-export default function DashboardPage() {
+function DashboardPage() {
     const dispatch = useDispatch();
-    const { user } = useAuth();
+    const { user, isEditorOrAbove } = useAuth();
     const { stats, recentContents, loading, error } = useSelector((state) => state.dashboard);
 
     useEffect(() => {
@@ -96,7 +97,7 @@ export default function DashboardPage() {
                             icon={<FiMessageSquare />}
                             color="bg-indigo-500"
                         />
-                        {(user?.role === 'admin' || user?.role === 'editor') ? (
+                        {isEditorOrAbove ? (
                             <StatCard
                                 title="Pending Comments"
                                 value={stats.pendingComments || 0}
@@ -193,7 +194,7 @@ export default function DashboardPage() {
                             iconClass="text-purple-600 bg-purple-100"
                             href="/dashboard/media"
                         />
-                        {(user?.role === 'admin' || user?.role === 'editor') && (
+                        {isEditorOrAbove && (
                             <QuickActionCard
                                 title="View Analytics"
                                 description="Check performance and gain insights."
@@ -257,3 +258,5 @@ function QuickActionCard({ title, description, icon, iconClass, href }) {
         </Link>
     );
 }
+
+export default withAuth(DashboardPage, ['admin', 'editor', 'author', 'viewer']);

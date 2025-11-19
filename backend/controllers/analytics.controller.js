@@ -5,13 +5,11 @@ const { successResponse } = require('../utils/responses');
 
 /**
  * Get all analytics data (admin only)
- * GET /api/v1/analytics
+ * GET /api/v1/analytics?period=30
  */
-exports.getAnalytics = catchAsync(async (req, res) => {
-    const analytics = await analyticsService.getAnalytics();
-    const userGrowth = await analyticsService.getUserGrowth();
-    const contentActivity = await analyticsService.getContentActivity();
-    const popularContent = await analyticsService.getPopularContent();
-
-    successResponse(res, { ...analytics, userGrowth, contentActivity, popularContent }, 'Analytics data retrieved successfully');
-});
+exports.getAnalytics = async (req, res) => {
+    const period = req.query.period ? parseInt(req.query.period, 10) : 30;
+    const analyticsData = await analyticsService.getAnalytics(period);
+    
+    successResponse(res, analyticsData, 'Analytics data retrieved successfully');
+};

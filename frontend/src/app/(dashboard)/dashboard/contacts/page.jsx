@@ -1,10 +1,11 @@
 'use client';
 
+import withAuth from '@/hoc/withAuth';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import axios from '@/libs/axios';
 
-export default function ContactsPage() {
+function ContactsPage() {
     const { user } = useAuth();
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -12,10 +13,6 @@ export default function ContactsPage() {
 
     useEffect(() => {
         const fetchContacts = async () => {
-            if (user?.role !== 'admin') {
-                setLoading(false);
-                return;
-            }
             try {
                 const response = await axios.get('/contact');
                 setContacts(response.data.data.contacts);
@@ -41,9 +38,6 @@ export default function ContactsPage() {
         return <div className="text-red-500">{error}</div>;
     }
 
-    if (user?.role !== 'admin') {
-        return <div className="text-red-500">You do not have permission to view this page.</div>;
-    }
 
     return (
         <div>
@@ -75,3 +69,5 @@ export default function ContactsPage() {
         </div>
     );
 }
+
+export default withAuth(ContactsPage, ['admin']);

@@ -21,8 +21,14 @@ export const useAuth = () => {
     };
 
     const isAdmin = user?.role === 'admin';
-    const isEditor = user?.role === 'editor' || isAdmin;
-    const isAuthor = user?.role === 'author' || isEditor;
+    const isEditorOrAbove = ['admin', 'editor'].includes(user?.role);
+    const isAuthorOrAbove = ['admin', 'editor', 'author'].includes(user?.role);
+
+    // Exact role checks
+    const isRoleAdmin = user?.role === 'admin';
+    const isRoleEditor = user?.role === 'editor';
+    const isRoleAuthor = user?.role === 'author';
+    const isRoleViewer = user?.role === 'viewer';
 
     return {
         user,
@@ -31,7 +37,12 @@ export const useAuth = () => {
         error,
         logout: handleLogout,
         isAdmin,
-        isEditor,
-        isAuthor,
+        isEditorOrAbove,
+        isAuthorOrAbove,
+        // Exact roles
+        isRoleAdmin,
+        isRoleEditor,
+        isRoleAuthor,
+        isRoleViewer,
     };
 };

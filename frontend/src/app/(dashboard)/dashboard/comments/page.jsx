@@ -1,5 +1,6 @@
 'use client';
 
+import withAuth from '@/hoc/withAuth';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDistanceToNow } from 'date-fns';
@@ -12,7 +13,7 @@ import {
 } from '@/store/slices/commentSlice';
 
 
-export default function CommentsPage() {
+function CommentsPage() {
     const dispatch = useDispatch();
     const { allComments, stats, pagination, loading } = useSelector((state) => state.comment);
     const { user } = useSelector((state) => state.auth);
@@ -258,14 +259,6 @@ export default function CommentsPage() {
                                     {allComments.map((comment) => (
                                         <tr key={comment._id}>
                                             <td>
-                                                <input
-                                                    type="checkbox"
-                                                    className="checkbox"
-                                                    checked={selectedComments.includes(comment._id)}
-                                                    onChange={() => toggleSelectComment(comment._id)}
-                                                />
-                                            </td>
-                                            <td>
                                                 <div className="flex items-center gap-2">
                                                     <div className="avatar">
                                                         <div className="w-10 rounded-full">
@@ -383,3 +376,4 @@ export default function CommentsPage() {
     );
 }
 
+export default withAuth(CommentsPage, ['admin', 'editor']);
