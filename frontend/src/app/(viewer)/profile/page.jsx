@@ -1,5 +1,6 @@
 'use client';
 
+import withAuth from '@/hoc/withAuth';
 import axios from '@/libs/axios';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
