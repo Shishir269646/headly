@@ -33,12 +33,17 @@ export const useAuth = () => {
     const isRoleAuthor = user?.role === 'author';
     const isRoleViewer = user?.role === 'viewer';
 
+    const fetchUser = () => {
+        dispatch(getCurrentUser());
+    };
+
     return {
         user,
         isAuthenticated,
         loading,
         error,
         logout: handleLogout,
+        fetchUser,
         isAdmin,
         isEditorOrAbove,
         isAuthorOrAbove,

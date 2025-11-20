@@ -173,3 +173,26 @@ exports.updateAvatar = async (userId, file) => {
     return user;
 };
 
+exports.deleteProfile = async (userId) => {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new ApiError(404, 'User not found');
+    }
+
+    // Optional: Delete user's associated media (avatar, etc.)
+    if (user.image) {
+        await mediaService.deleteMedia(user.image);
+    }
+
+    await user.deleteOne();
+
+    await AuditLog.create({
+        user: userId,
+        action: 'DELETE_PROFILE',
+        resource: 'user',
+        resourceId: userId
+    });
+
+    return { message: 'Profile deleted successfully' };
+};
+

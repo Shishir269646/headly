@@ -74,3 +74,13 @@ exports.updateAvatar = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.deleteProfile = async (req, res, next) => {
+    try {
+        await userService.deleteProfile(req.user.id);
+        successResponse(res, null, 'Profile deleted successfully');
+    } catch (error) {
+        next(error);
+    }
+};
+

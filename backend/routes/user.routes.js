@@ -19,5 +19,6 @@ router.delete('/:id', authenticate, authorize('admin'), userController.deleteUse
 router.get('/profile/me', authenticate, userController.getProfile);
 router.put('/profile/me', authenticate, validate({ body: updateProfileSchema }), userController.updateProfile);
 router.put('/profile/avatar', authenticate, upload.single('image'), userController.updateAvatar);
+router.delete('/profile/me', authenticate, userController.deleteProfile);
 
 module.exports = router;
