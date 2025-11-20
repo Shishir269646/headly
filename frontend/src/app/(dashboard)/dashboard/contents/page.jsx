@@ -297,4 +297,11 @@ function ContentsPage() {
     );
 }
 
-export default withAuth(ContentsPage, ['admin', 'editor', 'author']);
+// ... other components and functions
+
+function AuthWrapper() {
+    const AuthenticatedContentsPage = withAuth(ContentsPage, ['admin', 'editor', 'author']);
+    return <AuthenticatedContentsPage />;
+}
+
+export default AuthWrapper;

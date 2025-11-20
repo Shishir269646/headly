@@ -376,4 +376,11 @@ function CommentsPage() {
     );
 }
 
-export default withAuth(CommentsPage, ['admin', 'editor']);
+// ... other components and functions
+
+function AuthWrapper() {
+    const AuthenticatedCommentsPage = withAuth(CommentsPage, ['admin', 'editor']);
+    return <AuthenticatedCommentsPage />;
+}
+
+export default AuthWrapper;

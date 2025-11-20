@@ -7,17 +7,9 @@ export const register = createAsyncThunk(
     async (userData, { rejectWithValue }) => {
         try {
             const { data } = await axiosInstance.post('/auth/register', userData);
-            // Store tokens if provided
-            if (data.data.token) {
-                localStorage.setItem('accessToken', data.data.token);
-            }
-            if (data.data.refreshToken) {
-                localStorage.setItem('refreshToken', data.data.refreshToken);
-            }
-            // Store user data (without tokens)
-            const { token, refreshToken, ...userWithoutTokens } = data.data;
-            localStorage.setItem('user', JSON.stringify(userWithoutTokens.user || userWithoutTokens));
-            return userWithoutTokens.user || userWithoutTokens;
+            // The backend now sets httpOnly cookies. No need to store tokens in localStorage.
+            localStorage.setItem('user', JSON.stringify(data.data.user));
+            return data.data.user;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Registration failed');
         }
@@ -29,17 +21,9 @@ export const login = createAsyncThunk(
     async (credentials, { rejectWithValue }) => {
         try {
             const { data } = await axiosInstance.post('/auth/login', credentials);
-            // Store tokens in localStorage
-            if (data.data.token) {
-                localStorage.setItem('accessToken', data.data.token);
-            }
-            if (data.data.refreshToken) {
-                localStorage.setItem('refreshToken', data.data.refreshToken);
-            }
-            // Store user data (without tokens)
-            const { token, refreshToken, ...userWithoutTokens } = data.data;
-            localStorage.setItem('user', JSON.stringify(userWithoutTokens));
-            return userWithoutTokens;
+            // The backend now sets httpOnly cookies. No need to store tokens in localStorage.
+            localStorage.setItem('user', JSON.stringify(data.data.user));
+            return data.data.user;
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Login failed');
         }
@@ -51,15 +35,11 @@ export const logout = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             await axiosInstance.post('/auth/logout');
-            // Clear all auth-related data
+            // The backend clears the httpOnly cookies. We only need to clear the user from localStorage.
             localStorage.removeItem('user');
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
         } catch (error) {
-            // Clear tokens even if logout request fails
+            // Even if the backend logout fails, clear the client-side user data.
             localStorage.removeItem('user');
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
             return rejectWithValue(error.response?.data?.message || 'Logout failed');
         }
     }
@@ -93,26 +73,9 @@ export const refreshToken = createAsyncThunk(
     'auth/refreshToken',
     async (_, { rejectWithValue }) => {
         try {
-            // Get refresh token from localStorage
-            const refreshToken = localStorage.getItem('refreshToken');
-            if (!refreshToken) {
-                throw new Error('Refresh token not found');
-            }
-            
-            // Call refresh endpoint with refresh token
-            const { data } = await axiosInstance.post('/auth/refresh-token', {
-                refreshToken
-            });
-            
-            // Store new tokens
-            if (data.data.token) {
-                localStorage.setItem('accessToken', data.data.token);
-            }
-            if (data.data.refreshToken) {
-                localStorage.setItem('refreshToken', data.data.refreshToken);
-            }
-            
-            return data.data;
+            // The httpOnly refreshToken cookie will be sent automatically by the browser.
+            // We just need to call the endpoint.
+            await axiosInstance.post('/auth/refresh-token');
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Token refresh failed');
         }
@@ -137,16 +100,16 @@ const authSlice = createSlice({
         },
         loadUserFromStorage: (state) => {
             const userStr = localStorage.getItem('user');
-            const token = localStorage.getItem('accessToken');
-            // Only set as authenticated if we have both user data and token
-            // If only user data exists (from old sessions), we'll verify via getCurrentUser
-            if (userStr && token) {
-                state.user = JSON.parse(userStr);
-                state.isAuthenticated = true;
-            } else if (userStr) {
-                // User data exists but no token - verify with backend
-                state.user = JSON.parse(userStr);
-                state.isAuthenticated = false; // Will be set to true if getCurrentUser succeeds
+            if (userStr) {
+                let user = JSON.parse(userStr);
+                // Handle a case where the user object might be nested
+                if (user && user.user) {
+                    user = user.user;
+                }
+                state.user = user;
+                // We assume they might be authenticated and let getCurrentUser verify.
+                // This helps prevent flashes of logged-out content.
+                state.isAuthenticated = true; 
             }
         },
         // New action to set isAuthenticated based on backend response (e.g., from a session check)

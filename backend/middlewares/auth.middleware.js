@@ -7,14 +7,9 @@ exports.authenticate = async (req, res, next) => {
     try {
         let token;
 
-        // Get token from Authorization header (Bearer token)
-        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-            token = req.headers.authorization.substring(7);
-        }
-        
-        // Fallback to cookie if no header token
-        if (!token && req.cookies?.token) {
-            token = req.cookies.token;
+        // Get token from the httpOnly cookie
+        if (req.cookies.accessToken) {
+            token = req.cookies.accessToken;
         }
 
         if (!token) {
@@ -57,14 +52,9 @@ exports.optionalAuth = async (req, res, next) => {
     try {
         let token;
 
-        // Get token from Authorization header (Bearer token)
-        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-            token = req.headers.authorization.substring(7);
-        }
-        
-        // Fallback to cookie if no header token
-        if (!token && req.cookies?.token) {
-            token = req.cookies.token;
+        // Get token from the httpOnly cookie
+        if (req.cookies.accessToken) {
+            token = req.cookies.accessToken;
         }
 
         if (token) {

@@ -18,7 +18,7 @@ exports.register = async (userData) => {
         name,
         email,
         password,
-        role: role || 'author'
+        role: role || 'viewer'
     });
 
     // Generate tokens

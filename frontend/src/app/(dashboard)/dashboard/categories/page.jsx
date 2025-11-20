@@ -1,9 +1,9 @@
+"use client";
+
 import withAuth from '@/hoc/withAuth';
 import CategoryManager from '@/components/dashboard/CategoryManager';
 
-export const metadata = {
-    title: 'Category Management',
-};
+// import { metadata } from 'next'; // If dynamic metadata is needed, consider a different approach.
 
 function CategoriesPage() {
     return (
@@ -14,4 +14,9 @@ function CategoriesPage() {
     );
 }
 
-export default withAuth(CategoriesPage, ['admin', 'editor']);
+function AuthWrapper() {
+    const AuthenticatedCategoriesPage = withAuth(CategoriesPage, ['admin', 'editor']);
+    return <AuthenticatedCategoriesPage />;
+}
+
+export default AuthWrapper;

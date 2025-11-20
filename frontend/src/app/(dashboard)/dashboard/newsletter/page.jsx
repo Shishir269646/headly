@@ -64,4 +64,11 @@ function NewsletterPage() {
     );
 }
 
-export default withAuth(NewsletterPage, ['admin']);
+// ... other components and functions
+
+function AuthWrapper() {
+    const AuthenticatedNewsletterPage = withAuth(NewsletterPage, ['admin']);
+    return <AuthenticatedNewsletterPage />;
+}
+
+export default AuthWrapper;

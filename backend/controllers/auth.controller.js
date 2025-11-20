@@ -7,16 +7,23 @@ exports.register = async (req, res, next) => {
     try {
         const { token, refreshToken, ...userData } = await authService.register(req.body);
         
-        // Set httpOnly cookie as backup
-        res.cookie('token', token, {
+        // Set httpOnly cookies for both tokens
+        res.cookie('accessToken', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+        });
         
-        // Return token in response body so frontend can use it in Authorization header
-        successResponse(res, { ...userData, token, refreshToken }, 'User registered successfully', 201);
+        // Only return user data in the response body
+        successResponse(res, userData, 'User registered successfully', 201);
     } catch (error) {
         next(error);
     }
@@ -26,16 +33,23 @@ exports.login = async (req, res, next) => {
     try {
         const { token, refreshToken, ...userData } = await authService.login(req.body, req.ip, req.headers['user-agent']);
 
-        // Set httpOnly cookie as backup
-        res.cookie('token', token, {
+        // Set httpOnly cookies for both tokens
+        res.cookie('accessToken', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+            secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
 
-        // Return token in response body so frontend can use it in Authorization header
-        successResponse(res, { ...userData, token, refreshToken }, 'Login successful');
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+        });
+
+        // Only return user data in the response body
+        successResponse(res, userData, 'Login successful');
     } catch (error) {
         next(error);
     }
@@ -44,7 +58,8 @@ exports.login = async (req, res, next) => {
 exports.logout = async (req, res, next) => {
     try {
         await authService.logout(req.user.id);
-        res.clearCookie('token');
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken');
         successResponse(res, null, 'Logout successful');
     } catch (error) {
         next(error);
@@ -54,17 +69,38 @@ exports.logout = async (req, res, next) => {
 exports.refreshToken = async (req, res, next) => {
     try {
         const { refreshToken } = req.body;
-        const result = await authService.refreshToken(refreshToken);
+        if (!refreshToken) {
+            // If refresh token is not in body, try to get it from cookie
+            // This can be useful for scenarios where the client doesn't manage refresh tokens
+            const refreshTokenFromCookie = req.cookies.refreshToken;
+            if (!refreshTokenFromCookie) {
+                throw new ApiError(401, 'Refresh token is required');
+            }
+            req.body.refreshToken = refreshTokenFromCookie;
+        }
+
+        const result = await authService.refreshToken(req.body.refreshToken);
         
         // Update httpOnly cookie
-        res.cookie('token', result.token, {
+        res.cookie('accessToken', result.token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
+
+        // Also update the refresh token cookie, as some strategies involve rotating them
+        if (result.refreshToken) {
+             res.cookie('refreshToken', result.refreshToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+            });
+        }
         
-        successResponse(res, result, 'Token refreshed successfully');
+        // Don't send tokens in the body for security
+        successResponse(res, { message: 'Token refreshed successfully' }, 'Token refreshed successfully');
     } catch (error) {
         next(error);
     }

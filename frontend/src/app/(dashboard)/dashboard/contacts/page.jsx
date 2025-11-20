@@ -70,4 +70,11 @@ function ContactsPage() {
     );
 }
 
-export default withAuth(ContactsPage, ['admin']);
+// ... other components and functions
+
+function AuthWrapper() {
+    const AuthenticatedContactsPage = withAuth(ContactsPage, ['admin']);
+    return <AuthenticatedContactsPage />;
+}
+
+export default AuthWrapper;

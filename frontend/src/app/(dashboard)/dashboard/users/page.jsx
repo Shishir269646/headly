@@ -231,4 +231,12 @@ function UsersPage() {
     );
 }
 
-export default withAuth(UsersPage, ['admin']);
+// ... imports
+// ... rest of the UsersPage component
+
+function AuthWrapper() {
+    const AuthenticatedUsersPage = withAuth(UsersPage, ['admin']);
+    return <AuthenticatedUsersPage />;
+}
+
+export default AuthWrapper;

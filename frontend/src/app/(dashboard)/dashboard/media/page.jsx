@@ -137,4 +137,11 @@ function MediaPage() {
     );
 }
 
-export default withAuth(MediaPage, ['admin', 'editor', 'author']);
+// ... other components and functions
+
+function AuthWrapper() {
+    const AuthenticatedMediaPage = withAuth(MediaPage, ['admin', 'editor', 'author']);
+    return <AuthenticatedMediaPage />;
+}
+
+export default AuthWrapper;

@@ -72,4 +72,11 @@ function AnalyticsPage() {
   );
 }
 
-export default withAuth(AnalyticsPage, ['admin', 'editor']);
+// ... other components and functions
+
+function AuthWrapper() {
+    const AuthenticatedAnalyticsPage = withAuth(AnalyticsPage, ['admin', 'editor']);
+    return <AuthenticatedAnalyticsPage />;
+}
+
+export default AuthWrapper;

@@ -156,8 +156,8 @@ export default function PostPage() {
                             {typeof author === 'object' && author !== null && (
                                 <ArticleAuthorBio
                                     name={author.name || 'Unknown Author'}
-                                    bio={author.bio || 'No bio available.'}
-                                    avatarUrl={author.avatarUrl || '/default-avatar.png'}
+                                    bio={author?.bio || 'No bio available.'}
+                                    avatarUrl={author?.avatar || '/default-avatar.png'}
                                     twitterUrl={author.twitter || '#'}
                                     linkedinUrl={author.linkedin || '#'}
                                 />

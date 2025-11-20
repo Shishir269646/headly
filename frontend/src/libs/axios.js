@@ -62,30 +62,8 @@ export const axiosInstance = axios.create({
     withCredentials: true,
 });
 
-// Request interceptor - Add token from localStorage
-axiosInstance.interceptors.request.use(
-    (config) => {
-        // Only run on the client side (in the browser)
-        if (typeof window !== 'undefined') {
-            // Try to get token from localStorage first (preferred method)
-            const token = localStorage.getItem('accessToken');
-            // Fallback to cookie if localStorage doesn't have it
-            if (!token) {
-                const cookieToken = getCookie('accessToken');
-                if (cookieToken) {
-                    localStorage.setItem('accessToken', cookieToken);
-                    config.headers.Authorization = `Bearer ${cookieToken}`;
-                }
-            } else {
-                config.headers.Authorization = `Bearer ${token}`;
-            }
-        }
-        return config;
-    },
-    (error) => {
-        return Promise.reject(error);
-    }
-);
+// Request interceptor is no longer needed as the browser will send the httpOnly cookie.
+// axiosInstance.interceptors.request.use(...)
 
 // Response interceptor - Handle token refresh
 axiosInstance.interceptors.response.use(
@@ -98,45 +76,23 @@ axiosInstance.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                // Retrieve refreshToken from localStorage or cookie
-                let refreshToken = localStorage.getItem('refreshToken');
-                if (!refreshToken) {
-                    refreshToken = getCookie('refreshToken');
-                }
-                if (!refreshToken) throw new Error('Refresh token missing');
-
-                // Call the refresh endpoint (using standard axios, NOT axiosInstance to avoid interceptor recursion)
-                const { data } = await axios.post(`${API_URL}/auth/refresh-token`, {
-                    refreshToken
-                }, {
+                // The httpOnly refreshToken cookie is sent automatically by the browser.
+                // We just need to call the refresh endpoint.
+                await axios.post(`${API_URL}/auth/refresh-token`, {}, {
                     withCredentials: true
                 });
 
-                // Store new tokens in localStorage (preferred) and cookies (backup)
-                if (data.data.token) {
-                    localStorage.setItem('accessToken', data.data.token);
-                    setCookie('accessToken', data.data.token, 1);
-                }
-                if (data.data.refreshToken) {
-                    localStorage.setItem('refreshToken', data.data.refreshToken);
-                    setCookie('refreshToken', data.data.refreshToken, 30);
-                }
-
-                // Update the Authorization header in the original request with the new token
-                originalRequest.headers.Authorization = `Bearer ${data.data.token}`;
-                // Retry the original failed request
+                // The backend will have set a new accessToken cookie.
+                // We can now retry the original failed request.
+                // axiosInstance will automatically use the new cookie.
                 return axiosInstance(originalRequest);
 
             } catch (refreshError) {
-                // Failed to refresh token or refresh token was missing
+                // Failed to refresh token
                 if (typeof window !== 'undefined') {
-                    // Clear all tokens from localStorage and cookies
-                    localStorage.removeItem('accessToken');
-                    localStorage.removeItem('refreshToken');
+                    // Clear user from localStorage
                     localStorage.removeItem('user');
-                    deleteCookie('accessToken');
-                    deleteCookie('refreshToken');
-
+                    // Redirect to login
                     window.location.href = '/login';
                 }
                 return Promise.reject(refreshError);

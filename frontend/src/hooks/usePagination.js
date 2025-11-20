@@ -1,12 +1,9 @@
 
 import { useState, useMemo } from 'react';
 
-/**
- * Pagination hook
- * @param {number} totalItems - Total number of items
- * @param {number} itemsPerPage - Items per page
- * @returns {object} Pagination utilities
- */
+
+
+
 export const usePagination = (totalItems, itemsPerPage = 10) => {
     const [currentPage, setCurrentPage] = useState(1);
 

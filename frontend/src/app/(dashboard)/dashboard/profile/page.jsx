@@ -244,4 +244,11 @@ function ProfilePage() {
     );
 }
 
-export default withAuth(ProfilePage, ['admin', 'editor', 'author', 'viewer']);
+// ... other functions and components
+
+function AuthWrapper() {
+    const AuthenticatedProfilePage = withAuth(ProfilePage, ['admin', 'editor', 'author', 'viewer']);
+    return <AuthenticatedProfilePage />;
+}
+
+export default AuthWrapper;

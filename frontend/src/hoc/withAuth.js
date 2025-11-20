@@ -1,3 +1,5 @@
+"use client";
+
 // frontend/src/hoc/withAuth.js
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';

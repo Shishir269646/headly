@@ -32,33 +32,33 @@ export default function DashboardLayout({ children }) {
     const pathname = usePathname();
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
-    // Redirect if not authenticated
     useEffect(() => {
+        // If loading is finished and the user is not authenticated (e.g., token is invalid)
         if (!loading && !isAuthenticated) {
             router.push('/login');
         }
     }, [loading, isAuthenticated, router]);
 
-    if (loading) {
+    // While loading or if not authenticated, show a loading spinner.
+    // This prevents content flashes and ensures we wait for the auth state to be resolved.
+    if (loading || !isAuthenticated || !user) {
         return (
-            <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <div className="min-h-screen flex items-center justify-center bg-gray-100">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
             </div>
         );
     }
 
-    if (!isAuthenticated) return null;
-
     const navigation = [
         { name: 'Dashboard', href: '/dashboard', icon: <FaTachometerAlt />, roles: ['admin', 'editor', 'author', 'viewer'] },
         { name: 'Contents', href: '/dashboard/contents', icon: <FaRegFileAlt />, roles: ['admin', 'editor', 'author'] },
-        { name: 'Categories', href: '/dashboard/categories', icon: <FaTags />, roles: ['admin', 'editor'] },
+        { name: 'Categories', href: '/dashboard/categories', icon: <FaTags />, roles: ['admin'] },
         { name: 'Comments', href: '/dashboard/comments', icon: <FaComments />, roles: ['admin', 'editor'] },
         { name: 'Media', href: '/dashboard/media', icon: <FaImages />, roles: ['admin', 'editor', 'author'] },
         { name: 'Users', href: '/dashboard/users', icon: <FaUsers />, roles: ['admin'] },
         { name: 'Contacts', href: '/dashboard/contacts', icon: <FaEnvelope />, roles: ['admin'] },
         { name: 'Newsletter', href: '/dashboard/newsletter', icon: <FaNewspaper />, roles: ['admin'] },
-        { name: 'Analytics', href: '/dashboard/analytics', icon: <FaChartLine />, roles: ['admin', 'editor'] },
+        { name: 'Analytics', href: '/dashboard/analytics', icon: <FaChartLine />, roles: ['admin'] },
         { name: 'Profile', href: '/dashboard/profile', icon: <FaUserCircle />, roles: ['admin', 'editor', 'author', 'viewer'] },
     ];
 

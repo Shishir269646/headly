@@ -1,12 +1,9 @@
 
 import { useState, useEffect } from 'react';
 
-/**
- * LocalStorage hook - sync state with localStorage
- * @param {string} key - LocalStorage key
- * @param {any} initialValue - Initial value
- * @returns {[any, Function]} State and setter
- */
+
+
+
 export const useLocalStorage = (key, initialValue) => {
     const [storedValue, setStoredValue] = useState(() => {
         if (typeof window === 'undefined') {
