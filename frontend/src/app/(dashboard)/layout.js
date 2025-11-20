@@ -54,7 +54,7 @@ export default function DashboardLayout({ children }) {
         { name: 'Contents', href: '/dashboard/contents', icon: <FaRegFileAlt />, roles: ['admin', 'editor', 'author'] },
         { name: 'Categories', href: '/dashboard/categories', icon: <FaTags />, roles: ['admin'] },
         { name: 'Comments', href: '/dashboard/comments', icon: <FaComments />, roles: ['admin', 'editor'] },
-        { name: 'Media', href: '/dashboard/media', icon: <FaImages />, roles: ['admin', 'editor', 'author'] },
+        { name: 'Media', href: '/dashboard/media', icon: <FaImages />, roles: ['admin', 'editor', 'author', 'viewer'] },
         { name: 'Users', href: '/dashboard/users', icon: <FaUsers />, roles: ['admin'] },
         { name: 'Contacts', href: '/dashboard/contacts', icon: <FaEnvelope />, roles: ['admin'] },
         { name: 'Newsletter', href: '/dashboard/newsletter', icon: <FaNewspaper />, roles: ['admin'] },
