@@ -3,8 +3,10 @@ import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import LogoutButton from "../ui/LogoutButton";
 import { Search } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Header() {
+    const { isAuthenticated, isRoleViewer } = useAuth();
     return (
         <div className="navbar bg-base-100 shadow-sm">
             <div className="navbar-start">
@@ -21,6 +23,9 @@ export default function Header() {
                         <li><Link href="/all-content">All Content</Link></li>
                         <li><Link href="/newsletter">Newsletter</Link></li>
                         <li><Link href="/contact">Contact</Link></li>
+                        {isAuthenticated && isRoleViewer && (
+                            <li><Link href="/profile">Profile</Link></li>
+                        )}
                         <LogoutButton/>
                     </ul>
                 </div>
@@ -34,6 +39,9 @@ export default function Header() {
                         <li><Link href="/all-content">All Content</Link></li>
                     <li><Link href="/newsletter">Newsletter</Link></li>
                     <li><Link href="/contact">Contact</Link></li>
+                    {isAuthenticated && isRoleViewer && (
+                        <li><Link href="/profile">Profile</Link></li>
+                    )}
                     <LogoutButton/>
                 </ul>
             </div>
