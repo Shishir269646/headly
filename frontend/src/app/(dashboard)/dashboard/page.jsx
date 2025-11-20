@@ -261,9 +261,4 @@ function QuickActionCard({ title, description, icon, iconClass, href }) {
 
 // ... StatCard and QuickActionCard definitions
 
-function AuthWrapper() {
-    const AuthenticatedDashboardPage = withAuth(DashboardPage, ['admin', 'editor', 'author', 'viewer']);
-    return <AuthenticatedDashboardPage />;
-}
-
-export default AuthWrapper;
+export default withAuth(DashboardPage, ['admin', 'editor', 'author', 'viewer']);
