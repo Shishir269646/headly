@@ -124,7 +124,7 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
     if (authLoading || !user) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <div className="text-lg font-semibold">Loading profile...</div>
+                <div className="text-lg font-semibold dark:text-white">Loading profile...</div>
             </div>
         );
     }
@@ -133,12 +133,12 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
     return (
         <div className="max-w-2xl mx-auto space-y-6">
             <div>
-                <h1 className="text-3xl font-bold text-gray-900">{isDashboard ? "Profile Settings" : "User Profile"}</h1>
-                <p className="text-gray-600 mt-1">{isDashboard ? "Manage your account information" : `Viewing profile of ${user.name}`}</p>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{isDashboard ? "Profile Settings" : "User Profile"}</h1>
+                <p className="text-gray-600 dark:text-gray-300 mt-1">{isDashboard ? "Manage your account information" : `Viewing profile of ${user.name}`}</p>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
-                <div className="flex items-center space-x-4 mb-6 pb-6 border-b">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <div className="flex items-center space-x-4 mb-6 pb-6 border-b dark:border-gray-700">
                     <img 
                         src={
                             imagePreview || (user.image?.url
@@ -149,9 +149,9 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
                         className="w-20 h-20 rounded-full object-cover"
                     />
                     <div>
-                        <h2 className="text-2xl font-bold text-gray-900">{user.name}</h2>
-                        <p className="text-gray-600">{user.email}</p>
-                        <span className="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{user.name}</h2>
+                        <p className="text-gray-600 dark:text-gray-300">{user.email}</p>
+                        <span className="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-medium">
                             {user.role}
                         </span>
                     </div>
@@ -159,7 +159,7 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
 
                 {/* Image Upload Section - Visible to all */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
                         Profile Image
                     </label>
                     <div className="flex items-center space-x-4">
@@ -173,7 +173,7 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
                         <button 
                             type="button"
                             onClick={() => fileInputRef.current.click()}
-                            className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50"
+                            className="px-4 py-2 border dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white"
                         >
                             Change
                         </button>
@@ -195,27 +195,27 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         {isDashboard && (
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
                                     Name
                                 </label>
                                 <input
                                     type="text"
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                    className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-4 py-2 border dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-500 bg-white dark:bg-gray-700 dark:text-white"
                                 />
                             </div>
                         )}
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
                                 Bio
                             </label>
                             <textarea
                                 value={formData.bio}
                                 onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
                                 rows="4"
-                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-4 py-2 border dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-500 bg-white dark:bg-gray-700 dark:text-white"
                                 placeholder="Tell us about yourself..."
                             />
                         </div>
@@ -231,25 +231,26 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
                 </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Account Information</h3>
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Account Information</h3>
                 <dl className="space-y-3">
                     <div className="flex justify-between">
-                        <dt className="text-sm text-gray-600">Email</dt>
-                        <dd className="text-sm font-medium text-gray-900">{user.email}</dd>
+                        <dt className="text-sm text-gray-600 dark:text-gray-300">Email</dt>
+                        <dd className="text-sm font-medium text-gray-900 dark:text-white">{user.email}</dd>
                     </div>
                     <div className="flex justify-between">
-                        <dt className="text-sm text-gray-600">Role</dt>
-                        <dd className="text-sm font-medium text-gray-900">{user.role}</dd>
+                        <dt className="text-sm text-gray-600 dark:text-gray-300">Role</dt>
+                        <dd className="text-sm font-medium text-gray-900 dark:text-white">{user.role}</dd>
                     </div>
                     <div className="flex justify-between">
-                        <dt className="text-sm text-gray-600">Member Since</dt>
-                        <dd className="text-sm font-medium text-gray-900">
+                        <dt className="text-sm text-gray-600 dark:text-gray-300">Member Since</dt>
+                        <dd className="text-sm font-medium text-gray-900 dark:text-white">
                             {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
                         </dd>
                     </div>
                 </dl>
             </div>
+
 
             <div className="fixed top-4 right-4 space-y-2 z-50">
                 {toast.toasts.map((t) => (

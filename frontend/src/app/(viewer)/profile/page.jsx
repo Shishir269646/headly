@@ -35,10 +35,10 @@ function ViewerProfilePage() {
         <div className="max-w-4xl mx-auto p-6 lg:p-10 space-y-8">
             <ProfilePageComponent user={user} isDashboard={false} />
 
-            <div className="card bg-base-100 shadow-xl border border-error">
+            <div className="card bg-white dark:bg-gray-800 shadow-xl border border-error">
                 <div className="card-body">
                     <h2 className="card-title text-error">Delete Account</h2>
-                    <p>Once you delete your account, there is no going back. Please be certain.</p>
+                    <p className="dark:text-gray-300">Once you delete your account, there is no going back. Please be certain.</p>
                     <div className="card-actions justify-end">
                         <button onClick={handleDeleteAccount} className="btn btn-error">
                             <FaTrash /> Delete My Account
