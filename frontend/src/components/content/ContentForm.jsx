@@ -96,9 +96,7 @@ export default function ContentForm({ contentId = null }) {
     setFormData({ ...formData, title: e.target.value });
   };
 
-  const handleEditorChange = (html) => {
-    setFormData({ ...formData, body: html });
-  };
+
 
   const handleRemoveFeaturedImage = () => {
     setFormData(prev => ({ ...prev, featuredImage: null }));
@@ -313,7 +311,10 @@ export default function ContentForm({ contentId = null }) {
                 ) : (
                   <TiptapEditor
                     content={formData.body || ''}
-                    onChange={handleEditorChange}
+                    onSave={(editorHtml) => {
+                        setFormData(prev => ({ ...prev, body: editorHtml }));
+                        performSubmit('draft');
+                    }}
                     placeholder="Start writing your content..."
                   />
                 )}

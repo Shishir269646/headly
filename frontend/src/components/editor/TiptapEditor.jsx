@@ -15,9 +15,10 @@ import javascript from 'highlight.js/lib/languages/javascript';
 const lowlight = createLowlight();
 lowlight.register('javascript', javascript);
 
-export default function TiptapEditor({ content, onChange, placeholder = 'Start writing...' }) {
+export default function TiptapEditor({ content: initialContent, onSave, placeholder = 'Start writing...' }) {
     const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
     const [mediaModalTab, setMediaModalTab] = useState('upload');
+    const [editorContent, setEditorContent] = useState(initialContent || '');
 
     const handleSelectImage = (media) => {
         if (media && media.url) {
@@ -39,24 +40,31 @@ export default function TiptapEditor({ content, onChange, placeholder = 'Start w
             Highlight.configure({ multicolor: true }),
             CodeBlockLowlight.configure({ lowlight })
         ],
-        content: content || '',
+        content: editorContent, // Use internal state for content
         editorProps: {
             attributes: {
                 class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none min-h-[300px] p-4'
             }
         },
+        // We still need onUpdate to keep editorContent state in sync with actual editor changes
         onUpdate: ({ editor }) => {
-            const html = editor.getHTML();
-            onChange(html);
+            setEditorContent(editor.getHTML());
         }
     });
 
-    // Effect to update editor content when the 'content' prop changes
+    // Effect to update editorContent when the 'initialContent' prop changes
     useEffect(() => {
-        if (editor && content !== editor.getHTML()) {
-            editor.commands.setContent(content || '', false, { preserveCursor: true });
+        if (editor && initialContent !== editorContent) {
+            editor.commands.setContent(initialContent || '', false, { preserveCursor: true });
+            setEditorContent(initialContent || '');
         }
-    }, [content, editor]);
+    }, [initialContent, editor]);
+
+    const handleSave = () => {
+        if (editor) {
+            onSave(editor.getHTML()); // Pass current editor HTML to parent
+        }
+    };
 
     if (!editor) {
         return <div>Loading editor...</div>;
@@ -67,6 +75,7 @@ export default function TiptapEditor({ content, onChange, placeholder = 'Start w
             <MenuBar
                 editor={editor}
                 onBrowseMedia={(tab) => { setMediaModalTab(tab); setIsMediaModalOpen(true); }}
+                onSave={handleSave}
             />
             <EditorContent editor={editor} />
             <MediaPickerModal
@@ -80,7 +89,7 @@ export default function TiptapEditor({ content, onChange, placeholder = 'Start w
     );
 }
 
-function MenuBar({ editor, onBrowseMedia }) {
+function MenuBar({ editor, onBrowseMedia, onSave }) {
     if (!editor) return null;
 
     const setLink = () => {
@@ -92,6 +101,8 @@ function MenuBar({ editor, onBrowseMedia }) {
 
     return (
         <div className="bg-base-200 border-b p-2 flex flex-wrap gap-2">
+            <button onClick={onSave} className="btn btn-sm btn-primary">Save</button>
+            <div className="divider divider-horizontal m-0"></div>
             <button onClick={() => editor.chain().focus().toggleBold().run()} className={btn(editor.isActive('bold'))}>B</button>
             <button onClick={() => editor.chain().focus().toggleItalic().run()} className={btn(editor.isActive('italic'))}>I</button>
             <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={btn(editor.isActive('underline'))}>U</button>
