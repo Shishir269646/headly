@@ -131,14 +131,14 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
     
 
     return (
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="max-w-full px-4 sm:px-6 lg:px-8 sm:max-w-2xl mx-auto space-y-6 py-8">
             <div>
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{isDashboard ? "Profile Settings" : "User Profile"}</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{isDashboard ? "Profile Settings" : "User Profile"}</h1>
                 <p className="text-gray-600 dark:text-gray-300 mt-1">{isDashboard ? "Manage your account information" : `Viewing profile of ${user.name}`}</p>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-                <div className="flex items-center space-x-4 mb-6 pb-6 border-b dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6 pb-6 border-b dark:border-gray-700">
                     <img 
                         src={
                             imagePreview || (user.image?.url
@@ -146,10 +146,10 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
                                 : `https://ui-images.com/api/?name=${user.name}&background=random`)
                         }
                         alt="image"
-                        className="w-20 h-20 rounded-full object-cover"
+                        className="w-24 h-24 sm:w-20 sm:h-20 rounded-full object-cover"
                     />
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{user.name}</h2>
+                    <div className="text-center sm:text-left">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{user.name}</h2>
                         <p className="text-gray-600 dark:text-gray-300">{user.email}</p>
                         <span className="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full text-xs font-medium">
                             {user.role}
@@ -162,7 +162,7 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-2">
                         Profile Image
                     </label>
-                    <div className="flex items-center space-x-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                         <input 
                             type="file"
                             accept="image/*"
@@ -173,7 +173,7 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
                         <button 
                             type="button"
                             onClick={() => fileInputRef.current.click()}
-                            className="px-4 py-2 border dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white"
+                            className="w-full sm:w-auto px-4 py-2 border dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white"
                         >
                             Change
                         </button>
@@ -182,7 +182,7 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
                                 type="button"
                                 onClick={handleimageUpload}
                                 disabled={imageUploading}
-                                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
+                                className="w-full sm:w-auto px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50"
                             >
                                 {imageUploading ? 'Uploading...' : 'Upload'}
                             </button>
@@ -231,18 +231,18 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Account Information</h3>
                 <dl className="space-y-3">
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between">
                         <dt className="text-sm text-gray-600 dark:text-gray-300">Email</dt>
                         <dd className="text-sm font-medium text-gray-900 dark:text-white">{user.email}</dd>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between">
                         <dt className="text-sm text-gray-600 dark:text-gray-300">Role</dt>
                         <dd className="text-sm font-medium text-gray-900 dark:text-white">{user.role}</dd>
                     </div>
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between">
                         <dt className="text-sm text-gray-600 dark:text-gray-300">Member Since</dt>
                         <dd className="text-sm font-medium text-gray-900 dark:text-white">
                             {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}

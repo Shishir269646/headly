@@ -1,8 +1,3 @@
-// ============================================
-// 📄 app/(dashboard)/dashboard/media/upload/page.js
-// Upload Media Page
-// ============================================
-
 'use client';
 
 import { useMedia } from '@/hooks/useMedia';

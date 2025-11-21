@@ -9,7 +9,8 @@ import Link from 'next/link';
 import { FiFileText, FiCheckCircle, FiFile, FiImage, FiMessageSquare, FiClock, FiUsers, FiSettings, FiPlusCircle, FiXCircle } from 'react-icons/fi';
 
 
-// --- Refactored Stat Card Component (Unchanged) ---
+
+
 function StatCard({ title, value, icon, color, href }) {
     const iconColorClass = color.replace('bg-', 'text-');
 
@@ -134,9 +135,7 @@ function DashboardPage() {
                         </div>
                     </section>
 
-                    {/* 3. Quick Actions and Secondary Stats 
-                      *** CONDITIONALLY RENDERED: ONLY SHOWN IF USER IS EDITOR OR ABOVE ***
-                    */}
+
                     {isEditorOrAbove && (
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
 

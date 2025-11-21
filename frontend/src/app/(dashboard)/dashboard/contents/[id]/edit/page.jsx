@@ -1,15 +1,11 @@
-// ============================================
-// 📄 app/(dashboard)/dashboard/contents/[id]/edit/page.js
-// Edit Content Page
-// ============================================
-
 'use client';
 
 import { use } from 'react';
 import ContentForm from '@/components/content/ContentForm';
 
 export default function EditContentPage({ params }) {
-    // Next.js 15+ requires unwrapping params with React.use()
+    
+    
     const { id } = use(params);
     
     return (

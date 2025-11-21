@@ -1,8 +1,4 @@
 
-// ============================================
-// ✅ FIXED: src/app/api/revalidate/route.js
-// ============================================
-
 import { revalidatePath } from 'next/cache';
 import { NextResponse } from 'next/server';
 
@@ -10,8 +6,10 @@ export async function POST(request) {
     try {
         // Verify secret
         const secret = request.headers.get('x-revalidate-secret');
+        console.log('Received revalidation request. Secret present:', !!secret);
 
         if (secret !== process.env.REVALIDATE_SECRET) {
+            console.warn('Revalidation failed: Invalid secret provided.');
             return NextResponse.json(
                 { error: 'Invalid secret' },
                 { status: 401 }
@@ -22,28 +20,29 @@ export async function POST(request) {
         const { slug, action } = body;
 
         if (!slug) {
+            console.warn('Revalidation failed: Slug is required.');
             return NextResponse.json(
                 { error: 'Slug is required' },
                 { status: 400 }
             );
         }
 
-        // Revalidate specific blog post
-        await revalidatePath(`/blog/${slug}`);
+        // Revalidate specific content page
+        await revalidatePath(`/content/${slug}`);
 
-        // Also revalidate blog list page
-        await revalidatePath('/blog');
+        // Also revalidate content list page
+        await revalidatePath('/all-content');
 
-        console.log(`✅ Revalidated: /blog/${slug} (${action})`);
+        console.log(`✅ Revalidated paths: /content/${slug} and /all-content (Action: ${action})`);
 
         return NextResponse.json({
             revalidated: true,
-            message: `Successfully revalidated /blog/${slug}`,
+            message: `Successfully revalidated /content/${slug} and /all-content`,
             timestamp: new Date().toISOString()
         });
 
     } catch (error) {
-        console.error('❌ Revalidation error:', error);
+        console.error('Revalidation error:', error);
         return NextResponse.json(
             {
                 error: 'Error revalidating',

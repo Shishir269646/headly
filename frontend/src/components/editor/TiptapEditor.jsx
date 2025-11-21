@@ -15,10 +15,9 @@ import javascript from 'highlight.js/lib/languages/javascript';
 const lowlight = createLowlight();
 lowlight.register('javascript', javascript);
 
-export default function TiptapEditor({ content: initialContent, onSave, placeholder = 'Start writing...' }) {
+export default function TiptapEditor({ content, onChange, onSave, placeholder = 'Start writing...' }) {
     const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
     const [mediaModalTab, setMediaModalTab] = useState('upload');
-    const [editorContent, setEditorContent] = useState(initialContent || '');
 
     const handleSelectImage = (media) => {
         if (media && media.url) {
@@ -40,29 +39,28 @@ export default function TiptapEditor({ content: initialContent, onSave, placehol
             Highlight.configure({ multicolor: true }),
             CodeBlockLowlight.configure({ lowlight })
         ],
-        content: editorContent, // Use internal state for content
+        content: content || '',
         editorProps: {
             attributes: {
                 class: 'prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none min-h-[300px] p-4'
             }
         },
-        // We still need onUpdate to keep editorContent state in sync with actual editor changes
         onUpdate: ({ editor }) => {
-            setEditorContent(editor.getHTML());
+            const html = editor.getHTML();
+            onChange(html);
         }
     });
 
-    // Effect to update editorContent when the 'initialContent' prop changes
+    // Effect to update editor content when the 'content' prop changes
     useEffect(() => {
-        if (editor && initialContent !== editorContent) {
-            editor.commands.setContent(initialContent || '', false, { preserveCursor: true });
-            setEditorContent(initialContent || '');
+        if (editor && content !== editor.getHTML()) {
+            editor.commands.setContent(content || '', false, { preserveCursor: true });
         }
-    }, [initialContent, editor]);
+    }, [content, editor]);
 
     const handleSave = () => {
         if (editor) {
-            onSave(editor.getHTML()); // Pass current editor HTML to parent
+            onSave(editor.getHTML());
         }
     };
 

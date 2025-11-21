@@ -1,7 +1,3 @@
-// ============================================
-// 📄 app/(dashboard)/dashboard/profile/page.js
-// ============================================
-
 'use client';
 
 import withAuth from '@/hoc/withAuth';

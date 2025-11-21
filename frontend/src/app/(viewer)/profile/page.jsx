@@ -32,15 +32,15 @@ function ViewerProfilePage() {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6 lg:p-10 space-y-8">
+        <div className="max-w-4xl mx-auto space-y-8">
             <ProfilePageComponent user={user} isDashboard={false} />
 
-            <div className="card bg-white dark:bg-gray-800 shadow-xl border border-error">
+            <div className="card bg-white dark:bg-gray-800 shadow-xl border border-error mx-4 sm:mx-0">
                 <div className="card-body">
                     <h2 className="card-title text-error">Delete Account</h2>
                     <p className="dark:text-gray-300">Once you delete your account, there is no going back. Please be certain.</p>
-                    <div className="card-actions justify-end">
-                        <button onClick={handleDeleteAccount} className="btn btn-error">
+                    <div className="card-actions justify-end mt-4">
+                        <button onClick={handleDeleteAccount} className="w-full sm:w-auto btn btn-error">
                             <FaTrash /> Delete My Account
                         </button>
                     </div>
