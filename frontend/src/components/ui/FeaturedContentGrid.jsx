@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import Image from 'next/image';
 
 const FeaturedContentGrid = ({ posts }) => {
     // Display a loading state if posts are not yet available
@@ -26,6 +27,8 @@ const FeaturedContentGrid = ({ posts }) => {
     // Use the first post from the array as the featured post
     const featuredPost = posts[0];
 
+    console.log("post", featuredPost.author)
+
     return (
         <section className="mb-8 px-4 bg-white dark:bg-gray-900">
             <div className="max-w-7xl mx-auto">
@@ -34,9 +37,12 @@ const FeaturedContentGrid = ({ posts }) => {
                     <article className="relative overflow-hidden rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 h-[600px]">
                         {/* Background Image with Overlay */}
                         <div className="absolute inset-0">
-                            <img
+                            <Image
                                 src={featuredPost.featuredImage?.url || 'https://via.placeholder.com/800x600'}
                                 alt={featuredPost.title}
+                                width={800}
+                                height={600}
+                                loading="lazy"
                                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                             />
                             {/* Gradient Overlay */}
@@ -67,9 +73,12 @@ const FeaturedContentGrid = ({ posts }) => {
                                     {/* Author */}
                                     {featuredPost.author && (
                                         <div className="flex items-center gap-2">
-                                            <img
-                                                src={featuredPost.author.avatar || 'https://via.placeholder.com/40'}
-                                                alt={featuredPost.author.name}
+                                            <Image
+                                                src={featuredPost?.author.image || 'https://via.placeholder.com/40'}
+                                                alt={featuredPost?.author.name}
+                                                width={40}
+                                                height={40}
+                                                loading="lazy"
                                                 className="w-8 h-8 rounded-full border-2 border-white/50"
                                             />
                                             <a

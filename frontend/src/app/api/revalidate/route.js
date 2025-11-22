@@ -6,7 +6,7 @@ export async function POST(request) {
     try {
         // Verify secret
         const secret = request.headers.get('x-revalidate-secret');
-        console.log('Received revalidation request. Secret present:', !!secret);
+
 
         if (secret !== process.env.REVALIDATE_SECRET) {
             console.warn('Revalidation failed: Invalid secret provided.');
@@ -28,16 +28,16 @@ export async function POST(request) {
         }
 
         // Revalidate specific content page
-        await revalidatePath(`/content/${slug}`);
+        await revalidatePath(`/${slug}`);
 
         // Also revalidate content list page
         await revalidatePath('/all-content');
 
-        console.log(`✅ Revalidated paths: /content/${slug} and /all-content (Action: ${action})`);
+
 
         return NextResponse.json({
             revalidated: true,
-            message: `Successfully revalidated /content/${slug} and /all-content`,
+            message: `Successfully revalidated /${slug} and /all-content`,
             timestamp: new Date().toISOString()
         });
 
