@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-
+import Image from 'next/image';
 
 
 export default function ArticleAuthorBio({
@@ -14,7 +14,7 @@ export default function ArticleAuthorBio({
             <div className="flex items-start gap-4">
                 <div className="avatar shrink-0">
                     <div className="w-20 rounded-full ring ring-blue-500 ring-offset-2 ring-offset-gray-50 dark:ring-offset-gray-800">
-                        <img src={avatarUrl} alt={`${name}'s avatar`} />
+                        <Image src={avatarUrl} alt={`${name}'s avatar`} width={80} height={80} loading="lazy" />
                     </div>
                 </div>
                 <div className="flex-1 min-w-0">

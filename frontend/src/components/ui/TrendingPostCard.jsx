@@ -1,4 +1,5 @@
 import { Eye } from 'lucide-react';
+import Image from 'next/image';
 
 export default function TrendingPostCard({ post }) {
     const { title, slug, featuredImage, categories, author, createdAt, views } = post;
@@ -6,9 +7,12 @@ export default function TrendingPostCard({ post }) {
     return (
         <div className="group cursor-pointer border-b pb-3 flex items-start gap-4">
             <div className="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
-                <img
+                <Image
                     src={featuredImage?.url || 'https://via.placeholder.com/150'}
                     alt={title}
+                    width={150}
+                    height={150}
+                    loading="lazy"
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
             </div>

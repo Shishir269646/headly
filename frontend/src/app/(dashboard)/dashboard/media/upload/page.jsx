@@ -4,6 +4,7 @@ import { useMedia } from '@/hooks/useMedia';
 import { useToast } from '@/hooks/useToast';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function UploadMediaPage() {
     const { upload, uploadMultiple, uploading } = useMedia();
@@ -72,7 +73,7 @@ export default function UploadMediaPage() {
                 {/* Preview */}
                 {preview && (
                     <div className="border rounded-lg p-4">
-                        <img src={preview} alt="Preview" className="max-w-full h-auto rounded" />
+                        <Image src={preview} alt="Preview" width={500} height={500} loading="lazy" className="max-w-full h-auto rounded" />
                     </div>
                 )}
 

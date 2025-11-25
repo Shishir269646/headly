@@ -26,7 +26,7 @@ export default function ThemeToggle() {
     if (!mounted) {
         // Render a placeholder or null on the server to avoid hydration mismatch
         return (
-            <div className="w-12 h-6 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />
+            <div className="w-12 h-6 rounded-full bg-gray-200 dark:bg-gray-300 animate-pulse" />
         );
     }
 

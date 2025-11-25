@@ -1,8 +1,3 @@
-// ============================================
-// 📝 REFACTORED: Content Form with Tiptap (Professional DaisyUI)
-// components/content/ContentForm.jsx
-// ============================================
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -317,8 +312,8 @@ export default function ContentForm({ contentId = null }) {
                     content={formData.body || ''}
                     onChange={handleEditorChange}
                     onSave={(editorHtml) => {
-                        setFormData(prev => ({ ...prev, body: editorHtml }));
-                        performSubmit('draft');
+                      setFormData(prev => ({ ...prev, body: editorHtml }));
+                      performSubmit('draft');
                     }}
                     placeholder="Start writing your content..."
                   />

@@ -6,7 +6,7 @@ const nextConfig = {
             {
                 protocol: "https",
                 hostname: "headly-upload-bucket.s3.us-east-1.amazonaws.com",
-                pathname: "**", // সব path অনুমোদিত
+                pathname: "**", // all path
             },
             {
                 protocol: "https",
@@ -18,6 +18,11 @@ const nextConfig = {
                 hostname: "localhost",
                 pathname: "**",
             },
+            {
+                protocol: "https",
+                hostname: "via.placeholder.com",
+                pathname: "**",
+            }
         ],
         formats: ["image/avif", "image/webp"],
     },

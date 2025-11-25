@@ -1,4 +1,5 @@
 import { Clock } from 'lucide-react';
+import Image from 'next/image';
 
 export default function ArticleCard({ post }) {
     // Display a loading state if the post is not yet available
@@ -21,12 +22,15 @@ export default function ArticleCard({ post }) {
     const { title, slug, excerpt, featuredImage, categories, author, createdAt, readTime } = post;
 
     return (
-        <article className="group cursor-pointer">
+        <article className="group cursor-pointer bg-base-200 p-2 rounded-lg hover:shadow-lg transition-shadow">
             <div className="relative overflow-hidden rounded-lg mb-4">
                 <a href={`/${slug}`}>
-                    <img
+                    <Image
                         src={featuredImage?.url || 'https://via.placeholder.com/400x300'}
                         alt={title}
+                        width={400}
+                        height={300}
+                        loading="lazy"
                         className="w-full h-48 sm:h-56 md:h-64 object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 </a>

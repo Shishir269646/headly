@@ -187,8 +187,21 @@ export default function LoginPage() {
                         {/* Divider */}
                         <div className="divider">Or</div>
 
+                        {/* Social Login Buttons */}
+                        <div className="space-y-2">
+                            <a href="http://localhost:4000/api/auth/google" className="btn btn-outline w-full">
+                                Continue with Google
+                            </a>
+                            <a href="http://localhost:4000/api/auth/github" className="btn btn-outline w-full">
+                                Continue with GitHub
+                            </a>
+                            <a href="http://localhost:4000/api/auth/linkedin" className="btn btn-outline w-full">
+                                Continue with LinkedIn
+                            </a>
+                        </div>
+
                         {/* Sign Up Link */}
-                        <div className="text-center">
+                        <div className="text-center mt-4">
                             <p className="text-sm text-base-content/70">
                                 Don't have an account?{' '}
                                 <Link href="/register" className="link link-primary font-medium">

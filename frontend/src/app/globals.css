@@ -23,6 +23,10 @@ body {
   background-color: #101828 !important;
 }
 
+.bg-gray-950 {
+  background-color: #080c13 !important;
+}
+
 .text-white{
   color: #FFFFFF !important;
 }

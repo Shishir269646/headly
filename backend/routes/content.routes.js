@@ -1,7 +1,3 @@
-// ============================================
-// 📄 src/routes/v1/content.routes.js
-// ✅ CORRECTED & IMPROVED VERSION
-// ============================================
 
 const express = require('express');
 const router = express.Router();
@@ -27,12 +23,14 @@ router.get('/trending', contentController.getTrendingContents);
 router.get('/popular', contentController.getPopularContents);
 router.get('/featured', contentController.getFeaturedContents);
 
+
+
 // Public content routes (with optional auth for analytics)
 router.get('/', optionalAuth, contentController.getAllContents);
 router.get('/slug/:slug', optionalAuth, contentController.getContentBySlug);
 
-// ⚠️ IMPORTANT: This should be LAST among GET routes
-// Because it can match any string including 'latest', 'trending', etc.
+
+
 router.get('/:id', optionalAuth, contentController.getContentById);
 
 // ============================================

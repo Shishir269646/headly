@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { format, formatDistanceToNow } from 'date-fns';
 import { deleteComment, toggleLike } from '@/store/slices/commentSlice';
 import CommentForm from './CommentForm';
+import Image from 'next/image';
 
 export default function CommentItem({ comment, depth = 0, maxDepth = 5 }) {
     const dispatch = useDispatch();
@@ -60,7 +61,7 @@ export default function CommentItem({ comment, depth = 0, maxDepth = 5 }) {
                 {/* Avatar */}
                 <div className="avatar shrink-0">
                     <div className="w-12 h-12 rounded-full">
-                        <img src={authorImage} alt={authorName} />
+                        <Image src={authorImage} alt={authorName} width={48} height={48} loading="lazy" />
                     </div>
                 </div>
 

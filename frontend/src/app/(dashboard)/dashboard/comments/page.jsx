@@ -4,6 +4,7 @@ import withAuth from '@/hoc/withAuth';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { formatDistanceToNow } from 'date-fns';
+import Image from 'next/image';
 import {
     getAllComments,
     moderateComment,
@@ -262,9 +263,12 @@ function CommentsPage() {
                                                 <div className="flex items-center gap-2">
                                                     <div className="avatar">
                                                         <div className="w-10 rounded-full">
-                                                            <img
+                                                            <Image
                                                                 src={comment.author?.image?.url || `https://ui-avatars.com/api/?name=${encodeURIComponent(comment.author?.name || comment.guestName || 'Anonymous')}&background=random`}
                                                                 alt={comment.author?.name || comment.guestName}
+                                                                width={40}
+                                                                height={40}
+                                                                loading="lazy"
                                                             />
                                                         </div>
                                                     </div>

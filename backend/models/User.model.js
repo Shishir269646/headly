@@ -20,9 +20,23 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'Password is required'],
         minlength: [6, 'Password must be at least 6 characters'],
         select: false
+    },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    githubId: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    linkedinId: {
+        type: String,
+        unique: true,
+        sparse: true
     },
     role: {
         type: String,
@@ -56,9 +70,20 @@ const userSchema = new mongoose.Schema({
 
 // Hash password before saving
 userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
-    this.password = await bcrypt.hash(this.password, 12);
+    if (!this.isModified('password') && !this.isNew) return next();
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 12);
+    }
     next();
+});
+
+// Validate password before saving
+userSchema.pre('save', function(next) {
+    if (!this.password && !this.googleId && !this.githubId && !this.linkedinId) {
+        next(new Error('Password is required'));
+    } else {
+        next();
+    }
 });
 
 // Compare password method

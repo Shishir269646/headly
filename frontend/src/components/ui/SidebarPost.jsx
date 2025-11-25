@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function SidebarPost({ post }) {
     // Display a loading state if the post is not yet available
     if (!post) {
@@ -18,9 +20,12 @@ export default function SidebarPost({ post }) {
     return (
         <div className="flex gap-3 group cursor-pointer">
             <a href={`/${slug}`} className="flex-shrink-0">
-                <img
+                <Image
                     src={featuredImage?.url || 'https://via.placeholder.com/80'}
                     alt={title}
+                    width={80}
+                    height={80}
+                    loading="lazy"
                     className="w-16 sm:w-20 h-16 sm:h-20 object-cover rounded transition-transform duration-300 group-hover:scale-105"
                 />
             </a>

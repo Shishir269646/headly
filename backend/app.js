@@ -28,6 +28,26 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
+// Sessions and Passport
+const session = require('express-session');
+const passport = require('passport');
+require('./config/passport'); 
+
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'a_default_session_secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 // 1 day
+    }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 // Data sanitization against NoSQL injection
 app.use(mongoSanitize());
 

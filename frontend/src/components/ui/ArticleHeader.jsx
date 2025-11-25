@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import { Clock, User, MessageSquare } from 'lucide-react';
+import Image from 'next/image';
 
 export default function ArticleHeader({
     category,
@@ -45,9 +46,12 @@ export default function ArticleHeader({
 
             {/* Featured Image */}
             <div className="mb-8">
-                <img
+                <Image
                     src={featuredImage?.url}
                     alt={featuredImage?.alt || 'Featured Image'}
+                    width={1200}
+                    height={600}
+                    loading="lazy"
                     className="w-full h-auto rounded-lg shadow-xl"
                 />
 

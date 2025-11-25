@@ -124,3 +124,28 @@ exports.changePassword = async (req, res, next) => {
     }
 };
 
+exports.socialLoginCallback = async (req, res, next) => {
+    try {
+        const user = req.user;
+        const { token, refreshToken } = await authService.generateAndSaveTokens(user._id);
+
+        res.cookie('accessToken', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000 // 1 day
+        });
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+        });
+
+        // Redirect to a specific frontend route after successful login
+        res.redirect(`${process.env.FRONTEND_URL}/auth/social/success`);
+    } catch (error) {
+        next(error);
+    }
+};

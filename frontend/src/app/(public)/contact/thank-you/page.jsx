@@ -11,17 +11,17 @@ function ThankYouPageContent() {
     
     useEffect(() => {
         const timer = setInterval(() => {
-            setCountdown((prev) => {
-                if (prev <= 1) {
-                    router.push('/');
-                    return 0;
-                }
-                return prev - 1;
-            });
+            setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [router]);
+    }, []);
+
+    useEffect(() => {
+        if (countdown === 0) {
+            router.push('/');
+        }
+    }, [countdown, router]);
 
     const formType = searchParams.get('type') || 'contact';
 

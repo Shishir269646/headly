@@ -239,9 +239,12 @@ export default function MediaPickerModal({ isOpen, onClose, onSelect, defaultTab
 										>
 											<div className="relative aspect-square">
 												{/* Replaced 'next/image' with basic img tag for simplicity in this single-file context */}
-												<img
+												<Image
 													src={item.url}
 													alt={item.alt || item.originalName || 'Media item'}
+													width={150}
+													height={150}
+													loading="lazy"
 													className="object-cover w-full h-full transition duration-300 group-hover:scale-[1.02]"
 													onError={(e) => e.target.src = 'https://placehold.co/150x150/EEEEEE/AAAAAA?text=Error'}
 												/>

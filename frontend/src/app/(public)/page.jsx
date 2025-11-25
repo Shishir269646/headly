@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useContent } from '@/hooks/useContent';
+import { useCategories } from '@/hooks/useCategories';
 
 import FeaturedContentGrid from '@/components/ui/FeaturedContentGrid';
 import TrendingSection from '@/components/ui/TrendingSection';
@@ -14,13 +15,15 @@ export default function Home() {
         popular,
         trending,
         latest,
-        loading,
-        error,
+        loading: contentLoading,
+        error: contentError,
         getFeatured,
         getPopular,
         getTrending,
         getLatest
     } = useContent();
+    
+    const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
 
     useEffect(() => {
         // Fetch all the data on component mount
@@ -30,14 +33,15 @@ export default function Home() {
         getTrending();
     }, []); // Empty dependency array - only run once on mount
 
-
+    const loading = contentLoading || categoriesLoading;
+    const error = contentError || categoriesError;
 
     if (loading) {
         return <div>Loading...</div>;
     }
 
     if (error) {
-        return <div>Error: {error}</div>;
+        return <div>Error: {error.message}</div>;
     }
 
     return (
@@ -68,7 +72,7 @@ export default function Home() {
                 </div>
 
                 {/* Sidebar */}
-                <Sidebar />
+                <Sidebar categories={categories} />
             </div>
         </div>
     );

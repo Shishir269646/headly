@@ -9,6 +9,7 @@ import { useUser } from '@/hooks/useUser';
 import { formatImageUrl } from '@/libs/utils';
 import { useToast } from '@/hooks/useToast';
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 
 export default function ProfilePage({ user: initialUser, isDashboard = false }) {
     const { user: authUser, loading: authLoading } = useAuth();
@@ -139,13 +140,16 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
 
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6 pb-6 border-b dark:border-gray-700">
-                    <img 
+                    <Image
                         src={
                             imagePreview || (user.image?.url
                                 ? formatImageUrl(user.image.url)
                                 : `https://ui-images.com/api/?name=${user.name}&background=random`)
                         }
                         alt="image"
+                        width={96}
+                        height={96}
+                        loading="lazy"
                         className="w-24 h-24 sm:w-20 sm:h-20 rounded-full object-cover"
                     />
                     <div className="text-center sm:text-left">

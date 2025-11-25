@@ -166,3 +166,19 @@ exports.changePassword = async (userId, passwordData) => {
         resource: 'auth'
     });
 };
+
+exports.generateAndSaveTokens = async (userId) => {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new ApiError(404, 'User not found');
+    }
+
+    const token = user.generateAuthToken();
+    const refreshToken = user.generateRefreshToken();
+
+    user.refreshToken = refreshToken;
+    await user.save();
+
+    return { token, refreshToken };
+};
+

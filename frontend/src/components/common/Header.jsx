@@ -2,13 +2,13 @@
 import Link from "next/link";
 import ThemeToggle from "./ThemeToggle";
 import LogoutButton from "../ui/LogoutButton";
-import { Search } from 'lucide-react';
+
 import { useAuth } from '@/hooks/useAuth';
 
 export default function Header() {
     const { isAuthenticated, isRoleViewer } = useAuth();
     return (
-        <div className="navbar bg-base-100 shadow-sm">
+        <div className="navbar shadow-md bg-base-300">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -46,9 +46,7 @@ export default function Header() {
                 </ul>
             </div>
             <div className="navbar-end gap-2">
-                <Link href="/search" className="btn btn-ghost btn-circle">
-                    <Search className="w-5 h-5" />
-                </Link>
+                
                 <ThemeToggle />
             </div>
         </div>

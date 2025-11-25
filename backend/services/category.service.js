@@ -1,8 +1,45 @@
 const Category = require('../models/Category.model');
+const Content = require('../models/Content.model');
 const ApiError = require('../utils/apiError');
 
 exports.getAllCategories = async () => {
-    const categories = await Category.find().sort({ createdAt: -1 });
+    const categories = await Category.aggregate([
+        {
+            $lookup: {
+                from: Content.collection.name,
+                let: { categoryId: '$_id' },
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $and: [
+                                    { $eq: ['$category', '$$categoryId'] },
+                                    { $eq: ['$status', 'published'] },
+                                    { $eq: ['$isDeleted', false] }
+                                ]
+                            }
+                        }
+                    },
+                    { $count: 'count' }
+                ],
+                as: 'content'
+            }
+        },
+        {
+            $addFields: {
+                contentCount: { $ifNull: [{ $arrayElemAt: ['$content.count', 0] }, 0] }
+            }
+        },
+        {
+            $project: {
+                content: 0 // Exclude the 'content' array from the final output
+            }
+        },
+        {
+            $sort: { name: 1 } // Sort by name alphabetically
+        }
+    ]);
+
     return categories;
 };
 
