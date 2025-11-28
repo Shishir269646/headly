@@ -98,20 +98,6 @@ const authSlice = createSlice({
         clearError: (state) => {
             state.error = null;
         },
-        loadUserFromStorage: (state) => {
-            const userStr = localStorage.getItem('user');
-            if (userStr) {
-                let user = JSON.parse(userStr);
-                // Handle a case where the user object might be nested
-                if (user && user.user) {
-                    user = user.user;
-                }
-                state.user = user;
-                // We assume they might be authenticated and let getCurrentUser verify.
-                // This helps prevent flashes of logged-out content.
-                state.isAuthenticated = true; 
-            }
-        },
         // New action to set isAuthenticated based on backend response (e.g., from a session check)
         setAuthenticated: (state, action) => {
             state.isAuthenticated = action.payload;
@@ -182,5 +168,5 @@ const authSlice = createSlice({
     }
 });
 
-export const { clearError, loadUserFromStorage, setAuthenticated, setUser } = authSlice.actions;
+export const { clearError, setAuthenticated, setUser } = authSlice.actions;
 export default authSlice.reducer;

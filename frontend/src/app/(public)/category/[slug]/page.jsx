@@ -46,8 +46,8 @@ export default function CategoryPage({ params }) {
 
             {contents.length > 0 ? (
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {contents.map((post) => (
-                        <ArticleCard key={post._id} post={post} />
+                    {contents.map((post, index) => (
+                        <ArticleCard key={post._id} post={post} priority={index < 3} />
                     ))}
                 </div>
             ) : (

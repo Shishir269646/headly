@@ -1,7 +1,3 @@
-// ============================================
-// omponent 📄 /components/profile/ProfilePage.jsx
-// ============================================
-
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -74,7 +70,7 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
         try {
             const result = await uploadUserimage(imageFile);
             const userData = result.payload || result;
-            
+
             if (userData && (userData.image?.url || userData.image?._id)) {
                 toast.success('image uploaded successfully!');
                 if (imagePreview) {
@@ -129,7 +125,7 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
             </div>
         );
     }
-    
+
 
     return (
         <div className="max-w-full px-4 sm:px-6 lg:px-8 sm:max-w-2xl mx-auto space-y-6 py-8">
@@ -141,11 +137,7 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6 pb-6 border-b dark:border-gray-700">
                     <Image
-                        src={
-                            imagePreview || (user.image?.url
-                                ? formatImageUrl(user.image.url)
-                                : `https://ui-images.com/api/?name=${user.name}&background=random`)
-                        }
+                        src={user?.image?.url}
                         alt="image"
                         width={96}
                         height={96}
@@ -167,14 +159,14 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
                         Profile Image
                     </label>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                        <input 
+                        <input
                             type="file"
                             accept="image/*"
                             ref={fileInputRef}
                             onChange={handleimageChange}
                             className="hidden"
                         />
-                        <button 
+                        <button
                             type="button"
                             onClick={() => fileInputRef.current.click()}
                             className="w-full sm:w-auto px-4 py-2 border dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 dark:text-white"
@@ -182,7 +174,7 @@ export default function ProfilePage({ user: initialUser, isDashboard = false }) 
                             Change
                         </button>
                         {imageFile && (
-                            <button 
+                            <button
                                 type="button"
                                 onClick={handleimageUpload}
                                 disabled={imageUploading}

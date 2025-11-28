@@ -6,7 +6,7 @@ const ApiError = require('../utils/apiError');
 exports.register = async (req, res, next) => {
     try {
         const { token, refreshToken, ...userData } = await authService.register(req.body);
-        
+
         // Set httpOnly cookies for both tokens
         res.cookie('accessToken', token, {
             httpOnly: true,
@@ -21,7 +21,7 @@ exports.register = async (req, res, next) => {
             sameSite: 'lax',
             maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
         });
-        
+
         // Only return user data in the response body
         successResponse(res, userData, 'User registered successfully', 201);
     } catch (error) {
@@ -80,7 +80,7 @@ exports.refreshToken = async (req, res, next) => {
         }
 
         const result = await authService.refreshToken(req.body.refreshToken);
-        
+
         // Update httpOnly cookie
         res.cookie('accessToken', result.token, {
             httpOnly: true,
@@ -91,14 +91,14 @@ exports.refreshToken = async (req, res, next) => {
 
         // Also update the refresh token cookie, as some strategies involve rotating them
         if (result.refreshToken) {
-             res.cookie('refreshToken', result.refreshToken, {
+            res.cookie('refreshToken', result.refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
                 sameSite: 'lax',
                 maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
             });
         }
-        
+
         // Don't send tokens in the body for security
         successResponse(res, { message: 'Token refreshed successfully' }, 'Token refreshed successfully');
     } catch (error) {
@@ -144,7 +144,7 @@ exports.socialLoginCallback = async (req, res, next) => {
         });
 
         // Redirect to a specific frontend route after successful login
-        res.redirect(`${process.env.FRONTEND_URL}/auth/social/success`);
+        res.redirect(`${process.env.FRONTEND_URL}/social/success`);
     } catch (error) {
         next(error);
     }

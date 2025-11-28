@@ -41,14 +41,14 @@ export default function ArticleBody({ children, tags, title, url }) {
             {tags && tags.length > 0 && (
                 <div className="mt-8 pt-6 border-t dark:border-gray-700 dark:bg-gray-900">
                     <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 mr-2">
+                        <span className="text-sm font-semibold text-base-content mr-2">
                             Tags:
                         </span>
                         {tags.map((tag) => (
                             <a
                                 href={`/tags/${tag}`} // Make tags functional links
                                 key={tag}
-                                className="badge badge-outline border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors no-underline hover:no-underline"
+                                className="badge badge-outline border-gray-300 text-base-content transition-colors no-underline hover:no-underline"
                             >
                                 {tag}
                             </a>
@@ -60,7 +60,7 @@ export default function ArticleBody({ children, tags, title, url }) {
             {/* Share Buttons */}
             <div className="mt-8 pt-6 border-t dark:border-gray-700">
                 <div className="flex flex-wrap items-center gap-4">
-                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                    <span className="text-sm font-semibold text-base-content">
                         Share:
                     </span>
                     {/* Use <a> tags for social links */}

@@ -31,7 +31,7 @@ exports.getAllContents = async (filters) => {
     }
 
     const contents = await Content.find(query)
-        .populate('author', 'name email avatar')
+        .populate({ path: 'author', populate: { path: 'image' } })
         .populate('featuredImage')
         .populate('category', 'name slug')
         .limit(limit * 1)
@@ -52,7 +52,7 @@ exports.getAllContents = async (filters) => {
 
 exports.getContentById = async (contentId) => {
     const content = await Content.findOne({ _id: contentId, isDeleted: false })
-        .populate('author', 'name email avatar')
+        .populate({ path: 'author', populate: { path: 'image' } })
         .populate('featuredImage')
         .populate('category', 'name slug');
 
@@ -65,7 +65,7 @@ exports.getContentById = async (contentId) => {
 
 exports.getContentBySlug = async (slug) => {
     const content = await Content.findOne({ slug, isDeleted: false })
-        .populate('author', 'name email avatar')
+        .populate({ path: 'author', populate: { path: 'image' } })
         .populate('featuredImage')
         .populate('category', 'name slug');
 
@@ -93,7 +93,7 @@ exports.createContent = async (authorId, contentData) => {
         resourceId: content._id
     });
 
-    return content.populate('author', 'name email avatar');
+    return content.populate({ path: 'author', populate: { path: 'image' } });
 };
 
 exports.updateContent = async (contentId, updateData, user) => {
@@ -119,7 +119,7 @@ exports.updateContent = async (contentId, updateData, user) => {
         details: updateData
     });
 
-    return content.populate('author', 'name email avatar');
+    return content.populate({ path: 'author', populate: { path: 'image' } });
 };
 
 exports.deleteContent = async (contentId, user) => {
@@ -165,7 +165,7 @@ exports.publishContent = async (contentId, user) => {
     // Trigger webhook for frontend revalidation
     await webhookService.triggerRevalidate(content.slug, 'publish');
 
-    return content.populate('author', 'name email avatar');
+    return content.populate({ path: 'author', populate: { path: 'image' } });
 };
 
 exports.scheduleContent = async (contentId, publishAt, user) => {
@@ -192,7 +192,7 @@ exports.scheduleContent = async (contentId, publishAt, user) => {
         details: { status: 'scheduled', publishAt }
     });
 
-    return content.populate('author', 'name email avatar');
+    return content.populate({ path: 'author', populate: { path: 'image' } });
 };
 
 // 1. Latest (Automatic)
@@ -201,7 +201,7 @@ exports.getLatestContents = async (limit = 6) => {
         status: 'published',
         isDeleted: false
     })
-        .populate('author', 'name email avatar')
+        .populate({ path: 'author', populate: { path: 'image' } })
         .populate('featuredImage')
         .sort({ publishAt: -1, createdAt: -1 })
         .limit(limit);
@@ -217,7 +217,7 @@ exports.getTrendingContents = async (limit = 6) => {
         isDeleted: false,
         createdAt: { $gte: sevenDaysAgo }
     })
-        .populate('author', 'name email avatar')
+        .populate({ path: 'author', populate: { path: 'image' } })
         .populate('featuredImage')
         .sort({ views: -1, createdAt: -1 })
         .limit(limit);
@@ -230,7 +230,7 @@ exports.getPopularContents = async (limit = 6) => {
         isDeleted: false,
         isPopular: true
     })
-        .populate('author', 'name email avatar')
+        .populate({ path: 'author', populate: { path: 'image' } })
         .populate('featuredImage')
         .sort({ views: -1 })
         .limit(limit);
@@ -243,7 +243,7 @@ exports.getFeaturedContents = async (limit = 4) => {
         isDeleted: false,
         isFeatured: true
     })
-        .populate('author', 'name email avatar')
+        .populate({ path: 'author', populate: { path: 'image' } })
         .populate('featuredImage')
         .sort({ featuredOrder: -1, createdAt: -1 })
         .limit(limit);

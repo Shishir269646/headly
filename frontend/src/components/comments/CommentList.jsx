@@ -6,7 +6,7 @@ import CommentItem from './CommentItem';
 export default function CommentList({ comments = [] }) {
     if (!comments || comments.length === 0) {
         return (
-            <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+            <div className="text-center py-8 text-base-content/70">
                 <p>No comments yet. Be the first to comment!</p>
             </div>
         );

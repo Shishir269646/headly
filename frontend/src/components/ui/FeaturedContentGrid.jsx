@@ -42,7 +42,7 @@ const FeaturedContentGrid = ({ posts }) => {
                                 alt={featuredPost.title}
                                 width={800}
                                 height={600}
-                                loading="lazy"
+                                priority
                                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                             />
                             {/* Gradient Overlay */}
@@ -72,15 +72,18 @@ const FeaturedContentGrid = ({ posts }) => {
                                 <div className="flex items-center gap-4 text-gray-200">
                                     {/* Author */}
                                     {featuredPost.author && (
+                                        
                                         <div className="flex items-center gap-2">
                                             <Image
-                                                src={featuredPost?.author.image || 'https://via.placeholder.com/40'}
-                                                alt={featuredPost?.author.name}
+                                                src={featuredPost?.author.image?.url}
+                                                alt={featuredPost?.author?.name}
                                                 width={40}
                                                 height={40}
                                                 loading="lazy"
+                                                unoptimized
                                                 className="w-8 h-8 rounded-full border-2 border-white/50"
                                             />
+
                                             <a
                                                 href={`/author/${featuredPost.author.slug}`}
                                                 className="text-sm font-medium hover:text-white transition-colors"

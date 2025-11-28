@@ -51,7 +51,7 @@ export default function ArticleHeader({
                     alt={featuredImage?.alt || 'Featured Image'}
                     width={1200}
                     height={600}
-                    loading="lazy"
+                    priority
                     className="w-full h-auto rounded-lg shadow-xl"
                 />
 

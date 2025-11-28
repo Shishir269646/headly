@@ -16,7 +16,7 @@ export const useAuth = () => {
         // Attempt to fetch current user on mount to verify authentication status
         // This will implicitly use the HTTP-only cookie sent by the browser
         dispatch(getCurrentUser());
-    }, [dispatch]);
+    }, []);
 
     const handleLogout = async () => {
         await dispatch(logout());

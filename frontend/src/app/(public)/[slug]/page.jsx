@@ -153,11 +153,12 @@ export default function PostPage() {
                                 <ContentRenderer content={body} />
                             </ArticleBody>
 
+
                             {typeof author === 'object' && author !== null && (
                                 <ArticleAuthorBio
-                                    name={author.name || 'Unknown Author'}
-                                    bio={author?.bio || 'No bio available.'}
-                                    avatarUrl={author?.avatar || '/default-avatar.png'}
+                                    name={author?.name}
+                                    bio={author?.bio}
+                                    avatarUrl={author?.image?.url}
                                     twitterUrl={author.twitter || '#'}
                                     linkedinUrl={author.linkedin || '#'}
                                 />

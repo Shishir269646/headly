@@ -65,8 +65,8 @@ export default function Home() {
                         Latest Articles
                     </h3>
                     <div className="grid sm:grid-cols-2 gap-6">
-                        {latest.map((post) => (
-                            <ArticleCard key={post._id} post={post} />
+                        {latest.map((post, index) => (
+                            <ArticleCard key={post._id} post={post} priority={index < 2} />
                         ))}
                     </div>
                 </div>

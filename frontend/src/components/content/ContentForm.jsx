@@ -32,6 +32,7 @@ export default function ContentForm({ contentId = null }) {
     // This holds the Media ObjectId (string)
     featuredImage: null,
     status: 'draft',
+    publishAt: null,
     category: '',
     tags: [],
     seo: {
@@ -60,6 +61,7 @@ export default function ContentForm({ contentId = null }) {
         // Use the Media object ID for the form field
         featuredImage: currentContent.featuredImage?._id || null,
         status: currentContent.status || 'draft',
+        publishAt: currentContent.publishAt || null,
         category: currentContent.category?._id || '',
         tags: currentContent.tags || [],
         seo: currentContent.seo || {
@@ -137,6 +139,9 @@ export default function ContentForm({ contentId = null }) {
     dataToSend.append('excerpt', formData.excerpt || '');
     dataToSend.append('body', formData.body || '');
     dataToSend.append('status', statusOverride || formData.status || 'draft');
+    if (formData.status === 'scheduled' && formData.publishAt) {
+      dataToSend.append('publishAt', new Date(formData.publishAt).toISOString());
+    }
     dataToSend.append('category', formData.category || '');
 
     // Append complex fields as JSON strings (CRITICAL for multipart/form-data)
@@ -176,6 +181,8 @@ export default function ContentForm({ contentId = null }) {
         successMessage = 'Content successfully published!';
       } else if (status === 'draft') {
         successMessage = 'Draft saved!';
+      } else if (status === 'scheduled') {
+        successMessage = 'Content successfully scheduled!';
       } else {
         successMessage = contentId ? 'Content updated successfully!' : 'Content created successfully!';
       }
@@ -348,6 +355,21 @@ export default function ContentForm({ contentId = null }) {
                   <option value="scheduled">Scheduled</option>
                   <option value="archived">Archived</option>
                 </select>
+
+                {formData.status === 'scheduled' && (
+                  <div className="form-control mt-4">
+                    <label className="label">
+                      <span className="label-text font-semibold">Publish Date</span>
+                    </label>
+                    <input
+                      type="datetime-local"
+                      value={formData.publishAt ? new Date(formData.publishAt).toISOString().slice(0, 16) : ''}
+                      onChange={(e) => setFormData({ ...formData, publishAt: e.target.value })}
+                      className="input input-bordered w-full"
+                      required
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>

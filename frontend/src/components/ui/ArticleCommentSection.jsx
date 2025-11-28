@@ -37,7 +37,7 @@ export default function ArticleCommentSection({ contentId }) {
         <div className="mt-12">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h3 className="text-2xl font-bold text-base-content">
                     {commentCount} {commentCount === 1 ? 'Comment' : 'Comments'}
                 </h3>
                 <button
@@ -50,7 +50,7 @@ export default function ArticleCommentSection({ contentId }) {
 
             {/* Comment form */}
             {showForm && (
-                <div className="mb-8 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="mb-8 p-6 bg-base-300 rounded-lg">
                     <CommentForm
                         contentId={contentId}
                         onSuccess={handleCommentSuccess}
@@ -61,7 +61,7 @@ export default function ArticleCommentSection({ contentId }) {
 
             {/* Loading state */}
             {loading && comments.length === 0 && (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <div className="text-center py-8 text-base-content/70">
                     <span className="loading loading-spinner loading-md"></span>
                     <p className="mt-2">Loading comments...</p>
                 </div>

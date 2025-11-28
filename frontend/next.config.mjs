@@ -22,7 +22,8 @@ const nextConfig = {
                 protocol: "https",
                 hostname: "via.placeholder.com",
                 pathname: "**",
-            }
+            },
+            
         ],
         formats: ["image/avif", "image/webp"],
     },

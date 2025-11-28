@@ -1,49 +1,52 @@
-// ============================================
-// 📄 app/(auth)/social/success/page.js - Social Login Success Page
-// ============================================
+"use client";
 
-'use client';
+import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/navigation';
-import { getCurrentUser } from '@/store/slices/authSlice';
+export default function SocialAuthSuccessPage() {
+  const router = useRouter();
 
-export default function SocialSuccessPage() {
-    const dispatch = useDispatch();
-    const router = useRouter();
-    const { isAuthenticated, loading, error } = useSelector((state) => state.auth);
+  useEffect(() => {
+    // Optionally redirect after a few seconds or based on some condition
+    // For now, let's just keep it as a success page with a link.
+    // You might want to get user info from query params or local storage here
+    // and store it in your auth context/store.
+    // Example: const token = new URLSearchParams(window.location.search).get('token');
+    // if (token) {
+    //   localStorage.setItem('jwtToken', token);
+    //   // Update auth state in your store
+    // }
+  }, []);
 
-    useEffect(() => {
-        // Dispatch getCurrentUser to fetch user data and update authentication status
-        dispatch(getCurrentUser());
-    }, [dispatch]);
-
-    useEffect(() => {
-        if (!loading) {
-            if (isAuthenticated) {
-                // Successfully authenticated, redirect to dashboard
-                router.push('/dashboard');
-            } else if (error) {
-                // Authentication failed or user not found, redirect to login with an error
-                router.push('/login?error=Social login failed');
-            } else {
-                // If not authenticated and no error, means getCurrentUser didn't return a user
-                // This might happen if cookies are not set correctly or token is invalid
-                router.push('/login?error=Authentication required');
-            }
-        }
-    }, [isAuthenticated, loading, error, router]);
-
-    return (
-        <div className="min-h-screen flex items-center justify-center bg-base-200">
-            <div className="text-center p-8 bg-base-100 shadow-xl rounded-lg">
-                <span className="loading loading-spinner loading-lg text-primary mb-4"></span>
-                <h2 className="text-2xl font-semibold text-base-content">
-                    Authenticating you...
-                </h2>
-                <p className="text-base-content/70 mt-2">Please wait while we log you in.</p>
-            </div>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-base-200">
+      <div className="card w-full max-w-md bg-base-100 shadow-xl">
+        <div className="card-body items-center text-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="stroke-current shrink-0 h-12 w-12 text-success"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <h2 className="card-title text-success mt-4">Authentication Successful!</h2>
+          <p className="text-sm text-base-content-secondary">
+            You have successfully logged in. You will be redirected shortly or click the button below.
+          </p>
+          <div className="card-actions justify-end mt-6">
+            <Link href="/" className="btn btn-primary">
+              Go to Home Page
+            </Link>
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 }

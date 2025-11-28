@@ -1,7 +1,7 @@
 import { Clock } from 'lucide-react';
 import Image from 'next/image';
 
-export default function ArticleCard({ post }) {
+export default function ArticleCard({ post, priority = false }) {
     // Display a loading state if the post is not yet available
     if (!post) {
         return (
@@ -30,7 +30,8 @@ export default function ArticleCard({ post }) {
                         alt={title}
                         width={400}
                         height={300}
-                        loading="lazy"
+                        priority={priority}
+                        unoptimized
                         className="w-full h-48 sm:h-56 md:h-64 object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                 </a>

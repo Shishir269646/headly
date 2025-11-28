@@ -56,8 +56,8 @@ export default function CommentItem({ comment, depth = 0, maxDepth = 5 }) {
     }
 
     return (
-        <div className={`comment-item ${depth > 0 ? 'ml-8 mt-4 border-l-2 border-gray-200 dark:border-gray-700 pl-4' : ''}`}>
-            <div className="flex gap-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm">
+        <div className={`comment-item ${depth > 0 ? 'ml-8 mt-4 border-l-2 border-base-content pl-4' : ''}`}>
+            <div className="flex gap-4 p-4 bg-base-content rounded-lg shadow-sm">
                 {/* Avatar */}
                 <div className="avatar shrink-0">
                     <div className="w-12 h-12 rounded-full">
@@ -69,13 +69,13 @@ export default function CommentItem({ comment, depth = 0, maxDepth = 5 }) {
                 <div className="flex-1 min-w-0">
                     {/* Author info */}
                     <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <span className="font-semibold text-gray-900 dark:text-white">
+                        <span className="font-semibold text-base-content">
                             {authorName}
                         </span>
                         {comment.author && (
                             <span className="badge badge-sm badge-primary">Member</span>
                         )}
-                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                        <span className="text-sm text-base-content/70">
                             {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                         </span>
                         {comment.isEdited && (
@@ -84,7 +84,7 @@ export default function CommentItem({ comment, depth = 0, maxDepth = 5 }) {
                     </div>
 
                     {/* Comment body */}
-                    <div className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap mb-3">
+                    <div className="text-base-content text-sm whitespace-pre-wrap mb-3">
                         {comment.body}
                     </div>
 
@@ -92,7 +92,7 @@ export default function CommentItem({ comment, depth = 0, maxDepth = 5 }) {
                     <div className="flex items-center gap-4 flex-wrap">
                         <button
                             onClick={handleLike}
-                            className="btn btn-xs btn-ghost text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
+                            className="btn btn-xs btn-ghost text-base-content hover:text-blue-600"
                             disabled={loading}
                         >
                             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,7 +104,7 @@ export default function CommentItem({ comment, depth = 0, maxDepth = 5 }) {
                         {depth < maxDepth && (
                             <button
                                 onClick={() => setShowReplyForm(!showReplyForm)}
-                                className="btn btn-xs btn-ghost text-blue-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-blue-400"
+                                className="btn btn-xs btn-ghost text-base-content/30 hover:bg-gray-100"
                             >
                                 Reply
                             </button>
@@ -113,7 +113,7 @@ export default function CommentItem({ comment, depth = 0, maxDepth = 5 }) {
                         {isOwner && (
                             <button
                                 onClick={handleDelete}
-                                className="btn btn-xs btn-ghost text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-red-400"
+                                className="btn btn-xs btn-ghost text-base-content/80 hover:bg-base-300 hover:text-red-600"
                                 disabled={isDeleting}
                             >
                                 {isDeleting ? 'Deleting...' : 'Delete'}
@@ -123,7 +123,7 @@ export default function CommentItem({ comment, depth = 0, maxDepth = 5 }) {
                         {comment.replies && comment.replies.length > 0 && (
                             <button
                                 onClick={() => setShowReplies(!showReplies)}
-                                className="btn btn-xs btn-ghost text-gray-600 dark:text-gray-400"
+                                className="btn btn-xs btn-ghost text-base-content/80"
                             >
                                 {showReplies ? 'Hide' : 'Show'} {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}
                             </button>
@@ -132,7 +132,7 @@ export default function CommentItem({ comment, depth = 0, maxDepth = 5 }) {
 
                     {/* Reply form */}
                     {showReplyForm && (
-                        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <div className="mt-4 pt-4 border-t border-base-content/20">
                             <CommentForm
                                 contentId={comment.content}
                                 parentId={comment._id}

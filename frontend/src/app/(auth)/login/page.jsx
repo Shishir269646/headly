@@ -218,8 +218,8 @@ export default function LoginPage() {
                     <div>
                         <p className="font-medium text-sm">Demo Credentials</p>
                         <p className="text-xs">
-                            Email: admin@headly.app<br />
-                            Password: admin123456
+                            Email: mjshishirf@gmail.com<br />
+                            Password: Admin@123
                         </p>
                     </div>
                 </div>

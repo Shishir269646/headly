@@ -81,8 +81,8 @@ export default function TagPage() {
                                 Latest Articles
                             </h2>
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {articles.map((article) => (
-                                    <ArticleCard key={article._id} post={article} />
+                                {articles.map((article, index) => (
+                                    <ArticleCard key={article._id} post={article} priority={index < 3} />
                                 ))}
                             </div>
                         </>
