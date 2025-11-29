@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { useContent } from '@/hooks/useContent';
 import { useCategories } from '@/hooks/useCategories';
+import { useUser } from '@/hooks/useUser'; // Import useUser
 
 import FeaturedContentGrid from '@/components/ui/FeaturedContentGrid';
 import TrendingSection from '@/components/ui/TrendingSection';
@@ -24,6 +25,7 @@ export default function Home() {
     } = useContent();
     
     const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
+    const { users, loading: usersLoading, error: usersError } = useUser(); // Fetch all users
 
     useEffect(() => {
         // Fetch all the data on component mount
@@ -33,8 +35,8 @@ export default function Home() {
         getTrending();
     }, []); // Empty dependency array - only run once on mount
 
-    const loading = contentLoading || categoriesLoading;
-    const error = contentError || categoriesError;
+    const loading = contentLoading || categoriesLoading || usersLoading;
+    const error = contentError || categoriesError || usersError;
 
     if (loading) {
         return <div>Loading...</div>;
@@ -50,11 +52,11 @@ export default function Home() {
             <div className="grid lg:grid-cols-3 gap-6 mb-12">
                 {/* Large Featured Post */}
                 <div className="lg:col-span-2">
-                    <FeaturedContentGrid posts={featured} />
+                    <FeaturedContentGrid posts={featured} allCategories={categories} allAuthors={users} />
                 </div>
 
                 {/* Trending Posts */}
-                <TrendingSection posts={trending} />
+                <TrendingSection posts={trending} allCategories={categories} allAuthors={users} />
             </div>
 
             {/* Latest Posts Section */}
@@ -66,7 +68,13 @@ export default function Home() {
                     </h3>
                     <div className="grid sm:grid-cols-2 gap-6">
                         {latest.map((post, index) => (
-                            <ArticleCard key={post._id} post={post} priority={index < 2} />
+                            <ArticleCard
+                                key={post._id}
+                                post={post}
+                                priority={index < 2}
+                                allCategories={categories}
+                                allAuthors={users}
+                            />
                         ))}
                     </div>
                 </div>

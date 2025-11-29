@@ -3,7 +3,7 @@
 import { TrendingUp } from 'lucide-react';
 import TrendingPostCard from './TrendingPostCard';
 
-export default function TrendingSection({ posts }) {
+export default function TrendingSection({ posts, allCategories = [], allAuthors = [] }) {
     // Display a loading state if posts are not yet available
     if (!posts || posts.length === 0) {
         return (
@@ -33,7 +33,7 @@ export default function TrendingSection({ posts }) {
                 <h3 className="text-xl font-bold dark:text-white">Trending Now</h3>
             </div>
             {posts.map((post) => (
-                <TrendingPostCard key={post._id} post={post} />
+                <TrendingPostCard key={post._id} post={post} allCategories={allCategories} allAuthors={allAuthors} />
             ))}
         </div>
     );

@@ -1,8 +1,10 @@
 "use client";
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link'; // Import Link
+import { generateSlug } from '../../libs/utils'; // Import generateSlug
 
-const FeaturedContentGrid = ({ posts }) => {
+const FeaturedContentGrid = ({ posts, allCategories = [], allAuthors = [] }) => {
     // Display a loading state if posts are not yet available
     if (!posts || posts.length === 0) {
         return (
@@ -27,7 +29,67 @@ const FeaturedContentGrid = ({ posts }) => {
     // Use the first post from the array as the featured post
     const featuredPost = posts[0];
 
-    console.log("post", featuredPost.author)
+    // Resolve category details
+    let displayCategoryName = '';
+    let displayCategorySlug = '';
+    if (typeof featuredPost.category === 'object' && featuredPost.category !== null) {
+        displayCategoryName = featuredPost.category.name;
+        displayCategorySlug = featuredPost.category.slug;
+    } else if (typeof featuredPost.category === 'string') {
+        const foundCategory = allCategories.find(cat => cat._id === featuredPost.category || cat.name === featuredPost.category);
+        if (foundCategory) {
+            displayCategoryName = foundCategory.name;
+            displayCategorySlug = foundCategory.slug;
+        } else {
+            // Fallback if not found in allCategories (e.g., if category is a raw name string)
+            displayCategoryName = featuredPost.category;
+            displayCategorySlug = generateSlug(featuredPost.category);
+        }
+    } else if (featuredPost.categories && featuredPost.categories.length > 0) { // For old `categories` array if still present
+        const categoryItem = featuredPost.categories[0];
+        if (typeof categoryItem === 'object' && categoryItem !== null) {
+             displayCategoryName = categoryItem.name;
+             displayCategorySlug = categoryItem.slug;
+        } else if (typeof categoryItem === 'string') {
+            const foundCategory = allCategories.find(cat => cat._id === categoryItem || cat.name === categoryItem);
+            if (foundCategory) {
+                displayCategoryName = foundCategory.name;
+                displayCategorySlug = foundCategory.slug;
+            } else {
+                displayCategoryName = categoryItem;
+                displayCategorySlug = generateSlug(categoryItem);
+            }
+        }
+    }
+
+
+    // Resolve author details
+    let displayAuthorName = '';
+    let displayAuthorId = '';
+    let displayAuthorSlug = '';
+    let displayAuthorImage = featuredPost.author?.image?.url;
+
+    if (typeof featuredPost.author === 'object' && featuredPost.author !== null) {
+        displayAuthorName = featuredPost.author.name;
+        displayAuthorId = featuredPost.author._id;
+        // Assuming author object has a slug, if not, create one from name
+        displayAuthorSlug = featuredPost.author.slug || generateSlug(featuredPost.author.name);
+        displayAuthorImage = featuredPost.author.image?.url;
+    } else if (typeof featuredPost.author === 'string') {
+        const foundAuthor = allAuthors.find(auth => auth._id === featuredPost.author);
+        if (foundAuthor) {
+            displayAuthorName = foundAuthor.name;
+            displayAuthorId = foundAuthor._id;
+            displayAuthorSlug = foundAuthor.slug || generateSlug(foundAuthor.name);
+            displayAuthorImage = foundAuthor.image?.url;
+        } else {
+            // Fallback if not found in allAuthors
+            displayAuthorName = 'Unknown Author';
+            displayAuthorId = featuredPost.author;
+            displayAuthorSlug = generateSlug('Unknown Author'); // Placeholder slug
+            displayAuthorImage = null;
+        }
+    }
 
     return (
         <section className="mb-8 px-4 bg-white dark:bg-gray-900">
@@ -53,48 +115,48 @@ const FeaturedContentGrid = ({ posts }) => {
                         <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
                             <div className="space-y-4">
                                 {/* Category Badge */}
-                                {featuredPost.categories && featuredPost.categories.length > 0 && (
+                                {displayCategoryName && displayCategorySlug && (
                                     <div className="flex items-center gap-2">
-                                        <span className="bg-blue-500 text-white px-4 py-1.5 rounded-md text-sm font-normal uppercase tracking-wider hover:opacity-90 transition-opacity cursor-pointer">
-                                            {featuredPost.categories[0]}
-                                        </span>
+                                        <Link href={`/categories/${displayCategorySlug}`} className="bg-blue-500 text-white px-4 py-1.5 rounded-md text-sm font-normal uppercase tracking-wider hover:opacity-90 transition-opacity">
+                                            {displayCategoryName}
+                                        </Link>
                                     </div>
                                 )}
 
                                 {/* Title */}
-                                <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight hover:text-gray-200 transition-colors cursor-pointer">
-                                    <a href={`/${featuredPost.slug}`} className="block">
+                                <h2 className="text-white text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight hover:text-gray-200 transition-colors">
+                                    <Link href={`/${featuredPost.slug}`} className="block">
                                         {featuredPost.title}
-                                    </a>
+                                    </Link>
                                 </h2>
 
                                 {/* Meta Information */}
                                 <div className="flex items-center gap-4 text-gray-200">
                                     {/* Author */}
-                                    {featuredPost.author && (
-                                        
+                                    {displayAuthorName && displayAuthorId && (
                                         <div className="flex items-center gap-2">
-                                            <Image
-                                                src={featuredPost?.author.image?.url}
-                                                alt={featuredPost?.author?.name}
-                                                width={40}
-                                                height={40}
-                                                loading="lazy"
-                                                unoptimized
-                                                className="w-8 h-8 rounded-full border-2 border-white/50"
-                                            />
-
-                                            <a
-                                                href={`/author/${featuredPost.author.slug}`}
+                                            {displayAuthorImage && (
+                                                <Image
+                                                    src={displayAuthorImage}
+                                                    alt={displayAuthorName}
+                                                    width={40}
+                                                    height={40}
+                                                    loading="lazy"
+                                                    unoptimized
+                                                    className="w-8 h-8 rounded-full border-2 border-white/50"
+                                                />
+                                            )}
+                                            <Link
+                                                href={`/authors/${displayAuthorId}`}
                                                 className="text-sm font-medium hover:text-white transition-colors"
                                             >
-                                                {featuredPost.author.name}
-                                            </a>
+                                                {displayAuthorName}
+                                            </Link>
                                         </div>
                                     )}
 
                                     {/* Separator */}
-                                    {featuredPost.author && <span className="text-gray-400">•</span>}
+                                    {displayAuthorName && <span>•</span>}
 
                                     {/* Date */}
                                     <time className="text-sm">
