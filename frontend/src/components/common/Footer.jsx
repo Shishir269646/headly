@@ -6,9 +6,9 @@ export default function Footer() {
             <nav>
                 <h6 className="footer-title">Services</h6>
                 <Link href="/" className="link link-hover">Articles</Link>
-                <Link href="/" className="link link-hover">Popular Posts</Link>
-                <Link href="/" className="link link-hover">Trending</Link>
-                <Link href="/" className="link link-hover">Featured</Link>
+                <Link href="/popular-content" className="link link-hover">Popular Posts</Link>
+                <Link href="/trending-content" className="link link-hover">Trending</Link>
+                
             </nav>
             <nav>
                 <h6 className="footer-title">Company</h6>

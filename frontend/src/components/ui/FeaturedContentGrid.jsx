@@ -9,12 +9,12 @@ const FeaturedContentGrid = ({ posts, allCategories = [], allAuthors = [] }) => 
     if (!posts || posts.length === 0) {
         return (
             <div className="animate-pulse">
-                <div className="relative overflow-hidden rounded-lg shadow-xl h-[600px] dark:bg-gray-900">
+                <div className="relative overflow-hidden rounded-lg shadow-xl h-[600px]">
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
                     <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
                         <div className="space-y-4">
-                            <div className="bg-gray-400 dark:bg-gray-600 h-6 w-24 rounded-md"></div>
-                            <div className="bg-gray-400 dark:bg-gray-600 h-8 w-3/4 rounded-md"></div>
+                            <div className="bg-base-content h-6 w-24 rounded-md"></div>
+                            <div className="bg-accent-content h-8 w-3/4 rounded-md"></div>
                             <div className="flex items-center gap-4">
                                 <div className="bg-gray-400 dark:bg-gray-600 h-8 w-8 rounded-full"></div>
                                 <div className="bg-gray-400 dark:bg-gray-600 h-4 w-20 rounded-md"></div>
@@ -48,8 +48,8 @@ const FeaturedContentGrid = ({ posts, allCategories = [], allAuthors = [] }) => 
     } else if (featuredPost.categories && featuredPost.categories.length > 0) { // For old `categories` array if still present
         const categoryItem = featuredPost.categories[0];
         if (typeof categoryItem === 'object' && categoryItem !== null) {
-             displayCategoryName = categoryItem.name;
-             displayCategorySlug = categoryItem.slug;
+            displayCategoryName = categoryItem.name;
+            displayCategorySlug = categoryItem.slug;
         } else if (typeof categoryItem === 'string') {
             const foundCategory = allCategories.find(cat => cat._id === categoryItem || cat.name === categoryItem);
             if (foundCategory) {
@@ -92,7 +92,7 @@ const FeaturedContentGrid = ({ posts, allCategories = [], allAuthors = [] }) => 
     }
 
     return (
-        <section className="mb-8 px-4 bg-white dark:bg-gray-900">
+        <section className="mb-8 px-4">
             <div className="max-w-7xl mx-auto">
                 <div className="relative group">
                     {/* Main Featured Article */}
@@ -100,7 +100,7 @@ const FeaturedContentGrid = ({ posts, allCategories = [], allAuthors = [] }) => 
                         {/* Background Image with Overlay */}
                         <div className="absolute inset-0">
                             <Image
-                                src={featuredPost.featuredImage?.url || 'https://via.placeholder.com/800x600'}
+                                src={featuredPost.featuredImage?.url}
                                 alt={featuredPost.title}
                                 width={800}
                                 height={600}

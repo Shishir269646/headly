@@ -21,6 +21,8 @@ export default function Header() {
                         <li><Link href="/about">About</Link></li>
                         <li><Link href="/archive">Archive</Link></li>
                         <li><Link href="/all-content">All Content</Link></li>
+                        <li><Link href="/popular-content">Popular</Link></li>
+                        <li><Link href="/trending-content">Trending</Link></li>
                         <li><Link href="/newsletter">Newsletter</Link></li>
                         <li><Link href="/contact">Contact</Link></li>
                         {isAuthenticated && isRoleViewer && (
@@ -37,6 +39,8 @@ export default function Header() {
                     <li><Link href="/about">About</Link></li>
                     <li><Link href="/archive">Archive</Link></li>
                         <li><Link href="/all-content">All Content</Link></li>
+                        <li><Link href="/popular-content">Popular</Link></li>
+                        <li><Link href="/trending-content">Trending</Link></li>
                     <li><Link href="/newsletter">Newsletter</Link></li>
                     <li><Link href="/contact">Contact</Link></li>
                     {isAuthenticated && isRoleViewer && (

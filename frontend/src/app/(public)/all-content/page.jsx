@@ -2,17 +2,16 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import { useContent } from "@/hooks/useContent";
-import { useUser } from "@/hooks/useUser"; // Import useUser
-import { useCategories } from "@/hooks/useCategories"; // Import useCategories
-import Link from "next/link";
+import { useUser } from "@/hooks/useUser";
+import { useCategories } from "@/hooks/useCategories";
 import { XCircle } from "lucide-react";
-import ArticleCard from '@/components/ui/ArticleCard'; // Import ArticleCard
-import ContentSearchBar from "@/components/ui/ContentSearchBar"; // Adjust path as needed
+import ArticleCard from '@/components/ui/ArticleCard';
+import ContentSearchBar from "@/components/ui/ContentSearchBar";
 
 const AllContentPage = () => {
   const { contents, loading, error, getContents } = useContent();
-  const { users } = useUser(); // Fetch users (authors)
-  const { categories } = useCategories(); // Fetch categories
+  const { users } = useUser();
+  const { categories } = useCategories();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedAuthorId, setSelectedAuthorId] = useState("");
@@ -30,7 +29,7 @@ const AllContentPage = () => {
     if (selectedCategorySlug) {
       filters.category = selectedCategorySlug;
     }
-    
+
     getContents(filters);
   }, [getContents, searchTerm, selectedAuthorId, selectedCategorySlug]);
 
