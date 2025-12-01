@@ -15,8 +15,8 @@ import {
     fetchLatestContents,
     fetchTrendingContents,
     clearError,
-    clearCurrentContent // This action is still used, but manually
-} from '@/store/slices/contentSlice'; // Assuming this is the correct path
+    clearCurrentContent
+} from '@/store/slices/contentSlice';
 
 export const useContent = (filters = null, contentId = null) => {
     const dispatch = useDispatch();
@@ -33,17 +33,14 @@ export const useContent = (filters = null, contentId = null) => {
         error
     } = useSelector((state) => state.content);
 
-    // Memoize filters to prevent unnecessary re-renders
     const memoizedFilters = useMemo(() => filters, [JSON.stringify(filters)]);
 
-    // --- Action Functions (returning .unwrap() for component use) ---
 
     const getContents = useCallback((filters) => {
         dispatch(fetchContents(filters));
     }, [dispatch]);
 
     const getContentBySlug = useCallback((slug) => {
-        // Return the thunk's promise (unwrapped result)
         return dispatch(fetchContentBySlug(slug)).unwrap();
     }, [dispatch]);
 
@@ -56,27 +53,24 @@ export const useContent = (filters = null, contentId = null) => {
     }, [dispatch]);
 
 
-    // --- useEffects ---
-
-    // 1. Effect for fetching the main content list
+  
+    
     useEffect(() => {
         if (memoizedFilters) {
             getContents(memoizedFilters);
         }
     }, [memoizedFilters, getContents]);
 
-    // 2. Effect for fetching a single content item by ID
-    // CRITICAL FIX: The cleanup function that called clearCurrentContent() has been REMOVED here.
-    // This prevents the state from being wiped right after the slug-based fetch completes.
+  
     useEffect(() => {
         if (contentId) {
             dispatch(fetchContentById(contentId));
         }
-        // NOTE: The automatic cleanup (return () => dispatch(clearCurrentContent());) 
-        // has been intentionally removed to fix the data going null issue.
+       
+        
     }, [dispatch, contentId]);
 
-    // --- Remaining CRUD Action Functions (Same as before) ---
+
 
     const create = useCallback((contentData) => {
         return dispatch(createContent(contentData)).unwrap();
@@ -142,6 +136,6 @@ export const useContent = (filters = null, contentId = null) => {
         getPopular,
         getTrending,
         clearError: clearErrorState,
-        clearCurrentContent: clearContentState // Now you must call this manually if needed
+        clearCurrentContent: clearContentState
     };
 };

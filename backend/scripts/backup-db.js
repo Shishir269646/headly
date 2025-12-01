@@ -16,22 +16,22 @@ const backupDatabase = () => {
     const mongoUri = process.env.MONGO_URI;
     const dbName = mongoUri.split('/').pop().split('?')[0];
 
-    console.log(`🔄 Starting database backup...`);
-    console.log(`📦 Database: ${dbName}`);
+    console.log(`Starting database backup...`);
+    console.log(`Database: ${dbName}`);
 
     const command = `mongodump --uri="${mongoUri}" --out="${backupPath}"`;
 
     exec(command, (error, stdout, stderr) => {
         if (error) {
-            console.error(`❌ Backup failed: ${error.message}`);
+            console.error(`Backup failed: ${error.message}`);
             return;
         }
         if (stderr) {
-            console.error(`⚠️  Warning: ${stderr}`);
+            console.error(`Warning: ${stderr}`);
         }
 
-        console.log(`✅ Backup completed successfully!`);
-        console.log(`📁 Backup location: ${backupPath}`);
+        console.log(`Backup completed successfully!`);
+        console.log(`Backup location: ${backupPath}`);
     });
 };
 

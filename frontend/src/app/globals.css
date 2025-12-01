@@ -27,6 +27,33 @@ body {
   background-color: #080c13 !important;
 }
 
-.text-white{
+.text-white {
   color: #FFFFFF !important;
 }
+
+
+/* 404 Text Shadow Effect */
+.shadow-404 {
+  text-shadow:
+    2px -1px 0 #000,
+    4px -2px 0 #333,
+    6px -3px 0 #444,
+    8px -4px 0 #555,
+    10px -5px 0 #666,
+    12px -6px 0 #777,
+    14px -7px 0 #888,
+    16px -8px 0 #999,
+    18px -9px 0 #aaa;
+}
+
+/* Moving gradient animation */
+@keyframes moveGradient {
+  to {
+    background-position: 100vmin 20vmin, -100vmin -25vmin;
+  }
+}
+
+.animate-moveGradient {
+  animation: moveGradient 10s linear infinite;
+}
+

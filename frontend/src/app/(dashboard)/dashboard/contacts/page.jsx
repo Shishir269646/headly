@@ -70,7 +70,7 @@ function ContactsPage() {
     );
 }
 
-// ... other components and functions
+
 
 function AuthWrapper() {
     const AuthenticatedContactsPage = withAuth(ContactsPage, ['admin']);

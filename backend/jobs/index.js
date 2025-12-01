@@ -24,5 +24,5 @@ exports.start = () => {
         }
     });
 
-    logger.info('✅ Cron jobs scheduled');
+    logger.info('Cron jobs scheduled');
 };

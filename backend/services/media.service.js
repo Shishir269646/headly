@@ -67,7 +67,7 @@ exports.uploadMedia = async (file, userId, metadata = {}) => {
         if (process.env.AWS_S3_BUCKET_NAME && process.env.AWS_REGION && 
             process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
             try {
-                // Upload to S3 (no ACL to support BucketOwnerEnforced)
+                // Upload to S3 
                 const params = {
                     Bucket: process.env.AWS_S3_BUCKET_NAME,
                     Key: key,

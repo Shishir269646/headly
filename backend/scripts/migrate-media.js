@@ -13,7 +13,7 @@ const migrateMediaToCloudinary = async () => {
             cloudinaryId: { $exists: false }
         });
 
-        console.log(`📦 Found ${mediaToMigrate.length} media files to migrate`);
+        console.log(`Found ${mediaToMigrate.length} media files to migrate`);
 
         let migrated = 0;
         let failed = 0;
@@ -37,7 +37,7 @@ const migrateMediaToCloudinary = async () => {
                 console.log(`✅ Migrated: ${media.originalName}`);
             } catch (error) {
                 failed++;
-                console.error(`❌ Failed to migrate ${media.originalName}:`, error.message);
+                console.error(`Failed to migrate ${media.originalName}:`, error.message);
             }
         }
 

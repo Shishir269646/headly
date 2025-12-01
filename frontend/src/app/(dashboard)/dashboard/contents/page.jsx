@@ -1,8 +1,3 @@
-// ============================================
-// 📄 app/(dashboard)/dashboard/contents/page.js
-// Contents List Page
-// ============================================
-
 'use client';
 
 

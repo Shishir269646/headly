@@ -6,7 +6,7 @@ const WebhookLog = require('../src/models/WebhookLog.model');
 const cleanupOldLogs = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log('✅ Connected to MongoDB');
+        console.log('Connected to MongoDB');
 
         // Delete audit logs older than 90 days
         const ninetyDaysAgo = new Date();
@@ -16,7 +16,7 @@ const cleanupOldLogs = async () => {
             createdAt: { $lt: ninetyDaysAgo }
         });
 
-        console.log(`🗑️  Deleted ${deletedAuditLogs.deletedCount} old audit logs`);
+        console.log(`Deleted ${deletedAuditLogs.deletedCount} old audit logs`);
 
         // Delete webhook logs older than 30 days
         const thirtyDaysAgo = new Date();
@@ -27,12 +27,12 @@ const cleanupOldLogs = async () => {
             status: 'success' // Keep failed logs for debugging
         });
 
-        console.log(`🗑️  Deleted ${deletedWebhookLogs.deletedCount} old webhook logs`);
+        console.log(`Deleted ${deletedWebhookLogs.deletedCount} old webhook logs`);
 
-        console.log('✅ Cleanup completed!');
+        console.log('Cleanup completed!');
         process.exit(0);
     } catch (error) {
-        console.error('❌ Cleanup error:', error.message);
+        console.error('Cleanup error:', error.message);
         process.exit(1);
     }
 };

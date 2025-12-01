@@ -86,9 +86,7 @@ router.post(
     contentController.scheduleContent
 );
 
-// ============================================
-// HOMEPAGE FLAGS (Editors and above)
-// ============================================
+
 
 // Update content flags (Featured, Popular, etc.)
 router.put(

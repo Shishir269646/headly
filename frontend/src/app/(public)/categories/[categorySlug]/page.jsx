@@ -12,7 +12,6 @@ export default function CategoryContentPage() {
 
     useEffect(() => {
         if (categorySlug) {
-            // Assuming the backend can filter by category slug or name if slug is not available
             getContents({ category: categorySlug });
         }
     }, [categorySlug, getContents]);

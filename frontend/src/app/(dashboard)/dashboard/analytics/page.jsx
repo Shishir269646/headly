@@ -73,7 +73,7 @@ function AnalyticsPage() {
   );
 }
 
-// ... other components and functions
+
 
 function AuthWrapper() {
     const AuthenticatedAnalyticsPage = withAuth(AnalyticsPage, ['admin', 'editor']);

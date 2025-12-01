@@ -18,11 +18,11 @@ export default function TrendingPostCard({ post, allCategories = [], allAuthors 
             displayCategoryName = foundCategory.name;
             displayCategorySlug = foundCategory.slug;
         } else {
-            // Fallback if not found in allCategories (e.g., if category is a raw name string)
+            
             displayCategoryName = category;
             displayCategorySlug = generateSlug(category);
         }
-    } else if (post.categories && post.categories.length > 0) { // For old `categories` array if still present
+    } else if (post.categories && post.categories.length > 0) {
         const categoryItem = post.categories[0];
         if (typeof categoryItem === 'object' && categoryItem !== null) {
              displayCategoryName = categoryItem.name;

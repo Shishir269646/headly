@@ -1,7 +1,3 @@
-// ============================================
-// 📄 app/(auth)/login/page.js - Login Page
-// ============================================
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -51,7 +47,7 @@ export default function LoginPage() {
         const result = await dispatch(login(formData));
 
         if (result.type === 'auth/login/fulfilled') {
-            // Save email if remember me is checked
+
             if (rememberMe) {
                 localStorage.setItem('rememberedEmail', formData.email);
             } else {

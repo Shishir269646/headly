@@ -6,7 +6,6 @@ const logger = require('../utils/logger');
 
 /**
  * Subscribe to newsletter
- * POST /api/v1/newsletter/subscribe
  */
 exports.subscribe = catchAsync(async (req, res) => {
     // Add metadata if available
@@ -32,7 +31,6 @@ exports.subscribe = catchAsync(async (req, res) => {
 
 /**
  * Confirm newsletter subscription
- * GET /api/v1/newsletter/confirm/:token
  */
 exports.confirmSubscription = catchAsync(async (req, res) => {
     const subscription = await newsletterService.confirmSubscription(req.params.token);
@@ -47,7 +45,6 @@ exports.confirmSubscription = catchAsync(async (req, res) => {
 
 /**
  * Unsubscribe from newsletter
- * POST /api/v1/newsletter/unsubscribe
  */
 exports.unsubscribe = catchAsync(async (req, res) => {
     const subscription = await newsletterService.unsubscribe(req.body.email);
@@ -62,7 +59,6 @@ exports.unsubscribe = catchAsync(async (req, res) => {
 
 /**
  * Get all newsletter subscribers (admin only)
- * GET /api/v1/newsletter/subscribers
  */
 exports.getSubscribers = catchAsync(async (req, res) => {
     const { status, confirmed, page, limit, sortBy } = req.query;
@@ -80,7 +76,6 @@ exports.getSubscribers = catchAsync(async (req, res) => {
 
 /**
  * Get a single subscriber by ID (admin only)
- * GET /api/v1/newsletter/subscribers/:id
  */
 exports.getSubscriberById = catchAsync(async (req, res) => {
     const subscriber = await newsletterService.getSubscriberById(req.params.id);
@@ -90,7 +85,6 @@ exports.getSubscriberById = catchAsync(async (req, res) => {
 
 /**
  * Delete a subscriber (admin only)
- * DELETE /api/v1/newsletter/subscribers/:id
  */
 exports.deleteSubscriber = catchAsync(async (req, res) => {
     await newsletterService.deleteSubscriber(req.params.id);
@@ -100,7 +94,6 @@ exports.deleteSubscriber = catchAsync(async (req, res) => {
 
 /**
  * Update subscriber preferences
- * PATCH /api/v1/newsletter/preferences/:email
  */
 exports.updatePreferences = catchAsync(async (req, res) => {
     const subscription = await newsletterService.updatePreferences(

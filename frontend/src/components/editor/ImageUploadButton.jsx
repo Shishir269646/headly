@@ -27,13 +27,11 @@ export default function ImageUploadButton({ editor }) {
         }
 
         try {
-            // Upload with proper metadata following backend requirements
             const result = await upload(file, {
                 folder: 'content-images',
                 alt: 'Content Image'
             });
 
-            // Handle Redux thunk response structure
             const media = result.payload || result;
             
             if (media && media.url) {
@@ -47,7 +45,7 @@ export default function ImageUploadButton({ editor }) {
             toast.error(errorMessage);
             console.error('Image upload error:', error);
         } finally {
-            // Reset input to allow uploading the same file again
+
             if (fileInputRef.current) {
                 fileInputRef.current.value = '';
             }

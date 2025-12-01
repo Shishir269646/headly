@@ -1,8 +1,23 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
+import { useCategories } from '@/hooks/useCategories';
 
-export default function SidebarCategories({ categories }) {
+export default function SidebarCategories() {
+    const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
+
+    const loading = categoriesLoading;
+    const error = categoriesError;
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
+
+
     if (!categories || categories.length === 0) {
         return (
             <div className="card bg-base-200 shadow-lg mb-8">

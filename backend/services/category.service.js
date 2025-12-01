@@ -32,11 +32,11 @@ exports.getAllCategories = async () => {
         },
         {
             $project: {
-                content: 0 // Exclude the 'content' array from the final output
+                content: 0 
             }
         },
         {
-            $sort: { name: 1 } // Sort by name alphabetically
+            $sort: { name: 1 }
         }
     ]);
 
@@ -82,11 +82,7 @@ exports.deleteCategory = async (categoryId) => {
         throw new ApiError(404, 'Category not found');
     }
 
-    // Optional: Check if any content is using this category before deletion
-    // const contentCount = await Content.countDocuments({ category: categoryId });
-    // if (contentCount > 0) {
-    //     throw new ApiError(400, `Cannot delete category. It is currently assigned to ${contentCount} content item(s).`);
-    // }
+    
 
     await category.deleteOne();
 };

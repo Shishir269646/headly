@@ -25,10 +25,9 @@ export default function ViewerLayout({ children }) {
         );
     }
     
-    // If the user is not a viewer, redirect them away.
-    // This adds an extra layer of protection for this layout.
+
     if (user.role !== 'viewer') {
-        router.replace('/dashboard'); // Or any other appropriate page
+        router.replace('/dashboard');
         return null;
     }
 

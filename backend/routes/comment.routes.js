@@ -12,9 +12,6 @@ const {
     toggleLikeSchema
 } = require('../validators/comment.validator');
 
-// ============================================
-// PUBLIC ROUTES
-// ============================================
 
 // Get comments for a content (public, but can filter by status)
 router.get('/content/:contentId', optionalAuth, commentController.getCommentsByContent);
@@ -25,9 +22,6 @@ router.get('/content/:contentId/count', optionalAuth, commentController.getComme
 // Get comment by ID
 router.get('/:id', optionalAuth, commentController.getCommentById);
 
-// ============================================
-// AUTHENTICATED ROUTES
-// ============================================
 
 // Create a comment (authenticated or guest)
 router.post(
@@ -68,9 +62,6 @@ router.post(
     commentController.toggleLike
 );
 
-// ============================================
-// ADMIN/EDITOR ROUTES
-// ============================================
 
 // Get all comments (for dashboard)
 router.get(

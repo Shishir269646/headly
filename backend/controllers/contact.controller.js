@@ -6,7 +6,6 @@ const logger = require('../utils/logger');
 
 /**
  * Create a new contact form submission
- * POST /api/v1/contact
  */
 exports.createContact = catchAsync(async (req, res) => {
     const contact = await contactService.createContact(req.body);
@@ -21,7 +20,6 @@ exports.createContact = catchAsync(async (req, res) => {
 
 /**
  * Get all contact submissions (admin only)
- * GET /api/v1/contact
  */
 exports.getContacts = catchAsync(async (req, res) => {
     const { status, read, page, limit, sortBy } = req.query;
@@ -39,7 +37,6 @@ exports.getContacts = catchAsync(async (req, res) => {
 
 /**
  * Get a single contact by ID (admin only)
- * GET /api/v1/contact/:id
  */
 exports.getContactById = catchAsync(async (req, res) => {
     const contact = await contactService.getContactById(req.params.id);
@@ -49,7 +46,6 @@ exports.getContactById = catchAsync(async (req, res) => {
 
 /**
  * Update contact (admin only)
- * PATCH /api/v1/contact/:id
  */
 exports.updateContact = catchAsync(async (req, res) => {
     const contact = await contactService.updateContact(
@@ -62,7 +58,6 @@ exports.updateContact = catchAsync(async (req, res) => {
 
 /**
  * Delete a contact (admin only)
- * DELETE /api/v1/contact/:id
  */
 exports.deleteContact = catchAsync(async (req, res) => {
     await contactService.deleteContact(req.params.id);
@@ -82,7 +77,6 @@ exports.markAsRead = catchAsync(async (req, res) => {
 
 /**
  * Update contact status (admin only)
- * PATCH /api/v1/contact/:id/status
  */
 exports.updateStatus = catchAsync(async (req, res) => {
     const { status } = req.body;

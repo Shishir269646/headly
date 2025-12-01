@@ -5,7 +5,6 @@ const { successResponse } = require('../utils/responses');
 
 /**
  * Get all analytics data (admin only)
- * GET /api/v1/analytics?period=30
  */
 exports.getAnalytics = async (req, res) => {
     const period = req.query.period ? parseInt(req.query.period, 10) : 30;

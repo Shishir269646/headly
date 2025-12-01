@@ -1,10 +1,35 @@
 'use client';
 
-import React from 'react';
-import { Map, Home, FileText, Users, Mail, Calendar } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Map, Home, FileText, Users, Mail, Calendar, Tag } from 'lucide-react';
 import Link from 'next/link';
+import axios from '@/libs/axios';
+import { toast } from 'react-hot-toast';
 
 export default function SitemapPage() {
+    const [sitemapData, setSitemapData] = useState({
+        categories: [],
+        contents: [],
+        popularTags: [],
+    });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchSitemapData = async () => {
+            try {
+                setLoading(true);
+                const response = await axios.get('/sitemap');
+                setSitemapData(response.data.data);
+            } catch (error) {
+                toast.error('Failed to fetch sitemap data.');
+                console.error('Sitemap fetch error:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchSitemapData();
+    }, []);
+
     const siteSections = [
         {
             icon: Home,
@@ -12,7 +37,8 @@ export default function SitemapPage() {
             links: [
                 { href: '/', label: 'Home' },
                 { href: '/about', label: 'About Us' },
-                { href: '/contact', label: 'Contact' }
+                { href: '/contact', label: 'Contact' },
+                { href: '/newsletter', label: 'Newsletter' }
             ]
         },
         {
@@ -21,41 +47,28 @@ export default function SitemapPage() {
             links: [
                 { href: '/search', label: 'Search' },
                 { href: '/archive', label: 'Archive' },
-                { href: '/newsletter', label: 'Newsletter' }
+                { href: '/sitemap', label: 'Sitemap' }
             ]
         },
         {
             icon: Users,
-            title: 'Resources',
+            title: 'User & Legal',
             links: [
                 { href: '/terms', label: 'Terms of Service' },
                 { href: '/privacy', label: 'Privacy Policy' },
-                { href: '/sitemap', label: 'Sitemap' }
+                { href: '/login', label: 'Login' },
+                { href: '/register', label: 'Register' },
             ]
         }
     ];
 
-    const categories = [
-        { href: '/category/technology', label: 'Technology' },
-        { href: '/category/business', label: 'Business' },
-        { href: '/category/design', label: 'Design' },
-        { href: '/category/science', label: 'Science' },
-        { href: '/category/lifestyle', label: 'Lifestyle' }
-    ];
-
-    const popularTags = [
-        { href: '/tag/react', label: '#react' },
-        { href: '/tag/javascript', label: '#javascript' },
-        { href: '/tag/design', label: '#design' },
-        { href: '/tag/innovation', label: '#innovation' },
-        { href: '/tag/web-development', label: '#webdev' }
-    ];
-
-    const recentMonths = [
-        { href: '/archive/2024/July', label: 'July 2024' },
-        { href: '/archive/2024/June', label: 'June 2024' },
-        { href: '/archive/2024/May', label: 'May 2024' }
-    ];
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-base-100">
+                <span className="loading loading-spinner loading-lg text-primary"></span>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-base-100">
@@ -114,13 +127,13 @@ export default function SitemapPage() {
                                 <h2 className="text-2xl font-bold">Categories</h2>
                             </div>
                             <div className="flex flex-wrap gap-3">
-                                {categories.map((category, index) => (
+                                {sitemapData.categories.map((category, index) => (
                                     <Link
                                         key={index}
-                                        href={category.href}
+                                        href={`/category/${category.slug}`}
                                         className="btn btn-outline btn-sm"
                                     >
-                                        {category.label}
+                                        {category.name}
                                     </Link>
                                 ))}
                             </div>
@@ -131,64 +144,47 @@ export default function SitemapPage() {
                     <div className="card bg-base-200 shadow-lg mb-8">
                         <div className="card-body">
                             <div className="flex items-center gap-3 mb-4">
-                                <FileText className="w-6 h-6 text-accent" />
+                                <Tag className="w-6 h-6 text-accent" />
                                 <h2 className="text-2xl font-bold">Popular Tags</h2>
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                {popularTags.map((tag, index) => (
+                                {sitemapData.popularTags.map((tag, index) => (
                                     <Link
                                         key={index}
-                                        href={tag.href}
+                                        href={`/tag/${tag.slug}`}
                                         className="badge badge-lg badge-outline"
                                     >
-                                        {tag.label}
+                                        {tag.name}
                                     </Link>
                                 ))}
                             </div>
                         </div>
                     </div>
 
-                    {/* Recent Archives */}
+                    {/* Recent Contents */}
                     <div className="card bg-base-200 shadow-lg mb-8">
                         <div className="card-body">
                             <div className="flex items-center gap-3 mb-4">
                                 <Calendar className="w-6 h-6 text-primary" />
-                                <h2 className="text-2xl font-bold">Recent Archives</h2>
+                                <h2 className="text-2xl font-bold">Recent Contents</h2>
                             </div>
                             <div className="space-y-2">
-                                {recentMonths.map((month, index) => (
+                                {sitemapData.contents.map((content, index) => (
                                     <Link
                                         key={index}
-                                        href={month.href}
+                                        href={`/${content.slug}`}
                                         className="block p-3 rounded-lg bg-base-100 hover:bg-base-300 transition-colors"
                                     >
-                                        {month.label}
+                                        {content.title}
                                     </Link>
                                 ))}
-                            </div>
-                            <div className="mt-4">
-                                <Link href="/archive" className="btn btn-sm btn-primary">
-                                    View All Archives
-                                </Link>
                             </div>
                         </div>
                     </div>
 
-                    {/* Search Section */}
-                    <div className="card bg-gradient-to-br from-primary/10 to-transparent shadow-xl">
-                        <div className="card-body text-center">
-                            <h2 className="text-2xl font-bold mb-4">Find What You're Looking For?</h2>
-                            <p className="text-base-content/70 mb-6">
-                                Use our search functionality to quickly find articles, topics, and more
-                            </p>
-                            <Link href="/search" className="btn btn-primary btn-lg">
-                                Search Content
-                            </Link>
-                        </div>
-                    </div>
+                    
                 </div>
             </section>
         </div>
     );
 }
-

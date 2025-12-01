@@ -21,7 +21,6 @@ export default function Footer() {
                 <h6 className="footer-title">Resources</h6>
                 <Link href="/archive" className="link link-hover">Archive</Link>
                 <Link href="/newsletter" className="link link-hover">Newsletter</Link>
-                <Link href="/search" className="link link-hover">Search</Link>
                 <Link href="/sitemap" className="link link-hover">Sitemap</Link>
             </nav>
             <nav>

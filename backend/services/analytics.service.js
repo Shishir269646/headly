@@ -13,15 +13,6 @@ const logger = require('../utils/logger');
 
 
 
-/**
-
- * Generates a date query object for aggregations based on a specified period.
-
- * @param {number} period - The number of days for the range. 0 or invalid numbers mean "all time".
-
- * @returns {object} A Mongoose query object for the 'createdAt' field.
-
- */
 
 const getDateQuery = (period) => {
 
@@ -29,7 +20,7 @@ const getDateQuery = (period) => {
 
     if (!days || days <= 0) {
 
-        return {}; // Return an empty object for "all time"
+        return {};
 
     }
 
@@ -43,15 +34,6 @@ const getDateQuery = (period) => {
 
 
 
-/**
-
- * Merges multiple time-series data arrays (e.g., views, comments, likes) by date.
-
- * @param {Array<Array<Object>>} trendArrays - An array of trend data arrays to merge.
-
- * @returns {Array<Object>} A single, merged and sorted time-series array.
-
- */
 
 const mergeTrends = (...trendArrays) => {
 
@@ -85,15 +67,7 @@ const mergeTrends = (...trendArrays) => {
 
 
 
-/**
 
- * Get comprehensive analytics data for a given period.
-
- * @param {number} period - The number of days (e.g., 7, 30, 90). Defaults to 30.
-
- * @returns {Promise<Object>} Comprehensive analytics data.
-
- */
 
 const getAnalytics = async (period = 30) => {
 

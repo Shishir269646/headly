@@ -19,17 +19,17 @@ export default function ContentForm({ contentId = null }) {
   const toast = useToast();
   const { categories: availableCategories, loading: categoriesLoading } = useCategories();
 
-  // Renamed 'loading' to 'isSubmitting' for clarity on form-level loading state
+
   const { create, update, currentContent, loading: isSubmitting } = useContent(null, contentId);
   const { uploading } = useMedia({ folder: 'content-images' });
 
-  // --- State Initialization ---
+
   const [formData, setFormData] = useState({
     title: '',
     slug: '',
     excerpt: '',
     body: '',
-    // This holds the Media ObjectId (string)
+
     featuredImage: null,
     status: 'draft',
     publishAt: null,
@@ -48,9 +48,8 @@ export default function ContentForm({ contentId = null }) {
   const [mediaModalTab, setMediaModalTab] = useState('upload');
   const [isSeoOpen, setIsSeoOpen] = useState(false);
 
-  // --- Effects ---
+ 
 
-  // 1. Load existing content data for editing
   useEffect(() => {
     if (currentContent && contentId) {
       setFormData({
@@ -58,7 +57,7 @@ export default function ContentForm({ contentId = null }) {
         slug: currentContent.slug || '',
         excerpt: currentContent.excerpt || '',
         body: currentContent.body || '',
-        // Use the Media object ID for the form field
+
         featuredImage: currentContent.featuredImage?._id || null,
         status: currentContent.status || 'draft',
         publishAt: currentContent.publishAt || null,
@@ -70,15 +69,11 @@ export default function ContentForm({ contentId = null }) {
           metaKeywords: []
         }
       });
-      // Use the Media URL for the image preview
       setFeaturedPreviewUrl(currentContent.featuredImage?.url || null);
     }
   }, [currentContent, contentId]);
 
-  // 2. Auto-generate slug on title change for new content
   useEffect(() => {
-    // Only auto-generate slug if we are creating new content (no contentId)
-    // AND if the user hasn't started editing the slug manually (optional refinement)
     if (!contentId && formData.title) {
       setFormData(prev => ({
         ...prev,
@@ -151,11 +146,10 @@ export default function ContentForm({ contentId = null }) {
     const seoPayload = {
       metaTitle: formData.seo?.metaTitle || '',
       metaDescription: formData.seo?.metaDescription || '',
-      metaKeywords: formData.seo?.metaKeywords || [] // Ensure it's an array
+      metaKeywords: formData.seo?.metaKeywords || []
     };
     dataToSend.append('seo', JSON.stringify(seoPayload));
 
-    // Append featuredImage ID if present
     if (formData.featuredImage) {
       dataToSend.append('featuredImage', formData.featuredImage);
     }
@@ -204,12 +198,12 @@ export default function ContentForm({ contentId = null }) {
     setIsMediaModalOpen(true);
   };
 
-  // Called when a media item is selected from the MediaPickerModal
+
   const handleSelectFeatured = (media) => {
     if (!media) return;
-    // Save the Media ID to the form data
+
     setFormData(prev => ({ ...prev, featuredImage: media._id }));
-    // Save the Media URL for instant preview
+
     setFeaturedPreviewUrl(media.url);
     setIsMediaModalOpen(false);
   };

@@ -3,17 +3,17 @@
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import Link from 'next/link';
-// Assuming you have daisyUI properly installed and configured in your Next.js project.
 
-// Helper function to format ISO date string to YYYY-MM-DD for <input type="date">
+
+
 const formatDate = (isoString) => {
     if (!isoString) return '';
-    // new Date(isoString).toISOString().split('T')[0] converts "2023-10-26T10:00:00.000Z" to "2023-10-26"
+
     try {
         const date = new Date(isoString);
-        // Check for "Invalid Date"
+
         if (isNaN(date.getTime())) return '';
-        // Use a method that reliably gets YYYY-MM-DD in the local timezone or UTC
+
         return date.toISOString().split('T')[0];
     } catch (e) {
         return '';

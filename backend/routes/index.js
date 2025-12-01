@@ -1,7 +1,4 @@
 
-// ============================================
-// 📄 src/routes/v1/index.js (V1 Routes Aggregator)
-// ============================================
 
 const express = require('express');
 const router = express.Router();
@@ -17,6 +14,7 @@ const analyticsRoutes = require('./analytics.routes');
 const commentRoutes = require('./comment.routes');
 const dashboardRoutes = require('./dashboard.routes');
 const categoryRoutes = require('./category.routes');
+const sitemapRoutes = require('./sitemap.routes');
 
 // Mount routes
 router.use('/auth', authRoutes);
@@ -30,28 +28,8 @@ router.use('/newsletter', newsletterRoutes);
 router.use('/analytics', analyticsRoutes);
 router.use('/comments', commentRoutes);
 router.use('/dashboard', dashboardRoutes);
+router.use('/sitemap', sitemapRoutes);
 
 
 module.exports = router;
 
-
-/* 
-const express = require('express');
-const router = express.Router();
-const v1Routes = require('./v1');
-
-// API versioning
-router.use('/v1', v1Routes);
-
-// Default route
-router.get('/', (req, res) => {
-    res.json({
-        message: 'Headly API',
-        version: '1.0.0',
-        docs: '/api/v1/docs'
-    });
-});
-
-module.exports = router;
-
- */

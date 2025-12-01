@@ -24,7 +24,7 @@ export default function CategoryPage({ params }) {
     }
 
     if (error) {
-        // This could be a 404 if the category doesn't exist, or another server error
+        
         if (error.response?.status === 404) {
             notFound();
         }
@@ -57,7 +57,6 @@ export default function CategoryPage({ params }) {
                 </div>
             )}
 
-            {/* TODO: Add pagination controls if pagination.pages > 1 */}
         </div>
     );
 }

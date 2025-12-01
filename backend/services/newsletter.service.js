@@ -6,7 +6,6 @@ const { AppError } = require('../utils/apiError');
 
 /**
  * Generate confirmation token
- * @returns {String} Random token
  */
 const generateConfirmationToken = () => {
     return crypto.randomBytes(32).toString('hex');
@@ -14,8 +13,6 @@ const generateConfirmationToken = () => {
 
 /**
  * Subscribe to newsletter
- * @param {Object} subscriberData - Subscriber data
- * @returns {Promise<Object>} Created subscription
  */
 const subscribe = async (subscriberData) => {
     try {
@@ -58,8 +55,6 @@ const subscribe = async (subscriberData) => {
 
 /**
  * Confirm newsletter subscription
- * @param {String} token - Confirmation token
- * @returns {Promise<Object>} Confirmed subscription
  */
 const confirmSubscription = async (token) => {
     const subscription = await Newsletter.findOne({
@@ -82,8 +77,6 @@ const confirmSubscription = async (token) => {
 
 /**
  * Unsubscribe from newsletter
- * @param {String} email - Subscriber email
- * @returns {Promise<Object>} Unsubscribed subscription
  */
 const unsubscribe = async (email) => {
     const subscription = await Newsletter.findOne({ email: email.toLowerCase() });
@@ -102,9 +95,6 @@ const unsubscribe = async (email) => {
 
 /**
  * Get all newsletter subscribers (admin only)
- * @param {Object} filter - Filter criteria
- * @param {Object} options - Query options (page, limit, sort)
- * @returns {Promise<Object>} Subscribers with pagination
  */
 const getSubscribers = async (filter = {}, options = {}) => {
     try {
@@ -137,8 +127,6 @@ const getSubscribers = async (filter = {}, options = {}) => {
 
 /**
  * Get a single subscriber by ID (admin only)
- * @param {String} subscriberId - Subscriber ID
- * @returns {Promise<Object>} Subscriber details
  */
 const getSubscriberById = async (subscriberId) => {
     const subscriber = await Newsletter.findById(subscriberId);
@@ -152,8 +140,6 @@ const getSubscriberById = async (subscriberId) => {
 
 /**
  * Delete a subscriber (admin only)
- * @param {String} subscriberId - Subscriber ID
- * @returns {Promise<Object>} Deleted subscriber
  */
 const deleteSubscriber = async (subscriberId) => {
     const subscriber = await Newsletter.findByIdAndDelete(subscriberId);
@@ -168,9 +154,6 @@ const deleteSubscriber = async (subscriberId) => {
 
 /**
  * Update subscriber preferences
- * @param {String} email - Subscriber email
- * @param {Object} preferences - New preferences
- * @returns {Promise<Object>} Updated subscription
  */
 const updatePreferences = async (email, preferences) => {
     const subscription = await Newsletter.findOneAndUpdate(

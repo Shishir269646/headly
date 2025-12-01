@@ -5,7 +5,7 @@ import PopularPostsWidget from './PopularPostsWidget';
 import NewsletterWidget from './NewsletterWidget';
 import SidebarCategories from './SidebarCategories';
 
-export default function Sidebar({ categories = [] }) {
+export default function Sidebar() {
     const {
         fetchContents,
         popular,
@@ -29,7 +29,7 @@ export default function Sidebar({ categories = [] }) {
                     />
                 </div>
                 <PopularPostsWidget posts={popular} loading={loading} />
-                <SidebarCategories categories={categories} />
+                <SidebarCategories />
                 <NewsletterWidget />
             </div>
         </aside>

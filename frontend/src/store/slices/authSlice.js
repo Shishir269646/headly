@@ -7,7 +7,6 @@ export const register = createAsyncThunk(
     async (userData, { rejectWithValue }) => {
         try {
             const { data } = await axiosInstance.post('/auth/register', userData);
-            // The backend now sets httpOnly cookies. No need to store tokens in localStorage.
             localStorage.setItem('user', JSON.stringify(data.data.user));
             return data.data.user;
         } catch (error) {
@@ -21,7 +20,6 @@ export const login = createAsyncThunk(
     async (credentials, { rejectWithValue }) => {
         try {
             const { data } = await axiosInstance.post('/auth/login', credentials);
-            // The backend now sets httpOnly cookies. No need to store tokens in localStorage.
             localStorage.setItem('user', JSON.stringify(data.data.user));
             return data.data.user;
         } catch (error) {
@@ -35,10 +33,8 @@ export const logout = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             await axiosInstance.post('/auth/logout');
-            // The backend clears the httpOnly cookies. We only need to clear the user from localStorage.
             localStorage.removeItem('user');
         } catch (error) {
-            // Even if the backend logout fails, clear the client-side user data.
             localStorage.removeItem('user');
             return rejectWithValue(error.response?.data?.message || 'Logout failed');
         }
@@ -73,8 +69,7 @@ export const refreshToken = createAsyncThunk(
     'auth/refreshToken',
     async (_, { rejectWithValue }) => {
         try {
-            // The httpOnly refreshToken cookie will be sent automatically by the browser.
-            // We just need to call the endpoint.
+            
             await axiosInstance.post('/auth/refresh-token');
         } catch (error) {
             return rejectWithValue(error.response?.data?.message || 'Token refresh failed');
@@ -98,7 +93,6 @@ const authSlice = createSlice({
         clearError: (state) => {
             state.error = null;
         },
-        // New action to set isAuthenticated based on backend response (e.g., from a session check)
         setAuthenticated: (state, action) => {
             state.isAuthenticated = action.payload;
         },
@@ -116,7 +110,7 @@ const authSlice = createSlice({
             .addCase(register.fulfilled, (state, action) => {
                 state.loading = false;
                 state.isAuthenticated = true;
-                state.user = action.payload; // action.payload is now just user data
+                state.user = action.payload;
             })
             .addCase(register.rejected, (state, action) => {
                 state.loading = false;
@@ -150,16 +144,15 @@ const authSlice = createSlice({
             // Get Current User
             .addCase(getCurrentUser.fulfilled, (state, action) => {
                 state.user = action.payload;
-                state.isAuthenticated = true; // If we successfully get a user, they are authenticated
+                state.isAuthenticated = true;
             })
             .addCase(getCurrentUser.rejected, (state) => {
                 state.user = null;
                 state.isAuthenticated = false;
             })
-            // Refresh Token - no direct state update for token as it's in cookie
+
             .addCase(refreshToken.fulfilled, (state) => {
-                // Token is refreshed via cookie, no direct state update needed for token
-                state.isAuthenticated = true; // Assume if refresh is successful, user is authenticated
+                state.isAuthenticated = true;
             })
             .addCase(refreshToken.rejected, (state) => {
                 state.isAuthenticated = false;

@@ -16,7 +16,7 @@ function ViewerProfilePage() {
             try {
                 await axios.delete('/users/profile/me');
                 addToast('Account deleted successfully.', 'success');
-                logout(); // Log out after account deletion
+                logout();
             } catch (error) {
                 addToast(error.response?.data?.message || error.message || 'Failed to delete account.', 'error');
             }

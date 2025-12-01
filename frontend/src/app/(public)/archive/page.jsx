@@ -8,7 +8,8 @@ export default function ArchivePage() {
     const [selectedYear, setSelectedYear] = useState(String(new Date().getFullYear()));
     const [selectedMonth, setSelectedMonth] = useState(null);
 
-    // Mock archive data - replace with actual API data
+   
+    
     const archiveData = {
         '2024': {
             totalArticles: 45,

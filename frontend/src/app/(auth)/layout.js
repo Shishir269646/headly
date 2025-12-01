@@ -1,7 +1,3 @@
-// ============================================
-// 📄 app/(auth)/layout.js - Auth Layout (No Header/Footer)
-// ============================================
-
 
 
 import React from 'react'

@@ -1,11 +1,11 @@
-// ✅ File: /pages/_document.js
+
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
     return (
-        <Html lang="en" data-theme="light"> {/* DaisyUI default theme */}
+        <Html lang="en" data-theme="light">
             <Head>
-                {/* Google Fonts Preload (Geist + Geist Mono used in layout.js) */}
+
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
                 <link
@@ -38,7 +38,7 @@ export default function Document() {
                 <meta name="twitter:description" content="Next.js + DaisyUI CMS with Tiptap Editor" />
                 <meta name="twitter:image" content="/og-image.jpg" />
 
-                
+
             </Head>
 
             <body className="font-sans bg-base-100 text-base-content min-h-screen flex flex-col antialiased">

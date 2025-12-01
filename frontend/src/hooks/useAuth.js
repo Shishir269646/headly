@@ -1,20 +1,19 @@
 "use client";
 
-// ✅ hooks/useAuth.js
+
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
-import { logout, getCurrentUser } from '@/store/slices/authSlice'; // Removed loadUserFromStorage
-import { useEffect } from 'react'; // Removed useRef
+import { logout, getCurrentUser } from '@/store/slices/authSlice';
+import { useEffect } from 'react';
 
 export const useAuth = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { user, isAuthenticated, loading, error } = useSelector((state) => state.auth);
-    // Removed isMounted useRef
+
 
     useEffect(() => {
-        // Attempt to fetch current user on mount to verify authentication status
-        // This will implicitly use the HTTP-only cookie sent by the browser
+
         dispatch(getCurrentUser());
     }, []);
 

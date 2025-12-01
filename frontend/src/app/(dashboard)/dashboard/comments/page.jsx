@@ -39,7 +39,7 @@ function CommentsPage() {
         setFilters(prev => ({
             ...prev,
             [key]: value,
-            page: 1 // Reset to first page
+            page: 1
         }));
         setSelectedComments([]);
     };

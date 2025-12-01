@@ -37,7 +37,7 @@ function StatCard({ title, value, icon, color, href }) {
     return content;
 }
 
-// --- New: Quick Action Card Component (Unchanged) ---
+
 function QuickActionCard({ title, icon: Icon, description, href, color }) {
     return (
         <Link href={href} className="card card-compact bg-base-100 border border-base-200 hover:border-primary hover:shadow-xl transition duration-300 group">
@@ -54,7 +54,8 @@ function QuickActionCard({ title, icon: Icon, description, href, color }) {
     );
 }
 
-// --- Main Dashboard Page (Modified) ---
+
+
 function DashboardPage() {
     const dispatch = useDispatch();
     const { user, isEditorOrAbove, isAdministrator } = useAuth();

@@ -5,8 +5,6 @@ const User = require('../models/User.model');
 
 /**
  * Get dashboard statistics
- * @param {string} userId - Current user ID
- * @param {string} userRole - Current user role
  */
 exports.getDashboardStats = async (userId, userRole) => {
     try {

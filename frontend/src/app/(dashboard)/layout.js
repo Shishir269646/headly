@@ -23,6 +23,7 @@ import {
     FaChevronRight,
     FaComments,
     FaTags,
+    FaPlug,
 } from 'react-icons/fa';
 import Image from 'next/image';
 
@@ -59,6 +60,7 @@ export default function DashboardLayout({ children }) {
         { name: 'Contacts', href: '/dashboard/contacts', icon: <FaEnvelope />, roles: ['admin'] },
         { name: 'Newsletter', href: '/dashboard/newsletter', icon: <FaNewspaper />, roles: ['admin'] },
         { name: 'Analytics', href: '/dashboard/analytics', icon: <FaChartLine />, roles: ['admin'] },
+        { name: 'Webhooks', href: '/dashboard/webhooks', icon: <FaPlug />, roles: ['admin'] },
         { name: 'Profile', href: '/dashboard/profile', icon: <FaUserCircle />, roles: ['admin', 'editor', 'author'] },
     ];
 

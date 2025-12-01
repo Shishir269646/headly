@@ -5,8 +5,6 @@ const { AppError } = require('../utils/apiError');
 
 /**
  * Create a new contact submission
- * @param {Object} contactData - Contact form data
- * @returns {Promise<Object>} Created contact
  */
 const createContact = async (contactData) => {
     try {
@@ -21,9 +19,6 @@ const createContact = async (contactData) => {
 
 /**
  * Get all contact submissions (admin only)
- * @param {Object} filter - Filter criteria
- * @param {Object} options - Query options (page, limit, sort)
- * @returns {Promise<Object>} Contacts with pagination
  */
 const getContacts = async (filter = {}, options = {}) => {
     try {
@@ -56,8 +51,6 @@ const getContacts = async (filter = {}, options = {}) => {
 
 /**
  * Get a single contact by ID (admin only)
- * @param {String} contactId - Contact ID
- * @returns {Promise<Object>} Contact details
  */
 const getContactById = async (contactId) => {
     const contact = await Contact.findById(contactId);
@@ -71,9 +64,6 @@ const getContactById = async (contactId) => {
 
 /**
  * Update contact status (admin only)
- * @param {String} contactId - Contact ID
- * @param {Object} updateData - Data to update
- * @returns {Promise<Object>} Updated contact
  */
 const updateContact = async (contactId, updateData) => {
     const contact = await Contact.findByIdAndUpdate(
@@ -92,8 +82,6 @@ const updateContact = async (contactId, updateData) => {
 
 /**
  * Delete a contact (admin only)
- * @param {String} contactId - Contact ID
- * @returns {Promise<Object>} Deleted contact
  */
 const deleteContact = async (contactId) => {
     const contact = await Contact.findByIdAndDelete(contactId);
@@ -108,8 +96,6 @@ const deleteContact = async (contactId) => {
 
 /**
  * Mark contact as read (admin only)
- * @param {String} contactId - Contact ID
- * @returns {Promise<Object>} Updated contact
  */
 const markAsRead = async (contactId) => {
     return updateContact(contactId, { read: true });
@@ -117,9 +103,6 @@ const markAsRead = async (contactId) => {
 
 /**
  * Update contact status
- * @param {String} contactId - Contact ID
- * @param {String} status - New status
- * @returns {Promise<Object>} Updated contact
  */
 const updateStatus = async (contactId, status) => {
     const validStatuses = ['new', 'in-progress', 'resolved', 'archived'];

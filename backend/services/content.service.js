@@ -22,7 +22,7 @@ exports.getAllContents = async (filters) => {
         if (category) {
             query.category = category._id;
         } else {
-            // If category slug is provided but not found, return no content
+            
             return {
                 contents: [],
                 pagination: { total: 0, page: 1, pages: 0 }
