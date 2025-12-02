@@ -7,6 +7,11 @@ exports.authenticate = async (req, res, next) => {
     try {
         let token;
 
+         console.log("AUTH HEADER:", req.headers.authorization);
+        console.log("COOKIE TOKEN:", req.cookies?.accessToken);
+        console.log("BEARER TOKEN:", req.headers.authorization?.split(" ")[1]);
+
+
         // Get token from the httpOnly cookie
         if (req.cookies.accessToken) {
             token = req.cookies.accessToken;
