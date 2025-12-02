@@ -8,54 +8,30 @@ const routes = require('./routes');
 const { errorHandler } = require('./middlewares/errorHandler.middleware');
 const { notFound } = require('./middlewares/notFound.middleware');
 const logger = require('./utils/logger');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 
-// Trust proxy (for rate limiting behind proxy)
+// Trust proxy (important for Render)
 app.set('trust proxy', 1);
 
 // Security Middlewares
 app.use(helmet());
 app.use(cors({
     origin: [
-        "https://your-frontend.onrender.com",
-        "http://localhost:3000"
+        process.env.FRONTEND_URL || "http://localhost:3000"
     ],
-    credentials: true,
+    credentials: true, // allow cookies
 }));
-
-
 
 // Body parsers
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
-// Sessions and Passport
-const session = require('express-session');
-const passport = require('passport');
-require('./config/passport'); 
-
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'session_secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: true,
-        httpOnly: true,
-        sameSite: "none",
-        maxAge: 1000 * 60 * 60 * 24
-    }
-}));
-
-
-app.use(passport.initialize());
-app.use(passport.session());
-
-
 // Data sanitization against NoSQL injection
 app.use(mongoSanitize());
-
 
 // HTTP request logger
 if (process.env.NODE_ENV === 'development') {
@@ -65,11 +41,6 @@ if (process.env.NODE_ENV === 'development') {
         stream: { write: message => logger.info(message.trim()) }
     }));
 }
-
-
-// Static files - serve uploads directory
-const path = require('path');
-const fs = require('fs');
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -90,10 +61,8 @@ app.get('/health', (req, res) => {
     });
 });
 
-
 // API Routes
 app.use('/api', routes);
-
 
 // Handle 404 errors
 app.use(notFound);
