@@ -17,7 +17,10 @@ app.set('trust proxy', 1);
 // Security Middlewares
 app.use(helmet());
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+   origin: [
+        "https://your-frontend.onrender.com",
+        "http://localhost:3000"
+    ],
     credentials: true,
     optionsSuccessStatus: 200
 }));
