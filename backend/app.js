@@ -22,8 +22,8 @@ app.use(cors({
     origin: [
        "https://headly-nine.vercel.app/",
         "https://headly-8si0n7tdi-shishir269646s-projects.vercel.app/",
-        "https://headly-git-main-shishir269646s-projects.vercel.app/"
-        "http://localhost:3000/"
+        "https://headly-git-main-shishir269646s-projects.vercel.app/",
+        "http://localhost:3000/",
     ],
     credentials: true, // allow cookies
 }));
