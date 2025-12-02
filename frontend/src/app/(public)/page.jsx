@@ -9,6 +9,7 @@ import FeaturedContentGrid from '@/components/ui/FeaturedContentGrid';
 import TrendingSection from '@/components/ui/TrendingSection';
 import ArticleCard from '@/components/ui/ArticleCard';
 import Sidebar from '@/components/ui/Sidebar';
+import Loader from '@/components/common/Loader';
 
 export default function Home() {
     const {

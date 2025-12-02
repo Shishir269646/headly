@@ -40,7 +40,10 @@ app.use(session({
     cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 // 1 day
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+        // sameSite must be 'none' to enable cross-origin cookie sending (e.g., from a localhost frontend to a live backend).
+        // 'secure: true' is a requirement for 'sameSite: "none"'.
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     }
 }));
 
@@ -87,10 +90,6 @@ app.get('/health', (req, res) => {
 
 
 // API Routes
-app.use((req, res, next) => {
-  console.log(`Request Method: ${req.method}, Request Path: ${req.path}`);
-  next();
-});
 app.use('/api', routes);
 
 

@@ -18,7 +18,7 @@
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "logs": "pm2 logs headly-backend",
-    "prod:start": "pm2 start pm2.ecosystem.config.js"
+    "prod:start": "pm2 start pm2.ecosystem.config.js --env production"
   },
   "keywords": [
     "cms",
