@@ -37,18 +37,17 @@ const passport = require('passport');
 require('./config/passport'); 
 
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'a_default_session_secret',
+    secret: process.env.SESSION_SECRET || 'session_secret',
     resave: false,
     saveUninitialized: false,
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: true,
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24, // 1 day
-        // sameSite must be 'none' to enable cross-origin cookie sending (e.g., from a localhost frontend to a live backend).
-        // 'secure: true' is a requirement for 'sameSite: "none"'.
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        sameSite: "none",
+        maxAge: 1000 * 60 * 60 * 24
     }
 }));
+
 
 app.use(passport.initialize());
 app.use(passport.session());
