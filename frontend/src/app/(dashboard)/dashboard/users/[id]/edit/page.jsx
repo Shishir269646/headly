@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { useToast } from '@/hooks/useToast';
 import { useUser } from '@/hooks/useUser';
 import UserForm from '@/components/dashboard/UserForm';
+import Loader from '@/components/common/Loader';
 
 export default function EditUserPage() {
     const router = useRouter();
@@ -48,12 +49,7 @@ export default function EditUserPage() {
     // Handle Loading State
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading user data...</p>
-                </div>
-            </div>
+            <Loader />
         );
     }
 

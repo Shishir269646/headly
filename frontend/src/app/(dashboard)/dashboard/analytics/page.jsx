@@ -11,6 +11,7 @@ import CategoryDistributionChart from "@/components/dashboard/analytics/Category
 import TopContentTable from "@/components/dashboard/analytics/TopContentTable";
 import TopAuthorsTable from "@/components/dashboard/analytics/TopAuthorsTable";
 import { XCircle } from 'lucide-react';
+import Loader from '@/components/common/Loader';
 
 function AnalyticsPage() {
   const [period, setPeriod] = useState(30);
@@ -34,9 +35,7 @@ function AnalyticsPage() {
       />
 
       {loading && !data && (
-        <div className="flex justify-center items-center h-96">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
+        <Loader />
       )}
 
       {error && (

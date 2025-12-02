@@ -6,6 +6,7 @@ import { useCategories } from "@/hooks/useCategories";
 import Link from "next/link";
 import { XCircle } from "lucide-react";
 import ArticleCard from '@/components/ui/ArticleCard';
+import Loader from "@/components/common/Loader";
 
 const PopularContentPage = () => {
   const { popular, loading, error, getPopular } = useContent();
@@ -22,9 +23,7 @@ const PopularContentPage = () => {
       <hr className="mb-8" />
 
       {loading && (
-        <div className="flex justify-center">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
+        <Loader />
       )}
 
       {error && (

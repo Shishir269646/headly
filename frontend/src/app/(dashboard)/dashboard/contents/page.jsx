@@ -9,6 +9,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { formatDate, truncateText } from '@/libs/utils';
 import { Eye, Edit, CheckCircle, Trash2 } from 'lucide-react';
+import Loader from '@/components/common/Loader';
 
 function ContentsPage() {
     const [filters, setFilters] = useState({
@@ -85,9 +86,7 @@ function ContentsPage() {
             {/* Contents Table */}
             <div className="bg-white rounded-lg shadow overflow-hidden">
                 {loading ? (
-                    <div className="p-8 text-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                    </div>
+                    <Loader />
                 ) : contents && contents.length > 0 ? (
                     <>
                         <table className="min-w-full divide-y divide-gray-200">
@@ -135,8 +134,8 @@ function ContentsPage() {
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <span className={`px-3 py-1 rounded-full text-xs font-medium ${content.status === 'published' ? 'bg-green-100 text-green-800' :
-                                                    content.status === 'draft' ? 'bg-gray-100 text-gray-800' :
-                                                        'bg-yellow-100 text-yellow-800'
+                                                content.status === 'draft' ? 'bg-gray-100 text-gray-800' :
+                                                    'bg-yellow-100 text-yellow-800'
                                                 }`}>
                                                 {content.status}
                                             </span>
@@ -198,12 +197,12 @@ function ContentsPage() {
                                                     </button>
                                                 )}
                                                 <button
-                                                                                                            onClick={() => deleteModal.open(content._id)}
-                                                                                                            className="text-red-600 hover:text-red-900"
-                                                                                                            title="Delete"
-                                                                                                        >
-                                                                                                            <Trash2 size={18} />
-                                                                                                        </button>                                            </div>
+                                                    onClick={() => deleteModal.open(content._id)}
+                                                    className="text-red-600 hover:text-red-900"
+                                                    title="Delete"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>                                            </div>
                                         </td>
                                     </tr>
                                 ))}
@@ -280,8 +279,8 @@ function ContentsPage() {
                     <div
                         key={t.id}
                         className={`px-6 py-3 rounded-lg shadow-lg text-white ${t.type === 'success' ? 'bg-green-500' :
-                                t.type === 'error' ? 'bg-red-500' :
-                                    'bg-blue-500'
+                            t.type === 'error' ? 'bg-red-500' :
+                                'bg-blue-500'
                             }`}
                     >
                         {t.message}

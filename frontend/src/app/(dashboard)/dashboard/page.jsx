@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { fetchDashboardStats } from '@/store/slices/dashboardSlice';
 import Link from 'next/link';
 import { FiFileText, FiCheckCircle, FiFile, FiImage, FiMessageSquare, FiClock, FiUsers, FiSettings, FiPlusCircle, FiXCircle } from 'react-icons/fi';
+import Loader from '@/components/common/Loader';
 
 
 
@@ -81,10 +82,7 @@ function DashboardPage() {
 
             {/* Loading/Error States */}
             {loading && (
-                <div className="flex flex-col justify-center items-center py-20 bg-base-100 rounded-xl shadow-lg">
-                    <span className="loading loading-spinner loading-lg text-primary"></span>
-                    <p className="mt-4 text-lg text-base-content/70">Fetching dashboard data...</p>
-                </div>
+                <Loader />
             )}
 
             {error && (

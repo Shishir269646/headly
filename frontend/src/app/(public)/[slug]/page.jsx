@@ -16,6 +16,7 @@ import ArticleBody from '@/components/ui/ArticleBody';
 import ArticleAuthorBio from '@/components/ui/ArticleAuthorBio';
 import ArticleCommentSection from '@/components/ui/ArticleCommentSection';
 import Sidebar from '@/components/ui/Sidebar';
+import Loader from '@/components/common/Loader';
 
 
 export default function PostPage() {
@@ -61,9 +62,7 @@ export default function PostPage() {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-screen text-lg text-gray-800 dark:text-gray-200">
-                Loading post...
-            </div>
+            <Loader />
         );
     }
 

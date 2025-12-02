@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { useContent } from '@/hooks/useContent';
 import ArticleCard from '@/components/ui/ArticleCard';
+import Loader from '@/components/common/Loader';
 
 export default function AuthorContentPage() {
     const { authorId } = useParams();
@@ -16,7 +17,7 @@ export default function AuthorContentPage() {
     }, [authorId, getContents]);
 
     if (loading) {
-        return <div className="min-h-screen w-full flex items-center justify-center dark:bg-gray-900 text-white">Loading content by author...</div>;
+        return <Loader />;
     }
 
     if (error) {

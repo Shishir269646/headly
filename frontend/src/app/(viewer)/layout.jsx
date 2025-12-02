@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import Image from 'next/image';
+import Loader from '@/components/common/Loader';
 
 export default function ViewerLayout({ children }) {
     const { isAuthenticated, loading, user, logout } = useAuth();
@@ -19,12 +20,10 @@ export default function ViewerLayout({ children }) {
 
     if (loading || !isAuthenticated || !user) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
-            </div>
+            <Loader />
         );
     }
-    
+
 
     if (user.role !== 'viewer') {
         router.replace('/dashboard');
@@ -44,10 +43,10 @@ export default function ViewerLayout({ children }) {
                         </div>
                         <div className="flex items-center space-x-4">
                             <span className="text-sm font-medium text-gray-700">Welcome, {user.name}</span>
-                             <div className="dropdown dropdown-end">
+                            <div className="dropdown dropdown-end">
                                 <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
                                     <div className="w-10 rounded-full">
-                                         {user?.image && typeof user.image === 'object' && user.image.url ? (
+                                        {user?.image && typeof user.image === 'object' && user.image.url ? (
                                             <Image
                                                 src={user.image.url}
                                                 alt={user.image.alt || user.name}

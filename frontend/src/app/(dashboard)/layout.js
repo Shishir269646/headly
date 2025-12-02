@@ -1,8 +1,3 @@
-// ============================================
-// 📄 app/(dashboard)/layout.js
-// Dashboard Layout with Sidebar (fixed version)
-// ============================================
-
 'use client';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -26,6 +21,7 @@ import {
     FaPlug,
 } from 'react-icons/fa';
 import Image from 'next/image';
+import Loader from '@/components/common/Loader';
 
 export default function DashboardLayout({ children }) {
     const { isAuthenticated, loading, user, logout } = useAuth();
@@ -34,19 +30,16 @@ export default function DashboardLayout({ children }) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     useEffect(() => {
-        // If loading is finished and the user is not authenticated (e.g., token is invalid)
+
         if (!loading && !isAuthenticated) {
             router.push('/login');
         }
     }, [loading, isAuthenticated, router]);
 
-    // While loading or if not authenticated, show a loading spinner.
-    // This prevents content flashes and ensures we wait for the auth state to be resolved.
+
     if (loading || !isAuthenticated || !user) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-100">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-600"></div>
-            </div>
+            <Loader />
         );
     }
 

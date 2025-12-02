@@ -12,6 +12,7 @@ import {
     getCommentStats,
     deleteComment
 } from '@/store/slices/commentSlice';
+import Loader from '@/components/common/Loader';
 
 
 function CommentsPage() {
@@ -228,9 +229,7 @@ function CommentsPage() {
             <div className="card bg-base-100 shadow-xl">
                 <div className="card-body p-0">
                     {loading ? (
-                        <div className="flex justify-center items-center py-12">
-                            <span className="loading loading-spinner loading-lg"></span>
-                        </div>
+                        <Loader />
                     ) : allComments.length === 0 ? (
                         <div className="text-center py-12 text-gray-500">
                             <p>No comments found</p>

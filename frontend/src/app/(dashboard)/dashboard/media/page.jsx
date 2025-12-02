@@ -8,9 +8,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { formatFileSize, formatDate } from '@/libs/utils';
 import { useEffect } from 'react';
+import Loader from '@/components/common/Loader';
 
 function MediaPage() {
-    const { media, loading, remove, refetch } = useMedia({}, true);  
+    const { media, loading, remove, refetch } = useMedia({}, true);
     const toast = useToast();
     const deleteModal = useModal();
 
@@ -54,9 +55,7 @@ function MediaPage() {
 
             {/* Media Grid */}
             {loading ? (
-                <div className="text-center py-12">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-                </div>
+                <Loader />
             ) : media && media.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     {media.map((item) => (

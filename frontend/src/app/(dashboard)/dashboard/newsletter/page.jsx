@@ -4,6 +4,7 @@ import withAuth from '@/hoc/withAuth';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import axios from '@/libs/axios';
+import Loader from '@/components/common/Loader';
 
 function NewsletterPage() {
     const { user } = useAuth();
@@ -28,9 +29,7 @@ function NewsletterPage() {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-full">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-            </div>
+            <Loader />
         );
     }
 

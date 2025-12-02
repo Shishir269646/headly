@@ -1,7 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import axios from '@/libs/axios'; 
+import axios from '@/libs/axios';
+import Loader from '@/components/common/Loader';
 
 const WebhooksPage = () => {
   const [logs, setLogs] = useState([]);
@@ -39,7 +40,7 @@ const WebhooksPage = () => {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-4">Webhook Logs</h1>
       {loading ? (
-        <p>Loading...</p>
+        <Loader />
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white">

@@ -7,6 +7,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { XCircle } from "lucide-react";
 import ArticleCard from '@/components/ui/ArticleCard';
 import ContentSearchBar from "@/components/ui/ContentSearchBar";
+import Loader from "@/components/common/Loader";
 
 const AllContentPage = () => {
   const { contents, loading, error, getContents } = useContent();
@@ -76,9 +77,7 @@ const AllContentPage = () => {
       <hr className="mb-8" />
 
       {loading && (
-        <div className="flex justify-center">
-          <span className="loading loading-spinner loading-lg"></span>
-        </div>
+        <Loader />
       )}
 
       {error && (

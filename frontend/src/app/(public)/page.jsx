@@ -39,7 +39,7 @@ export default function Home() {
     const error = contentError || categoriesError || usersError;
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div><Loader/></div>;
     }
 
     if (error) {

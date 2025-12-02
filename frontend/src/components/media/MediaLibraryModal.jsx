@@ -3,6 +3,7 @@
 import { useMedia } from '@/hooks/useMedia';
 import Image from 'next/image';
 import { useState } from 'react';
+import Loader from '../common/Loader';
 
 export default function MediaLibraryModal({ isOpen, onClose, onSelect }) {
     const { media, loading } = useMedia({ limit: 50 }); // Fetch more items for the modal
@@ -31,9 +32,7 @@ export default function MediaLibraryModal({ isOpen, onClose, onSelect }) {
                 />
 
                 {loading ? (
-                    <div className="flex-1 flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                    </div>
+                    <Loader />
                 ) : (
                     <div className="flex-1 overflow-y-auto grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
                         {filteredMedia.map((item) => (

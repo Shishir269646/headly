@@ -1,7 +1,3 @@
-// ============================================
-// 📄 app/(dashboard)/dashboard/contents/new/page.js
-// Create New Content Page
-// ============================================
 
 'use client';
 

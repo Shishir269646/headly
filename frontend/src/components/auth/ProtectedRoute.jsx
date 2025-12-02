@@ -3,6 +3,7 @@
 import { useAuth } from '@/hooks/useAuth';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Loader from '../common/Loader';
 
 export default function AdminPage() {
     const { user, isAdmin, loading } = useAuth();
@@ -14,7 +15,7 @@ export default function AdminPage() {
         }
     }, [loading, isAdmin, router]);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <div><Loader /></div>;
     if (!isAdmin) return null;
 
     return <div>Admin Panel Content</div>;

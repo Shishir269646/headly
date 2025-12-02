@@ -1,8 +1,3 @@
-// ============================================
-// 📄 app/(dashboard)/dashboard/users/page.js
-// Users Management Page (Admin Only)
-// ============================================
-
 'use client';
 
 import withAuth from '@/hoc/withAuth';
@@ -15,6 +10,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { formatDate } from '@/libs/utils';
 import { Plus, Pencil, Trash2, FolderPlus, CheckCircle2, XCircle } from 'lucide-react';
+import Loader from '@/components/common/Loader';
 
 function UsersPage() {
     const { user: currentUser } = useAuth();
@@ -55,10 +51,7 @@ function UsersPage() {
             {/* Users Table */}
             <div className="bg-white shadow overflow-hidden sm:rounded-lg">
                 {loading ? (
-                    <div className="flex justify-center items-center p-8">
-                        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
-                        <p className="ml-4 text-gray-600">Loading users...</p>
-                    </div>
+                    <Loader />
                 ) : users && users.length > 0 ? (
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-gray-200">

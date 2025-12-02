@@ -5,6 +5,7 @@ import { Map, Home, FileText, Users, Mail, Calendar, Tag } from 'lucide-react';
 import Link from 'next/link';
 import axios from '@/libs/axios';
 import { toast } from 'react-hot-toast';
+import Loader from '@/components/common/Loader';
 
 export default function SitemapPage() {
     const [sitemapData, setSitemapData] = useState({
@@ -64,9 +65,7 @@ export default function SitemapPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-base-100">
-                <span className="loading loading-spinner loading-lg text-primary"></span>
-            </div>
+            <Loader />
         );
     }
 
@@ -104,7 +103,7 @@ export default function SitemapPage() {
                                         <ul className="space-y-2">
                                             {section.links.map((link, linkIndex) => (
                                                 <li key={linkIndex}>
-                                                    <Link 
+                                                    <Link
                                                         href={link.href}
                                                         className="link link-hover text-primary hover:text-primary-focus"
                                                     >
@@ -182,7 +181,7 @@ export default function SitemapPage() {
                         </div>
                     </div>
 
-                    
+
                 </div>
             </section>
         </div>

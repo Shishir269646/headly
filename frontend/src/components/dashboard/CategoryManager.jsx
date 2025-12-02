@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from '@/libs/axios';
 import { useToast } from '@/hooks/useToast';
+import Loader from '../common/Loader';
 
 // A reusable form component for creating/editing a category
 function CategoryForm({ onSubmit, isSubmitting, defaultValues = {}, onCancel }) {
@@ -134,9 +135,7 @@ export default function CategoryManager() {
             <div className="card bg-base-100 shadow-lg p-6 border border-base-200">
                 <h2 className="text-xl font-semibold mb-4">Existing Categories</h2>
                 {isLoading ? (
-                    <div className="flex justify-center items-center h-32">
-                        <span className="loading loading-spinner loading-lg"></span>
-                    </div>
+                    <Loader />
                 ) : (
                     <div className="overflow-x-auto">
                         <table className="table w-full">

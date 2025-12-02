@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useContent } from '@/hooks/useContent';
 import ArticleCard from '@/components/ui/ArticleCard';
 import { notFound } from 'next/navigation';
+import Loader from '@/components/common/Loader';
 
 export default function CategoryPage({ params }) {
     const { slug } = params;
@@ -17,20 +18,18 @@ export default function CategoryPage({ params }) {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-64">
-                <span className="loading loading-spinner loading-lg"></span>
-            </div>
+            <Loader />
         );
     }
 
     if (error) {
-        
+
         if (error.response?.status === 404) {
             notFound();
         }
         return <div className="text-center text-red-500">Error loading content for this category.</div>;
     }
-    
+
     const categoryName = contents[0]?.category?.name || slug.replace(/-/g, ' ');
 
     return (
