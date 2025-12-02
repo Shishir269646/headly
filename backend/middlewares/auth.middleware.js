@@ -57,6 +57,11 @@ exports.optionalAuth = async (req, res, next) => {
     try {
         let token;
 
+         console.log("optional AUTH HEADER:", req.headers.authorization);
+        console.log("optional COOKIE TOKEN:", req.cookies?.accessToken);
+        console.log("optional BEARER TOKEN:", req.headers.authorization?.split(" ")[1]);
+
+
         // Get token from the httpOnly cookie
         if (req.cookies.accessToken) {
             token = req.cookies.accessToken;
