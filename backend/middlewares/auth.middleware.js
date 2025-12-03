@@ -1,7 +1,7 @@
-
 const jwt = require('jsonwebtoken');
 const User = require('../models/User.model');
 const ApiError = require('../utils/apiError');
+
 
 exports.authenticate = async (req, res, next) => {
     try {
@@ -48,20 +48,35 @@ exports.authenticate = async (req, res, next) => {
     }
 };
 
+
+
+
 exports.optionalAuth = async (req, res, next) => {
     try {
         let token;
+
+        // Logging is safe here because it's inside the function scope
+        console.log("AUTH HEADER:", req.headers.authorization);
+        console.log("COOKIE TOKEN:", req.cookies?.accessToken);
+        console.log("BEARER TOKEN:", req.headers.authorization?.split(" ")[1]);
 
         // Get token from the httpOnly cookie
         if (req.cookies.accessToken) {
             token = req.cookies.accessToken;
         }
 
+        // You might also want to check for the Bearer header here as a fallback
+        if (!token && req.headers.authorization?.startsWith('Bearer')) {
+            token = req.headers.authorization.split(" ")[1];
+        }
+
+
         if (token) {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             const user = await User.findById(decoded.id);
 
             if (user && user.isActive) {
+                // Attach user to request
                 req.user = {
                     id: user._id,
                     email: user.email,
@@ -70,9 +85,11 @@ exports.optionalAuth = async (req, res, next) => {
             }
         }
 
+        // Always call next() to allow the request to proceed, regardless of auth success
         next();
     } catch (error) {
-        // Continue without authentication
+        // If the token is invalid or expired, we just ignore it and proceed unauthenticated.
+        // The request continues without req.user attached.
         next();
     }
 };

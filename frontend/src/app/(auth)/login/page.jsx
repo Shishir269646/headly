@@ -185,13 +185,13 @@ export default function LoginPage() {
 
                         {/* Social Login Buttons */}
                         <div className="space-y-2">
-                            <a href="http://localhost:4000/api/auth/google" className="btn btn-outline w-full">
+                            <a href="https://headlybackend.onrender.com/api/auth/google" className="btn btn-outline w-full">
                                 Continue with Google
                             </a>
-                            <a href="http://localhost:4000/api/auth/github" className="btn btn-outline w-full">
+                            <a href="https://headlybackend.onrender.com/api/auth/github" className="btn btn-outline w-full">
                                 Continue with GitHub
                             </a>
-                            <a href="http://localhost:4000/api/auth/linkedin" className="btn btn-outline w-full">
+                            <a href="https://headlybackend.onrender.com/api/auth/linkedin" className="btn btn-outline w-full">
                                 Continue with LinkedIn
                             </a>
                         </div>

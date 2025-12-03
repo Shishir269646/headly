@@ -69,3 +69,9 @@
 {"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-02 17:47:41"}
 {"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"headly-backend","timestamp":"2025-12-02 17:47:51"}
 {"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-02 17:47:51"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-02 18:39:13"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-02 18:39:13"}
+{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-02 18:39:13"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:05:00"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:05:00"}
+{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:05:01"}

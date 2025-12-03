@@ -17,9 +17,13 @@ app.set('trust proxy', 1);
 // Security Middlewares
 app.use(helmet());
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: [
+        "https://headly-nine.vercel.app/",
+        "https://headly-8si0n7tdi-shishir269646s-projects.vercel.app/",
+        "https://headly-git-main-shishir269646s-projects.vercel.app/",
+        "http://localhost:3000/",
+    ],
     credentials: true,
-    optionsSuccessStatus: 200
 }));
 
 
@@ -31,7 +35,7 @@ app.use(cookieParser());
 // Sessions and Passport
 const session = require('express-session');
 const passport = require('passport');
-require('./config/passport'); 
+require('./config/passport');
 
 app.use(session({
     secret: process.env.SESSION_SECRET || 'a_default_session_secret',
