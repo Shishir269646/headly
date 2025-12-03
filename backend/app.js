@@ -54,18 +54,18 @@ require('./config/passport');
 
 
 app.use(session({
-    secret: process.env.SESSION_SECRET || "default_secret",
+    secret: process.env.SESSION_SECRET || 'a_default_session_secret',
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-        mongoUrl: process.env.MONGODB_URI,
-        ttl: 24 * 60 * 60, // 1 day
+        mongoUrl: process.env.MONGO_URI,
+        ttl: 60 * 60 * 24, // 1 day
     }),
     cookie: {
-        secure: process.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24,
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     }
 }));
 
