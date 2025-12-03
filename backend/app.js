@@ -47,22 +47,28 @@ app.use(cookieParser());
 
 // Sessions and Passport
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const passport = require('passport');
 require('./config/passport');
 
+
+
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'a_default_session_secret',
+    secret: process.env.SESSION_SECRET || "default_secret",
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI,
+        ttl: 24 * 60 * 60, // 1 day
+    }),
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === "production",
         httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24, // 1 day
-        // sameSite must be 'none' to enable cross-origin cookie sending (e.g., from a localhost frontend to a live backend).
-        // 'secure: true' is a requirement for 'sameSite: "none"'.
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        maxAge: 1000 * 60 * 60 * 24,
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     }
 }));
+
 
 app.use(passport.initialize());
 app.use(passport.session());
