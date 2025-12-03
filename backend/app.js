@@ -8,10 +8,12 @@ const routes = require('./routes');
 const { errorHandler } = require('./middlewares/errorHandler.middleware');
 const { notFound } = require('./middlewares/notFound.middleware');
 const logger = require('./utils/logger');
+const path = require('path');
+const fs = require('fs');
 
 const app = express();
 
-// Trust proxy (for rate limiting behind proxy)
+// Trust proxy (important for Render)
 app.set('trust proxy', 1);
 
 // Security Middlewares
@@ -24,6 +26,7 @@ const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split('
 ];
 
 app.use(cors({
+
     origin: (origin, callback) => {
         // allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
@@ -34,8 +37,16 @@ app.use(cors({
         return callback(null, true);
     },
     credentials: true,
-}));
 
+    origin: [
+       "https://headly-nine.vercel.app/",
+        "https://headly-8si0n7tdi-shishir269646s-projects.vercel.app/",
+        "https://headly-git-main-shishir269646s-projects.vercel.app/",
+        "http://localhost:3000/",
+    ],
+    credentials: true, // allow cookies
+
+}));
 
 // Body parsers
 app.use(express.json({ limit: '10mb' }));
@@ -68,7 +79,6 @@ app.use(passport.session());
 // Data sanitization against NoSQL injection
 app.use(mongoSanitize());
 
-
 // HTTP request logger
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
@@ -77,11 +87,6 @@ if (process.env.NODE_ENV === 'development') {
         stream: { write: message => logger.info(message.trim()) }
     }));
 }
-
-
-// Static files - serve uploads directory
-const path = require('path');
-const fs = require('fs');
 
 // Ensure uploads directory exists
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -102,10 +107,8 @@ app.get('/health', (req, res) => {
     });
 });
 
-
 // API Routes
 app.use('/api', routes);
-
 
 // Handle 404 errors
 app.use(notFound);
