@@ -75,3 +75,18 @@
 {"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:05:00"}
 {"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:05:00"}
 {"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:05:01"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:31:41"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:31:41"}
+{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:31:42"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:50:12"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:50:12"}
+{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:50:13"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:50:51"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:50:51"}
+{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:50:52"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:51:00"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:51:00"}
+{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:51:01"}
+{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:51:07"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:51:07"}
+{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:51:08"}

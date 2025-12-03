@@ -11,14 +11,14 @@ exports.register = async (req, res, next) => {
         res.cookie('accessToken', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
         });
 
@@ -37,14 +37,14 @@ exports.login = async (req, res, next) => {
         res.cookie('accessToken', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
         });
 
@@ -85,7 +85,7 @@ exports.refreshToken = async (req, res, next) => {
         res.cookie('accessToken', result.token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
 
@@ -94,7 +94,7 @@ exports.refreshToken = async (req, res, next) => {
             res.cookie('refreshToken', result.refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'lax',
+                sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
                 maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
             });
         }
@@ -132,14 +132,14 @@ exports.socialLoginCallback = async (req, res, next) => {
         res.cookie('accessToken', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 24 * 60 * 60 * 1000 // 1 day
         });
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
             maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
         });
 
