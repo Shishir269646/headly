@@ -5,9 +5,10 @@ const ApiError = require('../utils/apiError');
 // Cookie options generator
 const cookieOptions = (maxAge) => ({
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    maxAge
+    secure: process.env.NODE_ENV === 'production',  // true in production
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',  // 'none' for cross-site
+    maxAge,
+    domain: process.env.NODE_ENV === 'production' ? undefined : 'localhost'
 });
 
 exports.register = async (req, res, next) => {

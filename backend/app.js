@@ -26,25 +26,17 @@ const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split('
 ];
 
 app.use(cors({
-
-    origin: (origin, callback) => {
-        // allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-            return callback(new Error(msg), false);
-        }
-        return callback(null, true);
-    },
-    credentials: true,
-
     origin: [
-       "https://headly-nine.vercel.app/",
+        "https://headly-nine.vercel.app/",
         "https://headly-8si0n7tdi-shishir269646s-projects.vercel.app/",
         "https://headly-git-main-shishir269646s-projects.vercel.app/",
         "http://localhost:3000/",
     ],
-    credentials: true, // allow cookies
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['set-cookie'],
+    optionsSuccessStatus: 200
 
 }));
 
