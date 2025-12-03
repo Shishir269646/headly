@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -13,7 +12,7 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: [true, 'Email is required'],
-        unique: true,
+        unique: true, // ✅ unique index
         lowercase: true,
         trim: true,
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please provide a valid email']
@@ -26,7 +25,7 @@ const userSchema = new mongoose.Schema({
     googleId: {
         type: String,
         unique: true,
-        sparse: true
+        sparse: true // allows multiple null values
     },
     githubId: {
         type: String,
@@ -68,30 +67,31 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Hash password before saving
+// ====================
+// Password Hashing
+// ====================
 userSchema.pre('save', async function (next) {
-    if (!this.isModified('password') && !this.isNew) return next();
     if (this.isModified('password')) {
         this.password = await bcrypt.hash(this.password, 12);
     }
     next();
 });
 
-// Validate password before saving
-userSchema.pre('save', function(next) {
+// Ensure at least one login method exists
+userSchema.pre('save', function (next) {
     if (!this.password && !this.googleId && !this.githubId && !this.linkedinId) {
-        next(new Error('Password is required'));
-    } else {
-        next();
+        return next(new Error('Password is required if no OAuth login is provided.'));
     }
+    next();
 });
 
-// Compare password method
+// ====================
+// Instance Methods
+// ====================
 userSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
 
-// Generate JWT token
 userSchema.methods.generateAuthToken = function () {
     return jwt.sign(
         { id: this._id, role: this.role },
@@ -100,7 +100,6 @@ userSchema.methods.generateAuthToken = function () {
     );
 };
 
-// Generate refresh token
 userSchema.methods.generateRefreshToken = function () {
     return jwt.sign(
         { id: this._id },
@@ -109,5 +108,7 @@ userSchema.methods.generateRefreshToken = function () {
     );
 };
 
+// ====================
+// Export Model
+// ====================
 module.exports = mongoose.model('User', userSchema);
-
