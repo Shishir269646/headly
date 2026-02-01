@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 const logger = require('../utils/logger');
 
@@ -14,21 +13,21 @@ const connectDB = async () => {
 
         logger.info(`✅ MongoDB Connected: ${conn.connection.host}`);
 
-        // Handle connection events
+        // Connection events
         mongoose.connection.on('error', (err) => {
-            logger.error(`MongoDB connection error: ${err}`);
+            logger.error(`❌ MongoDB error: ${err}`);
         });
 
         mongoose.connection.on('disconnected', () => {
-            logger.warn('MongoDB disconnected. Attempting to reconnect...');
+            logger.warn('⚠️ MongoDB disconnected');
         });
 
         mongoose.connection.on('reconnected', () => {
-            logger.info('MongoDB reconnected');
+            logger.info('🔄 MongoDB reconnected');
         });
 
     } catch (error) {
-        logger.error(`❌ MongoDB Connection Error: ${error.message}`);
+        logger.error(`❌ MongoDB Connection Failed: ${error.message}`);
         process.exit(1);
     }
 };

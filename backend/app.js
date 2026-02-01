@@ -4,114 +4,127 @@ const cors = require('cors');
 const morgan = require('morgan');
 const mongoSanitize = require('express-mongo-sanitize');
 const cookieParser = require('cookie-parser');
-const routes = require('./routes');
-const { errorHandler } = require('./middlewares/errorHandler.middleware');
-const { notFound } = require('./middlewares/notFound.middleware');
-const logger = require('./utils/logger');
+const session = require('express-session');
+const MongoStore = require('connect-mongo').default;
+const passport = require('passport');
+const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 
+const routes = require('./routes');
+const logger = require('./utils/logger');
+const { errorHandler } = require('./middlewares/errorHandler.middleware');
+const { notFound } = require('./middlewares/notFound.middleware');
+
+require('./config/passport');
+
 const app = express();
 
-// Trust proxy (important for Render)
+/* ===============================
+   Trust Proxy (Render / Vercel)
+================================ */
 app.set('trust proxy', 1);
 
-// Security Middlewares
+/* ===============================
+   Security
+================================ */
 app.use(helmet());
-const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : [
-    "https://headly-nine.vercel.app/",
-    "https://headly-8si0n7tdi-shishir269646s-projects.vercel.app/",
-    "https://headly-git-main-shishir269646s-projects.vercel.app/",
-    "http://localhost:3000/",
-];
 
 app.use(cors({
     origin: [
-        "https://headly-nine.vercel.app/",
-        "https://headly-8si0n7tdi-shishir269646s-projects.vercel.app/",
-        "https://headly-git-main-shishir269646s-projects.vercel.app/",
-        "http://localhost:3000/",
+        "https://headly-nine.vercel.app",
+        "https://headly-8si0n7tdi-shishir269646s-projects.vercel.app",
+        "https://headly-git-main-shishir269646s-projects.vercel.app",
+        "http://localhost:3000",
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     exposedHeaders: ['set-cookie'],
-    optionsSuccessStatus: 200
-
 }));
 
-// Body parsers
+/* ===============================
+   Body & Cookies
+================================ */
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
-// Sessions and Passport
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
-const passport = require('passport');
-require('./config/passport');
-
-
+/* ===============================
+   Mongo Session Store (FIXED ✅)
+================================ */
+const sessionStore = MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+    collectionName: 'sessions',
+    ttl: 60 * 60 * 24,
+});
 
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'a_default_session_secret',
+    name: 'headly.sid',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI,
-        ttl: 60 * 60 * 24, // 1 day
-    }),
+    store: sessionStore,
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'none',
         maxAge: 1000 * 60 * 60 * 24,
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     }
 }));
 
-
+/* ===============================
+   Passport
+================================ */
 app.use(passport.initialize());
 app.use(passport.session());
 
-
-// Data sanitization against NoSQL injection
+/* ===============================
+   Sanitize
+================================ */
 app.use(mongoSanitize());
 
-// HTTP request logger
+/* ===============================
+   Logger
+================================ */
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 } else {
     app.use(morgan('combined', {
-        stream: { write: message => logger.info(message.trim()) }
+        stream: { write: msg => logger.info(msg.trim()) }
     }));
 }
 
-// Ensure uploads directory exists
+/* ===============================
+   Uploads
+================================ */
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
 }
-
-// Serve static files from uploads directory
 app.use('/uploads', express.static(uploadsDir));
 
-// Health check endpoint
+/* ===============================
+   Health Check
+================================ */
 app.get('/health', (req, res) => {
     res.json({
         status: 'OK',
-        timestamp: new Date().toISOString(),
         uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
         environment: process.env.NODE_ENV
     });
 });
 
-// API Routes
+/* ===============================
+   Routes
+================================ */
 app.use('/api', routes);
 
-// Handle 404 errors
+/* ===============================
+   Errors
+================================ */
 app.use(notFound);
-
-// Global Error Handler
 app.use(errorHandler);
 
 module.exports = app;

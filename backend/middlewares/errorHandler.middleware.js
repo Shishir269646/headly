@@ -7,14 +7,24 @@ exports.errorHandler = (err, req, res, next) => {
     let error = { ...err };
     error.message = err.message;
 
-    // Log error
-    logger.error({
-        message: err.message,
-        stack: err.stack,
-        url: req.originalUrl,
-        method: req.method,
-        ip: req.ip
-    });
+    // Log error based on status code
+    if (error.statusCode && String(error.statusCode).startsWith('4')) {
+        logger.warn({
+            message: err.message,
+            statusCode: error.statusCode,
+            url: req.originalUrl,
+            method: req.method,
+            ip: req.ip
+        });
+    } else {
+        logger.error({
+            message: err.message,
+            stack: err.stack,
+            url: req.originalUrl,
+            method: req.method,
+            ip: req.ip
+        });
+    }
 
     // Mongoose bad ObjectId
     if (err.name === 'CastError') {

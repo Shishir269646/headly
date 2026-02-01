@@ -1,101 +1,78 @@
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 13:12:06"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 13:12:06"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-00.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 13:12:07"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 13:12:42"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 13:12:42"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 13:12:43"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 13:13:09"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 13:13:09"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 13:13:10"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 13:13:32"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 13:13:32"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 13:13:33"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 13:14:28"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 13:14:28"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 13:14:28"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 13:14:50"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 13:14:50"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 13:14:51"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 13:15:20"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 13:15:20"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-00.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 13:15:20"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 13:15:40"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 13:15:40"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 13:15:41"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 13:28:33"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 13:28:33"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-00.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 13:28:33"}
-{"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-01 15:52:05"}
-{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"headly-backend","timestamp":"2025-12-01 15:52:26"}
-{"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-01 15:52:26"}
-{"ip":"::1","level":"error","message":"Content not found","method":"GET","service":"headly-backend","stack":"Error: Content not found\n    at exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\services\\content.service.js:73:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\controllers\\content.controller.js:27:25)","timestamp":"2025-12-01 15:55:34","url":"/api/contents/slug/search"}
-{"ip":"::1","level":"error","message":"Content not found","method":"GET","service":"headly-backend","stack":"Error: Content not found\n    at exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\services\\content.service.js:73:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\controllers\\content.controller.js:27:25)","timestamp":"2025-12-01 15:55:34","url":"/api/contents/slug/search"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 15:57:41"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 15:57:41"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 15:57:42"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 15:57:59"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 15:57:59"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-00.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 15:58:00"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 15:58:07"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 15:58:07"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 15:58:08"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-01 15:58:46"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-01 15:58:46"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-00.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-01 15:58:47"}
-{"ip":"::1","level":"error","message":"Authentication required. Please login.","method":"GET","service":"headly-backend","stack":"Error: Authentication required. Please login.\n    at exports.authenticate (C:\\MERN Project\\headly\\backend\\middlewares\\auth.middleware.js:16:19)\n    at Layer.handle [as handle_request] (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at Function.handle (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:175:3)\n    at router (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:47:12)","timestamp":"2025-12-01 16:19:35","url":"/api/users"}
-{"ip":"::1","level":"error","message":"Authentication required. Please login.","method":"GET","service":"headly-backend","stack":"Error: Authentication required. Please login.\n    at exports.authenticate (C:\\MERN Project\\headly\\backend\\middlewares\\auth.middleware.js:16:19)\n    at Layer.handle [as handle_request] (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at Function.process_params (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at Function.handle (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:175:3)\n    at router (C:\\MERN Project\\headly\\backend\\node_modules\\express\\lib\\router\\index.js:47:12)","timestamp":"2025-12-01 16:19:35","url":"/api/users"}
-{"ip":"::1","level":"error","message":"Invalid or expired refresh token","method":"POST","service":"headly-backend","stack":"Error: Invalid or expired refresh token\n    at exports.refreshToken (C:\\MERN Project\\headly\\backend\\services\\auth.service.js:135:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async exports.refreshToken (C:\\MERN Project\\headly\\backend\\controllers\\auth.controller.js:82:24)","timestamp":"2025-12-01 16:19:36","url":"/api/auth/refresh-token"}
-{"ip":"::1","level":"error","message":"Content not found","method":"GET","service":"headly-backend","stack":"Error: Content not found\n    at exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\services\\content.service.js:73:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\controllers\\content.controller.js:27:25)","timestamp":"2025-12-01 17:50:29","url":"/api/contents/slug/authors"}
-{"ip":"::1","level":"error","message":"Content not found","method":"GET","service":"headly-backend","stack":"Error: Content not found\n    at exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\services\\content.service.js:73:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\controllers\\content.controller.js:27:25)","timestamp":"2025-12-01 18:48:58","url":"/api/contents/slug/bbbsjdf"}
-{"ip":"::1","level":"error","message":"Content not found","method":"GET","service":"headly-backend","stack":"Error: Content not found\n    at exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\services\\content.service.js:73:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\controllers\\content.controller.js:27:25)","timestamp":"2025-12-01 18:49:17","url":"/api/contents/slug/bbbsjdf"}
-{"ip":"::1","level":"error","message":"Content not found","method":"GET","service":"headly-backend","stack":"Error: Content not found\n    at exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\services\\content.service.js:73:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async exports.getContentBySlug (C:\\MERN Project\\headly\\backend\\controllers\\content.controller.js:27:25)","timestamp":"2025-12-01 18:49:36","url":"/api/contents/slug/termsms"}
-{"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-01 20:24:44"}
-{"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-01 20:24:44"}
-{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"headly-backend","timestamp":"2025-12-01 20:24:54"}
-{"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-01 20:24:55"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-02 12:22:38"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-02 12:22:38"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-00.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-02 12:22:38"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-02 13:28:47"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-02 13:28:47"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-02 13:28:48"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-02 13:28:49"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-02 13:28:49"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-02 13:28:50"}
-{"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-02 15:37:56"}
-{"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-02 15:37:56"}
-{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"headly-backend","timestamp":"2025-12-02 15:38:07"}
-{"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-02 15:38:07"}
-{"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-02 17:47:41"}
-{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"headly-backend","timestamp":"2025-12-02 17:47:51"}
-{"level":"info","message":"MongoDB reconnected","service":"headly-backend","timestamp":"2025-12-02 17:47:51"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-02 18:39:13"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-02 18:39:13"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-02 18:39:13"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:05:00"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:05:00"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:05:01"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:31:41"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:31:41"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:31:42"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:50:12"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:50:12"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:50:13"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:50:51"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:50:51"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:50:52"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:51:00"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:51:00"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:51:01"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:51:07"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:51:07"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:51:08"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 12:51:17"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 12:51:17"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-00.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 12:51:18"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 13:14:16"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 13:14:16"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 13:14:17"}
-{"level":"info","message":"🚀 Server running on port 4000 in development mode","service":"headly-backend","timestamp":"2025-12-03 13:29:45"}
-{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2025-12-03 13:29:45"}
-{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2025-12-03 13:29:46"}
+{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-01.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2026-02-01 17:49:22"}
+{"level":"info","message":"🚀 Server running on port 4000 in production mode","service":"headly-backend","timestamp":"2026-02-01 17:49:22"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2026-02-01 17:49:22"}
+{"level":"info","message":"Cron jobs scheduled","service":"headly-backend","timestamp":"2026-02-01 17:49:22"}
+{"level":"info","message":"⏰ Background jobs started","service":"headly-backend","timestamp":"2026-02-01 17:49:22"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 17:50:00"}
+{"level":"info","message":"Running webhook retry job...","service":"headly-backend","timestamp":"2026-02-01 17:50:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 17:50:00"}
+{"level":"info","message":"Found 0 webhook(s) to retry","service":"headly-backend","timestamp":"2026-02-01 17:50:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 17:55:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 17:55:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:00:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:00:00"}
+{"level":"info","message":"Running webhook retry job...","service":"headly-backend","timestamp":"2026-02-01 18:00:00"}
+{"level":"info","message":"Found 0 webhook(s) to retry","service":"headly-backend","timestamp":"2026-02-01 18:00:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:05:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:05:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:10:00"}
+{"level":"info","message":"Running webhook retry job...","service":"headly-backend","timestamp":"2026-02-01 18:10:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:10:00"}
+{"level":"info","message":"Found 0 webhook(s) to retry","service":"headly-backend","timestamp":"2026-02-01 18:10:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:15:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:15:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:20:00"}
+{"level":"info","message":"Running webhook retry job...","service":"headly-backend","timestamp":"2026-02-01 18:20:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:20:00"}
+{"level":"info","message":"Found 0 webhook(s) to retry","service":"headly-backend","timestamp":"2026-02-01 18:20:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:25:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:25:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:30:00"}
+{"level":"info","message":"Running webhook retry job...","service":"headly-backend","timestamp":"2026-02-01 18:30:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:30:00"}
+{"level":"info","message":"Found 0 webhook(s) to retry","service":"headly-backend","timestamp":"2026-02-01 18:30:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:35:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:35:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:40:00"}
+{"level":"info","message":"Running webhook retry job...","service":"headly-backend","timestamp":"2026-02-01 18:40:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:40:00"}
+{"level":"info","message":"Found 0 webhook(s) to retry","service":"headly-backend","timestamp":"2026-02-01 18:40:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:45:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:45:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:50:00"}
+{"level":"info","message":"Running webhook retry job...","service":"headly-backend","timestamp":"2026-02-01 18:50:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:50:00"}
+{"level":"info","message":"Found 0 webhook(s) to retry","service":"headly-backend","timestamp":"2026-02-01 18:50:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 18:55:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 18:55:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 19:00:00"}
+{"level":"info","message":"Running webhook retry job...","service":"headly-backend","timestamp":"2026-02-01 19:00:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 19:00:00"}
+{"level":"info","message":"Found 0 webhook(s) to retry","service":"headly-backend","timestamp":"2026-02-01 19:00:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 19:05:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 19:05:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 19:10:00"}
+{"level":"info","message":"Running webhook retry job...","service":"headly-backend","timestamp":"2026-02-01 19:10:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 19:10:01"}
+{"level":"info","message":"Found 0 webhook(s) to retry","service":"headly-backend","timestamp":"2026-02-01 19:10:01"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 19:15:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 19:15:00"}
+{"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-01 19:20:00"}
+{"level":"info","message":"Running webhook retry job...","service":"headly-backend","timestamp":"2026-02-01 19:20:00"}
+{"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-01 19:20:00"}
+{"level":"info","message":"Found 0 webhook(s) to retry","service":"headly-backend","timestamp":"2026-02-01 19:20:00"}
+{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-00.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2026-02-01 19:21:39"}
+{"level":"info","message":"🚀 Server running on port 4000 in production mode","service":"headly-backend","timestamp":"2026-02-01 19:21:39"}
+{"level":"info","message":"📡 API URL: http://localhost:4000/api","service":"headly-backend","timestamp":"2026-02-01 19:21:39"}
+{"level":"info","message":"Cron jobs scheduled","service":"headly-backend","timestamp":"2026-02-01 19:21:39"}
+{"level":"info","message":"⏰ Background jobs started","service":"headly-backend","timestamp":"2026-02-01 19:21:39"}
+{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-02.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2026-02-01 19:26:47"}
+{"level":"info","message":"🚀 Server running on port 4000","service":"headly-backend","timestamp":"2026-02-01 19:26:47"}
+{"level":"info","message":"📡 API: http://localhost:4000/api","service":"headly-backend","timestamp":"2026-02-01 19:26:47"}
+{"level":"info","message":"Cron jobs scheduled","service":"headly-backend","timestamp":"2026-02-01 19:26:47"}
+{"level":"info","message":"⏰ Background jobs started","service":"headly-backend","timestamp":"2026-02-01 19:26:47"}
+{"level":"info","message":"✅ MongoDB Connected: ac-uagqk5i-shard-00-00.lgqm4tw.mongodb.net","service":"headly-backend","timestamp":"2026-02-01 19:56:30"}
+{"level":"info","message":"🚀 Server running on port 4000","service":"headly-backend","timestamp":"2026-02-01 19:56:30"}
+{"level":"info","message":"📡 API: http://localhost:4000/api","service":"headly-backend","timestamp":"2026-02-01 19:56:30"}
+{"level":"info","message":"Cron jobs scheduled","service":"headly-backend","timestamp":"2026-02-01 19:56:30"}
+{"level":"info","message":"⏰ Background jobs started","service":"headly-backend","timestamp":"2026-02-01 19:56:30"}
