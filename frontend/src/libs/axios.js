@@ -40,7 +40,7 @@ function deleteCookie(name) {
 }
 
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://headlybackend.onrender.com/api');
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://headly-i6zv.vercel.app'||'https://vercel.com/shishir269646s-projects/headly-i6zv/jL95DcryB6fRbyzR3WR8kuTWvKeN');
 
 // Create axios instance
 export const axiosInstance = axios.create({
