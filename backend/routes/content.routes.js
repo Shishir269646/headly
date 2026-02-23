@@ -26,12 +26,12 @@ router.get('/featured', contentController.getFeaturedContents);
 
 
 // Public content routes (with optional auth for analytics)
-router.get('/', optionalAuth, contentController.getAllContents);
-router.get('/slug/:slug', optionalAuth, contentController.getContentBySlug);
+router.get('/', contentController.getAllContents);
+router.get('/slug/:slug',  contentController.getContentBySlug);
 
 
 
-router.get('/:id', optionalAuth, contentController.getContentById);
+router.get('/:id',  contentController.getContentById);
 
 // ============================================
 // PROTECTED ROUTES (Authentication required)

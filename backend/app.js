@@ -5,9 +5,8 @@ const morgan = require('morgan');
 const mongoSanitize = require('express-mongo-sanitize');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const MongoStore = require('connect-mongo').default;
+const MongoStore = require('connect-mongo').default; 
 const passport = require('passport');
-const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 
@@ -21,7 +20,7 @@ require('./config/passport');
 const app = express();
 
 /* ===============================
-   Trust Proxy (Render / Vercel)
+   Trust Proxy (Important for Render / Vercel)
 ================================ */
 app.set('trust proxy', 1);
 
@@ -33,42 +32,48 @@ app.use(helmet());
 app.use(cors({
     origin: [
         "https://headly-nine.vercel.app",
-        "https://headly-8si0n7tdi-shishir269646s-projects.vercel.app",
-        "https://headly-git-main-shishir269646s-projects.vercel.app",
         "http://localhost:3000",
     ],
     credentials: true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['set-cookie'],
 }));
 
 /* ===============================
    Body & Cookies
 ================================ */
 app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser(process.env.SESSION_SECRET)); // ✅ same secret
 
 /* ===============================
-   Mongo Session Store (FIXED ✅)
+   Mongo Session Store
 ================================ */
-const sessionStore = MongoStore.create({
-    mongoUrl: process.env.MONGO_URI,
-    collectionName: 'sessions',
-    ttl: 60 * 60 * 24,
-});
+let sessionStore;
+if (process.env.NODE_ENV === 'test') {
+    // Use in-memory store for tests to avoid external Mongo dependencies
+    sessionStore = new session.MemoryStore();
+} else {
+    sessionStore = MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,
+        collectionName: 'sessions',
+        ttl: 60 * 60 * 24,
+        autoRemove: 'native',
+    });
+}
 
+/* ===============================
+   Session
+================================ */
 app.use(session({
     name: 'headly.sid',
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'supersecretkey',
     resave: false,
     saveUninitialized: false,
+    proxy: true, // ✅ important when using trust proxy
     store: sessionStore,
     cookie: {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'none',
+        secure: process.env.NODE_ENV === 'production', // ✅ auto detect
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         maxAge: 1000 * 60 * 60 * 24,
     }
 }));

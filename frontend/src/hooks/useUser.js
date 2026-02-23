@@ -12,17 +12,22 @@ import {
     clearError
 } from '@/store/slices/userSlice';
 
-export const useUser = (filters = null) => {
-
+export const useUser = (filters = null, options = {}) => {
+    const { autoFetch = true } = options;
 
     const dispatch = useDispatch();
     const { users, currentUser, pagination, loading, error } = useSelector(
         (state) => state.user
     );
+    const { isAuthenticated } = useSelector((state) => state.auth);
 
+    // Only auto-fetch full user list when authenticated (admin pages, etc.).
+    // Public pages can still use the hook but should pass autoFetch: false.
     useEffect(() => {
+        if (!autoFetch) return;
+        if (!isAuthenticated) return;
         dispatch(fetchUsers(filters));
-    }, [dispatch, JSON.stringify(filters)]);
+    }, [dispatch, JSON.stringify(filters), autoFetch, isAuthenticated]);
 
 
 

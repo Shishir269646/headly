@@ -10,6 +10,7 @@ module.exports = {
       },
       env_production: {
         NODE_ENV: 'production',
+        MONGO_URI: 'YOUR_PRODUCTION_MONGO_URI_HERE', // IMPORTANT: Replace with your actual production MongoDB URI
       },
     },
   ],

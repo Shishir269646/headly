@@ -16,6 +16,16 @@ const dashboardRoutes = require('./dashboard.routes');
 const categoryRoutes = require('./category.routes');
 const sitemapRoutes = require('./sitemap.routes');
 
+// Health route under /api for convenience
+router.get('/health', (req, res) => {
+    res.json({
+        status: 'OK',
+        uptime: process.uptime(),
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV
+    });
+});
+
 // Mount routes
 router.use('/auth', authRoutes);
 router.use('/users', userRoutes);

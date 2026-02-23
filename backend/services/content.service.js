@@ -203,7 +203,8 @@ exports.getLatestContents = async (limit = 6) => {
     })
         .populate({ path: 'author', populate: { path: 'image' } })
         .populate('featuredImage')
-        .sort({ publishAt: -1, createdAt: -1 })
+        // Ensure deterministic ordering with _id as tiebreaker
+        .sort({ publishAt: -1, createdAt: -1, _id: -1 })
         .limit(limit);
 };
 

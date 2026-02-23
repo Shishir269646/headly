@@ -26,7 +26,8 @@ export default function Home() {
     } = useContent();
 
     const { categories, loading: categoriesLoading, error: categoriesError } = useCategories();
-    const { users, loading: usersLoading, error: usersError } = useUser();
+    // Do not auto-fetch admin-only user list on public homepage
+    const { users, loading: usersLoading, error: usersError } = useUser(null, { autoFetch: false });
 
     useEffect(() => {
         

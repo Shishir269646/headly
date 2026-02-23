@@ -13,7 +13,7 @@ describe('Content Routes', () => {
 
     beforeAll(async () => {
         // Connect to a test database
-        const url = 'mongodb://127.0.0.1/test_db';
+        const url = process.env.MONGO_URI || 'mongodb://127.0.0.1/test_db';
         await mongoose.connect(url);
 
         // Create a user

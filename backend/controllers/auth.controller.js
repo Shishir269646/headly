@@ -18,7 +18,14 @@ exports.register = async (req, res, next) => {
         res.cookie('accessToken', token, cookieOptions(24 * 60 * 60 * 1000));  // 1 day
         res.cookie('refreshToken', refreshToken, cookieOptions(30 * 24 * 60 * 60 * 1000)); // 30 days
 
-        successResponse(res, user, 'User registered successfully', 201);
+        // Return tokens in body for programmatic clients while keeping user under data.user
+        res.status(201).json({
+            success: true,
+            message: 'User registered successfully',
+            token,
+            refreshToken,
+            data: { user }
+        });
     } catch (error) {
         next(error);
     }
@@ -35,7 +42,14 @@ exports.login = async (req, res, next) => {
         res.cookie('accessToken', token, cookieOptions(24 * 60 * 60 * 1000));
         res.cookie('refreshToken', refreshToken, cookieOptions(30 * 24 * 60 * 60 * 1000));
 
-        successResponse(res, user, 'Login successful');
+        // Return tokens in body for programmatic clients while keeping user under data.user
+        res.status(200).json({
+            success: true,
+            message: 'Login successful',
+            token,
+            refreshToken,
+            data: { user }
+        });
     } catch (error) {
         next(error);
     }

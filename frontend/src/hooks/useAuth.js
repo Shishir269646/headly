@@ -6,16 +6,19 @@ import { useRouter } from 'next/navigation';
 import { logout, getCurrentUser } from '@/store/slices/authSlice';
 import { useEffect } from 'react';
 
-export const useAuth = () => {
+export const useAuth = (options = {}) => {
+    const { autoFetch = true } = options;
     const dispatch = useDispatch();
     const router = useRouter();
     const { user, isAuthenticated, loading, error } = useSelector((state) => state.auth);
 
-
+    // Only auto-fetch current user when explicitly desired (e.g. dashboard/profile),
+    // so public pages can use auth state without forcing a redirect flow.
     useEffect(() => {
-
-        dispatch(getCurrentUser());
-    }, []);
+        if (autoFetch) {
+            dispatch(getCurrentUser());
+        }
+    }, [autoFetch, dispatch]);
 
     const handleLogout = async () => {
         await dispatch(logout());

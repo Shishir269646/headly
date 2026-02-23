@@ -8,8 +8,9 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 
 export default function ProfilePage({ user: initialUser, isDashboard = false }) {
-    const { user: authUser, loading: authLoading } = useAuth();
-    const { updateMyProfile, uploadUserimage } = useUser();
+    const { user: authUser, loading: authLoading } = useAuth({ autoFetch: true });
+    // Profile page does not need the full admin user list, so skip auto-fetch
+    const { updateMyProfile, uploadUserimage } = useUser(null, { autoFetch: false });
     const toast = useToast();
     const [loading, setLoading] = useState(false);
     const [imageFile, setimageFile] = useState(null);

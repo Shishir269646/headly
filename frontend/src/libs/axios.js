@@ -40,7 +40,8 @@ function deleteCookie(name) {
 }
 
 
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://headlybackend.onrender.com/api');
+//const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://headlybackend.onrender.com/api'|| 'https://localhost:4000/api');
+const API_URL = 'http://localhost:4000/api';
 
 // Create axios instance
 export const axiosInstance = axios.create({
@@ -75,10 +76,22 @@ axiosInstance.interceptors.response.use(
             } catch (refreshError) {
 
                 if (typeof window !== 'undefined') {
+                    // List of public paths that should not trigger a redirect to login on 401
+                    const publicPaths = ['/', '/about', '/contact', '/all-content', '/popular-content', '/trending-content', '/newsletter'];
+                    const isPublicPath = publicPaths.some(path => window.location.pathname === path || (path !== '/' && window.location.pathname.startsWith(path + '/')));
 
-                    localStorage.removeItem('user');
+                    // Also consider authentication paths as non-redirecting
+                    const authPaths = ['/login', '/register', '/social/success'];
+                    const isAuthPath = authPaths.some(path => window.location.pathname.startsWith(path));
 
-                    window.location.href = '/login';
+                    if (!isPublicPath && !isAuthPath && !window.location.pathname.startsWith('/dashboard') && !window.location.pathname.startsWith('/viewer')) {
+                        localStorage.removeItem('user');
+                        window.location.href = '/login';
+                    } else if (window.location.pathname.startsWith('/dashboard') || window.location.pathname.startsWith('/viewer')) {
+                         // If it's a protected route, always redirect
+                        localStorage.removeItem('user');
+                        window.location.href = '/login';
+                    }
                 }
                 return Promise.reject(refreshError);
             }

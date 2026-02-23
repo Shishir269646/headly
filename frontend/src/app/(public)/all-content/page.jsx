@@ -11,7 +11,8 @@ import Loader from "@/components/common/Loader";
 
 const AllContentPage = () => {
   const { contents, loading, error, getContents } = useContent();
-  const { users } = useUser();
+  // Do not auto-fetch admin-only user list on public all-content listing
+  const { users } = useUser(null, { autoFetch: false });
   const { categories } = useCategories();
 
   const [searchTerm, setSearchTerm] = useState("");

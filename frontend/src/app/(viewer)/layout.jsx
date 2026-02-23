@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Loader from '@/components/common/Loader';
 
 export default function ViewerLayout({ children }) {
-    const { isAuthenticated, loading, user, logout } = useAuth();
+    const { isAuthenticated, loading, user, logout } = useAuth({ autoFetch: true });
     const router = useRouter();
 
     useEffect(() => {
