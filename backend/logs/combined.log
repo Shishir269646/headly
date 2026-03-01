@@ -520,3 +520,7 @@
 {"level":"info","message":"Found 0 webhook(s) to retry","service":"headly-backend","timestamp":"2026-02-23 20:20:00"}
 {"level":"info","message":"Running scheduled content publisher...","service":"headly-backend","timestamp":"2026-02-23 20:25:00"}
 {"level":"info","message":"Found 0 content(s) to publish","service":"headly-backend","timestamp":"2026-02-23 20:25:00"}
+{"level":"info","message":"🚀 Server running on port 4000","service":"headly-backend","timestamp":"2026-02-23 21:08:02"}
+{"level":"info","message":"📡 API: http://localhost:4000/api","service":"headly-backend","timestamp":"2026-02-23 21:08:02"}
+{"level":"info","message":"Cron jobs scheduled","service":"headly-backend","timestamp":"2026-02-23 21:08:02"}
+{"level":"info","message":"⏰ Background jobs started","service":"headly-backend","timestamp":"2026-02-23 21:08:02"}

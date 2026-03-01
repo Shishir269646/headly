@@ -40,12 +40,14 @@ function deleteCookie(name) {
 }
 
 
-<<<<<<< HEAD
-//const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://headlybackend.onrender.com/api'|| 'https://localhost:4000/api');
-const API_URL = 'http://localhost:4000/api';
-=======
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://headly-i6zv.vercel.app'||'https://vercel.com/shishir269646s-projects/headly-i6zv/jL95DcryB6fRbyzR3WR8kuTWvKeN');
->>>>>>> c3965fb38ac00462c5aebb96c6d9f79b084e4203
+
+const API_URL = 'https://headlybackend.onrender.com/api';
+
+
+//const API_URL = 'http://localhost:4000/api';
+
+//const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://headly-i6zv.vercel.app'||'https://vercel.com/shishir269646s-projects/headly-i6zv/jL95DcryB6fRbyzR3WR8kuTWvKeN');
+
 
 // Create axios instance
 export const axiosInstance = axios.create({
@@ -92,7 +94,7 @@ axiosInstance.interceptors.response.use(
                         localStorage.removeItem('user');
                         window.location.href = '/login';
                     } else if (window.location.pathname.startsWith('/dashboard') || window.location.pathname.startsWith('/viewer')) {
-                         // If it's a protected route, always redirect
+                        // If it's a protected route, always redirect
                         localStorage.removeItem('user');
                         window.location.href = '/login';
                     }
